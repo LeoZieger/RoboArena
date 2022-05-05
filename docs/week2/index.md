@@ -1,4 +1,5 @@
 # Teamprojekt RoboArena
+## Week 2
 
 | Team 2 |
 | ----------------- |
@@ -6,6 +7,3 @@
 | An Trieu          | 
 | Lasse Niederkrome |
 | Leonard Zieger    |
-
-* [week 1](week1/index.md)
-* [week 2](week2/index.md)

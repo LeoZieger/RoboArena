@@ -1,4 +1,5 @@
 # Teamprojekt RoboArena
+## Week 1
 
 | Team 2 |
 | ----------------- |
@@ -7,5 +8,4 @@
 | Lasse Niederkrome |
 | Leonard Zieger    |
 
-* [week 1](week1/index.md)
-* [week 2](week2/index.md)
+![logo](https://www.mobygames.com/images/covers/l/181687-paradroid-commodore-64-front-cover.jpg)
