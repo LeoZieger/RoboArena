@@ -32,6 +32,7 @@ class Example(QWidget):
 def main():
     app = QApplication(sys.argv)
     ex = Example()
+    ex.close()
     sys.exit(app.exec_())
 
 
