@@ -8,4 +8,6 @@
 | Lasse Niederkrome |
 | Leonard Zieger    |
 
-(![image](https://user-images.githubusercontent.com/72664329/167307675-18eec007-4d0e-4b8e-b289-8e19727ca6e5.png)
+![image](https://user-images.githubusercontent.com/72664329/167307823-dba4cab9-95f9-4f38-9384-aa32e2ee94bf.png)
+
+![image](https://user-images.githubusercontent.com/72664329/167307841-f2a08e63-3cd2-4fd8-bc22-a8cd3499bda1.png)
