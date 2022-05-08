@@ -8,7 +8,7 @@
 | Lasse Niederkrome |
 | Leonard Zieger    |
 
-* This week we created the github.io page for our project and implemented flake8 on our local python and on GitHub (RoboArena/.github/workflows/flake8.yml, from: https://github.com/marketplace/actions/flake8-action). 
+* This week we created the github.io page for our project and implemented flake8 on our local python and on GitHub (https://github.com/LeoZieger/RoboArena/blob/main/.github/workflows/flake8.yml, from: https://github.com/marketplace/actions/flake8-action). 
 * We also did a test PR for our main branch.
 
 ![image](https://user-images.githubusercontent.com/72664329/167307823-dba4cab9-95f9-4f38-9384-aa32e2ee94bf.png)
