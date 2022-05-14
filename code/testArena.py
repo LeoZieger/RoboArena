@@ -2,6 +2,7 @@
 
 import sys
 from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import QCoreApplication
 import Arena
 
 
@@ -21,8 +22,10 @@ class TestArena(QtWidgets.QMainWindow):
         painter = QtGui.QPainter(self.label.pixmap())
         for x in range(self.arena.tile_count_x):
             for y in range(self.arena.tile_count_y):
-                painter.fillRect(self.arena.matrix[x][y].rect,
-                                 self.arena.matrix[x][y].color)
+                # painter.fillRect(self.arena.matrix[x][y].rect,
+                #                 self.arena.matrix[x][y].color)
+                painter.drawImage(self.arena.matrix[x][y].rect,
+                                  self.arena.matrix[x][y].texture)
         painter.end()
 
 

@@ -1,5 +1,5 @@
 import numpy as np
-from PyQt5.QtGui import QColor
+from PyQt5.QtGui import QColor, QImage
 from PyQt5.QtCore import QRect
 import random
 
@@ -10,14 +10,37 @@ TILE_HEIGHT = 10
 
 
 class Tile():
-    def __init__(self, pos_x, pos_y):
-        grey_scale = random.randint(150, 160)  # Greyscale for 'rock' look
+    texture = QImage("res/no_texture.png")
 
-        self.color = QColor.fromRgb(grey_scale, grey_scale, grey_scale)
+    def __init__(self, pos_x, pos_y):
         self.rect = QRect(pos_x * TILE_WIDTH,
                           pos_y * TILE_HEIGHT,
                           TILE_WIDTH,
                           TILE_HEIGHT)
+        
+
+class Dirt(Tile):
+    texture = QImage("res/dirt_texture.png")
+
+
+class Grass(Tile):
+    texture = QImage("res/grass_texture.png")
+
+
+class Lava(Tile):
+    texture = QImage("res/lava_texture.png")
+
+
+class Stone(Tile):
+    texture = QImage("res/stone_texture.png")
+
+
+class Wall(Tile):
+    texture = QImage("res/wall_texture.png")
+
+
+class Water(Tile):
+    texture = QImage("res/water_texture.png")
 
 
 class Arena():
@@ -40,7 +63,9 @@ class Arena():
                                self.tile_count_y),
                                dtype=Tile)
 
-        # Filling matrix with Tiles
+        # Filling matrix with random Tiles
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
-                self.matrix[x][y] = Tile(x, y)
+                self.matrix[x][y] = random.choices([Dirt(x,y), Grass(x,y), Lava(x,y),
+                                                    Stone(x,y), Wall(x,y), Water(x,y)],
+                                                    weights=[0.3, 0.5, 0.05, 0.05, 0.05, 0.05])[0]
