@@ -6,6 +6,7 @@ from PyQt5.QtCore import QTimer
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 
+
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -24,6 +25,6 @@ class RoboArena(QtWidgets.QMainWindow):
 
 
 app = QtWidgets.QApplication(sys.argv)
-window = TestArena()
+window = RoboArena()
 window.show()
 app.exec_()
