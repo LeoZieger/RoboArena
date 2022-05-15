@@ -11,13 +11,13 @@
 
 what we did this week:
 
-Created some Wireframes and thought about the generel looks and mechanics of our game:
+Created some Wireframes and thought about the general looks and mechanics of our game:
 
 main menu:
 - singleplayer / multiplayer option 
 - difficulty
 - settings 
-- shop(upgrade ur firerate, ammunition, movement etc)?
+- shop(upgrade your firerate, ammunition, movement etc)?
 - skins?
 - exit 
 
@@ -44,4 +44,4 @@ in-game:
 ![ezgif com-gif-maker](https://user-images.githubusercontent.com/70483582/168475787-2fb48edc-bf47-46b2-8d19-3ee9bf00b9ff.gif)
 
 
-* We also implemented the Arena with a random generated background and moving Robot with given attributs
+* We also implemented the Arena with a random generated background and moving Robot with given attributes
