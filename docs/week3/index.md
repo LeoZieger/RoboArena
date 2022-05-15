@@ -11,10 +11,9 @@
 
 what we did this week:
 
-* created some Wireframes and thought about the generel looks and mechanics of our game (see below)
+Created some Wireframes and thought about the generel looks and mechanics of our game:
 
 what do we need?:
-
 main menu:
 - singleplayer / multiplayer option 
 - difficulty
@@ -39,11 +38,10 @@ in-game:
 - different robos?
 
 
-
 ![image](https://user-images.githubusercontent.com/70483582/168474541-0300a9bb-dc13-4d4c-b12f-1f8aefceddad.png)
-
 
 ![image](https://user-images.githubusercontent.com/70483582/168474547-b4870b61-b3ef-47d3-a971-e98c422ad2dd.png)
 
 
-* We also implemented the Arena with a random generated background
+
+* We also implemented the Arena with a random generated background and moving Robot with given attributs
