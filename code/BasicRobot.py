@@ -2,7 +2,8 @@
 
 
 # This is important for drawing the robot later
-import TestDrawing
+from PyQt5.QtGui import QPen
+from PyQt5.QtCore import Qt
 
 
 class BasicRobot:
@@ -21,11 +22,6 @@ class BasicRobot:
         print(self.r)
         print(self.alpha)
 
-#  def spawnRobot(self, x,y,r,alpha):
-
-
-testRobot = BasicRobot(0, 0, 50, 0)
-
-testRobot.info()
-
-TestDrawing.main()
+    def render(self, painter):
+        painter.setPen(QPen(Qt.green, 8, Qt.DashLine))
+        painter.drawEllipse(self.x, self.y, self.r*2, self.r*2)
