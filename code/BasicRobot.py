@@ -2,7 +2,7 @@
 
 
 # This is important for drawing the robot later
-from PyQt5.QtGui import QPen
+from PyQt5.QtGui import QPen, QBrush
 from PyQt5.QtCore import Qt
 
 
@@ -23,5 +23,6 @@ class BasicRobot:
         print(self.alpha)
 
     def render(self, painter):
-        painter.setPen(QPen(Qt.green, 8, Qt.DashLine))
+        painter.setPen(QPen(Qt.black, 8, Qt.SolidLine))
+        painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
         painter.drawEllipse(self.x, self.y, self.r*2, self.r*2)
