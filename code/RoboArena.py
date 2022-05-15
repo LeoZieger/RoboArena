@@ -20,15 +20,17 @@ class RoboArena(QtWidgets.QMainWindow):
         self.label.setPixmap(canvas)
         self.setCentralWidget(self.label)
 
+        self.painter = QtGui.QPainter(self.label.pixmap())
+
+        # Timer for ticks
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(1)
 
     def tick(self):
-        self.painter = QtGui.QPainter(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
-        self.painter.end()
+
         self.robot.move()
         self.update()
 
