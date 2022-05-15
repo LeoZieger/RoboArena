@@ -71,8 +71,8 @@ class Arena():
                 self.matrix[x][y] = random.choices([Dirt(x, y), Grass(x, y),
                                                     Lava(x, y), Stone(x, y),
                                                     Wall(x, y), Water(x, y)],
-                                                   weights=[0.9, 0.1, 0,
-                                                            0, 0, 0]
+                                                   weights=[0.8, 0.05, 0,
+                                                            0.1, 0, 0.05]
                                                    )[0]
 
     def render(self, painter):
