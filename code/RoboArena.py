@@ -12,6 +12,7 @@ class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # Arena und all robots that are kept track
         self.arena = Arena.Arena()
         self.robot = BasicRobot.BasicRobot(50, 50, 50, 10)
 
@@ -20,6 +21,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.label.setPixmap(canvas)
         self.setCentralWidget(self.label)
 
+        # Painter for all Classes on main Window
         self.painter = QtGui.QPainter(self.label.pixmap())
 
         # Timer for ticks
