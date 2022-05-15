@@ -13,8 +13,8 @@ what we did this week:
 
 Created some Wireframes and thought about the generel looks and mechanics of our game:
 
-what do we need?:
-main menu:
+- what do we need?:
+- main menu:
 - singleplayer / multiplayer option 
 - difficulty
 - settings 
