@@ -1,7 +1,8 @@
 import sys
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
-
+import Arena
+import BasicRobot
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -10,6 +11,9 @@ WINDOW_HEIGHT = 1000
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+
+        self.arena = Arena.Arena()
+        self.robot = BasicRobot.BasicRobot(50, 50, 100, 10)
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -21,7 +25,12 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.start(1)
 
     def tick(self):
-        pass
+        self.painter = QtGui.QPainter(self.label.pixmap())
+        self.arena.render(self.painter)
+        self.robot.render(self.painter)
+        self.painter.end()
+        self.robot.x += 1
+        self.update()
 
 
 app = QtWidgets.QApplication(sys.argv)
