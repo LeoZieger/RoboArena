@@ -39,7 +39,7 @@ in-game:
 
 ![image](https://user-images.githubusercontent.com/70483582/168474541-0300a9bb-dc13-4d4c-b12f-1f8aefceddad.png)
 
-![image](https://user-images.githubusercontent.com/70483582/168474547-b4870b61-b3ef-47d3-a971-e98c422ad2dd.png)
+![image](https://user-images.githubusercontent.com/70483582/168475373-8e8e9804-520c-4c74-84a8-61d34c1bd05b.png)
 
 
 
