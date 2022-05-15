@@ -1,7 +1,6 @@
 import numpy as np
-from PyQt5.QtGui import QColor, QImage
-from PyQt5.QtCore import QRect, QTimer
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtGui import QImage
+from PyQt5.QtCore import QRect
 import random
 
 ARENA_WIDTH = 1000
@@ -18,7 +17,7 @@ class Tile():
                           pos_y * TILE_HEIGHT,
                           TILE_WIDTH,
                           TILE_HEIGHT)
-        
+
 
 class Dirt(Tile):
     texture = QImage("res/dirt_texture.png")
@@ -63,16 +62,19 @@ class Arena():
         self.matrix = np.empty(shape=(self.tile_count_x,
                                self.tile_count_y),
                                dtype=Tile)
-        
+
         self.init_matrix()
 
     def init_matrix(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
-                self.matrix[x][y] = random.choices([Dirt(x,y), Grass(x,y), Lava(x,y),
-                                                    Stone(x,y), Wall(x,y), Water(x,y)],
-                                                    weights=[0.3, 0.5, 0.05, 0.05, 0.05, 0.05])[0]
-    
+                self.matrix[x][y] = random.choices([Dirt(x, y), Grass(x, y),
+                                                    Lava(x, y), Stone(x, y),
+                                                    Wall(x, y), Water(x, y)],
+                                                   weights=[0.3, 0.5, 0.05,
+                                                            0.05, 0.05, 0.05]
+                                                   )[0]
+
     def render(self, painter):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
