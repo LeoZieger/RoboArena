@@ -41,6 +41,7 @@ in-game:
 
 ![image](https://user-images.githubusercontent.com/70483582/168475373-8e8e9804-520c-4c74-84a8-61d34c1bd05b.png)
 
+![ezgif com-gif-maker](https://user-images.githubusercontent.com/70483582/168475787-2fb48edc-bf47-46b2-8d19-3ee9bf00b9ff.gif)
 
 
 * We also implemented the Arena with a random generated background and moving Robot with given attributs
