@@ -29,7 +29,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.robot.render(self.painter)
         self.painter.end()
-        self.robot.x += 1
+        self.robot.move()
         self.update()
 
 

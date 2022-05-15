@@ -26,3 +26,7 @@ class BasicRobot:
         painter.setPen(QPen(Qt.black, 8, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
         painter.drawEllipse(self.x, self.y, self.r*2, self.r*2)
+
+    def move(self):
+        self.x += 1
+        self.y += 1
