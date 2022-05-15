@@ -13,7 +13,7 @@ class RoboArena(QtWidgets.QMainWindow):
         super().__init__()
 
         self.arena = Arena.Arena()
-        self.robot = BasicRobot.BasicRobot(50, 50, 100, 10)
+        self.robot = BasicRobot.BasicRobot(50, 50, 50, 10)
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
