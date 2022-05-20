@@ -27,6 +27,12 @@ class BasicRobot:
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
         painter.drawEllipse(self.x, self.y, self.r*2, self.r*2)
 
-    def move(self):
-        self.x += 1
-        self.y += 1
+    def move(self, action):
+        if action == Qt.Key_W:
+            self.y -= 10
+        elif action == Qt.Key_S:
+            self.y += 10
+        elif action == Qt.Key_A:
+            self.x -= 10
+        elif action == Qt.Key_D:
+            self.x += 10
