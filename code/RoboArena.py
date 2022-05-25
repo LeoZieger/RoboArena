@@ -13,7 +13,8 @@ class RoboArena(QtWidgets.QMainWindow):
         super().__init__()
 
         self.arena = Arena.Arena()
-        self.robot = BasicRobot.BasicRobot(50, 50, 50, 10)
+        self.robot = BasicRobot.BasicRobot(50, 50, 50, 10, 3)
+        self.keys_pressed = set()
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -27,9 +28,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.start(1)
 
     def keyPressEvent(self, event):
-        self.robot.move(event.key())
+        self.keys_pressed.add(event.key())
+
+    def keyReleaseEvent(self, event):
+        self.keys_pressed.remove(event.key())
 
     def tick(self):
+        self.robot.move(self.keys_pressed)
         self.painter = QtGui.QPainter(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
@@ -37,7 +42,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.update()
 
 
-app = QtWidgets.QApplication(sys.argv)
-window = RoboArena()
-window.show()
-app.exec_()
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = RoboArena()
+    window.show()
+    app.exec_()
