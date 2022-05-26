@@ -79,6 +79,13 @@ class Arena():
                                self.tile_count_y),
                                dtype=Tile)
 
+        self.init_matrix_with_no_texture()
+
+    def init_matrix_with_no_texture(self):
+        for x in range(self.tile_count_x):
+            for y in range(self.tile_count_y):
+                self.matrix[x][y] = Tile(x, y)
+
     def init_matrix_random(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
