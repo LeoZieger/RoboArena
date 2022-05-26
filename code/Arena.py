@@ -2,6 +2,7 @@ import numpy as np
 from PyQt5.QtGui import QImage
 from PyQt5.QtCore import QRect
 import random
+import json
 
 ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
@@ -11,35 +12,50 @@ TILE_HEIGHT = 10
 
 class Tile():
     texture = QImage("res/no_texture.png")
+    tile_type = "None"
 
     def __init__(self, pos_x, pos_y):
-        self.rect = QRect(pos_x * TILE_WIDTH,
-                          pos_y * TILE_HEIGHT,
+        self.x = pos_x
+        self.y = pos_y
+
+        self.rect = QRect(self.x * TILE_WIDTH,
+                          self.y * TILE_HEIGHT,
                           TILE_WIDTH,
                           TILE_HEIGHT)
 
+    def to_json_string(self):
+        json_str = "{"
+        json_str += '"type":"{}", "x":{}, "y":{}'.format(self.tile_type, self.x, self.y)
+        json_str += "}"
+        return json_str
 
 class Dirt(Tile):
+    tile_type = "Dirt"
     texture = QImage("res/dirt_texture.png")
 
 
 class Grass(Tile):
+    tile_type = "Grass"
     texture = QImage("res/grass_texture.png")
 
 
 class Lava(Tile):
+    tile_type = "Lava"
     texture = QImage("res/lava_texture.png")
 
 
 class Stone(Tile):
+    tile_type = "Stone"
     texture = QImage("res/stone_texture.png")
 
 
 class Wall(Tile):
+    tile_type = "Wall"
     texture = QImage("res/wall_texture.png")
 
 
 class Water(Tile):
+    tile_type = "Water"
     texture = QImage("res/water_texture.png")
 
 
@@ -63,9 +79,9 @@ class Arena():
                                self.tile_count_y),
                                dtype=Tile)
 
-        self.init_matrix()
+        self.init_matrix_from_map("maps/test.json")
 
-    def init_matrix(self):
+    def init_matrix_random(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 self.matrix[x][y] = random.choices([Dirt(x, y), Grass(x, y),
@@ -74,9 +90,47 @@ class Arena():
                                                    weights=[0.8, 0.05, 0,
                                                             0.1, 0, 0.05]
                                                    )[0]
+    
+    def init_matrix_from_map(self, map_filepath):
+        data = self.load_map(map_filepath)
+        for t in data:
+            x = t["x"]
+            y = t["y"]
+
+            if t["type"] == "Dirt":
+                self.matrix[x][y] = Dirt(x, y)
+            elif t["type"] == "Grass":
+                self.matrix[x][y] = Grass(x, y)
+            elif t["type"] == "Lava":
+                self.matrix[x][y] = Lava(x, y)
+            elif t["type"] == "Stone":
+                self.matrix[x][y] = Stone(x, y)
+            elif t["type"] == "Wall":
+                self.matrix[x][y] = Wall(x, y)
+            elif t["type"] == "Water":
+                self.matrix[x][y] = Water(x, y)
+            else:
+                self.matrix[x][y] = Tile(x, y)
 
     def render(self, painter):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 painter.drawImage(self.matrix[x][y].rect,
                                   self.matrix[x][y].texture)
+    
+    def load_map(self, map_filepath):
+        with open(map_filepath) as f:
+            return json.load(f)
+
+    def store_current_map(self, map_filepath):
+        map_file = open("maps/" + map_filepath, "w")
+        map_file.write("[\n")
+        for x in range(self.tile_count_x):
+            for y in range(self.tile_count_y):
+                if not (x == self.tile_count_x -1 and y == self.tile_count_y-1):
+                    map_file.write(self.matrix[x][y].to_json_string() + ",\n")
+                else:
+                    map_file.write(self.matrix[x][y].to_json_string() + "\n")
+        map_file.write("]")
+        map_file.close()
+                
