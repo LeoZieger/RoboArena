@@ -2,6 +2,7 @@ import sys
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt
 import Arena
+import time
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -52,7 +53,11 @@ class MapCreator(QtWidgets.QMainWindow):
             self.current_draw_tile = "Wall"
         elif e.key() == Qt.Key_6:
             self.current_draw_tile = "Water"
-
+        
+        elif e.key() == Qt.Key_S:
+            print("hello")
+            self.arena.store_current_map(str(time.time()) + ".json")
+            exit()
 
 
 
