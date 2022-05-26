@@ -79,8 +79,6 @@ class Arena():
                                self.tile_count_y),
                                dtype=Tile)
 
-        self.init_matrix_from_map("maps/test.json")
-
     def init_matrix_random(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
@@ -96,18 +94,19 @@ class Arena():
         for t in data:
             x = t["x"]
             y = t["y"]
+            tile_type = t["type"]
 
-            if t["type"] == "Dirt":
+            if tile_type == "Dirt":
                 self.matrix[x][y] = Dirt(x, y)
-            elif t["type"] == "Grass":
+            elif tile_type == "Grass":
                 self.matrix[x][y] = Grass(x, y)
-            elif t["type"] == "Lava":
+            elif tile_type == "Lava":
                 self.matrix[x][y] = Lava(x, y)
-            elif t["type"] == "Stone":
+            elif tile_type == "Stone":
                 self.matrix[x][y] = Stone(x, y)
-            elif t["type"] == "Wall":
+            elif tile_type == "Wall":
                 self.matrix[x][y] = Wall(x, y)
-            elif t["type"] == "Water":
+            elif tile_type == "Water":
                 self.matrix[x][y] = Water(x, y)
             else:
                 self.matrix[x][y] = Tile(x, y)
@@ -115,8 +114,9 @@ class Arena():
     def render(self, painter):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
-                painter.drawImage(self.matrix[x][y].rect,
-                                  self.matrix[x][y].texture)
+                if self.matrix[x][y] is not None:
+                    painter.drawImage(self.matrix[x][y].rect,
+                                    self.matrix[x][y].texture)
     
     def load_map(self, map_filepath):
         with open(map_filepath) as f:
@@ -133,4 +133,20 @@ class Arena():
                     map_file.write(self.matrix[x][y].to_json_string() + "\n")
         map_file.write("]")
         map_file.close()
+
+    def set_tile(self, x, y, tile_type):
+        if tile_type == "Dirt":
+            self.matrix[x][y] = Dirt(x, y)
+        elif tile_type == "Grass":
+            self.matrix[x][y] = Grass(x, y)
+        elif tile_type == "Lava":
+            self.matrix[x][y] = Lava(x, y)
+        elif tile_type == "Stone":
+            self.matrix[x][y] = Stone(x, y)
+        elif tile_type == "Wall":
+            self.matrix[x][y] = Wall(x, y)
+        elif tile_type == "Water":
+            self.matrix[x][y] = Water(x, y)
+        else:
+            self.matrix[x][y] = Tile(x, y)
                 
