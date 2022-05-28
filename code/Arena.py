@@ -126,7 +126,7 @@ class Arena():
         popup = NameInput.NameInput()
         popup.exec_()
         name = popup.textValue()
-        
+
         data = self.load_map("maps/" + name + ".json")
         for t in data:
             x = t["x"]
