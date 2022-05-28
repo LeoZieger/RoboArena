@@ -40,16 +40,6 @@ class Arena():
             for y in range(self.tile_count_y):
                 self.matrix[x][y] = Tile(x, y)
 
-    def init_matrix_random(self):
-        for x in range(self.tile_count_x):
-            for y in range(self.tile_count_y):
-                self.matrix[x][y] = random.choices([Dirt(x, y), Grass(x, y),
-                                                    Lava(x, y), Stone(x, y),
-                                                    Wall(x, y), Water(x, y)],
-                                                   weights=[0.8, 0.05, 0,
-                                                            0.1, 0, 0.05]
-                                                   )[0]
-
     def init_matrix_from_map(self, map_name):
         data = self.load_map("maps/" + map_name + ".json")
         for t in data:
