@@ -57,8 +57,14 @@ class MapCreator(QtWidgets.QMainWindow):
             self.current_draw_tile = "Water"
         elif e.key() == Qt.Key_S:
             popup = NameInput.NameInput()
-            popup.exec_()
+            ok = popup.exec_()
             name = popup.textValue()
+
+            while ok and (name == "" or len(name.split(" ")) > 1):
+                popup.close()
+                ok = popup.exec_()
+                name = popup.textValue()
+            popup.close()
 
             self.arena.save_current_map(name)
             self.close()

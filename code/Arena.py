@@ -4,6 +4,7 @@ from PyQt5.QtCore import QRect
 import random
 import NameInput
 import json
+from os.path import exists
 
 ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
@@ -124,8 +125,17 @@ class Arena():
 
     def init_matrix_from_map_with_PROMT(self):
         popup = NameInput.NameInput()
-        popup.exec_()
+        ok = popup.exec_()
         name = popup.textValue()
+
+        while ok and (name == ""
+                      or len(name.split(" ")) > 1
+                      or not exists("maps/" + name + ".json")
+                      ):
+            popup.close()
+            ok = popup.exec_()
+            name = popup.textValue()
+        popup.close()
 
         data = self.load_map("maps/" + name + ".json")
         for t in data:
