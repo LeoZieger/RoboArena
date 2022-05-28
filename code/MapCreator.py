@@ -47,7 +47,9 @@ class MapCreator(QtWidgets.QMainWindow):
         if e.buttons() == QtCore.Qt.LeftButton:
             tile_pos_x = int(e.x() / self.arena.tile_width)
             tile_pos_y = int(e.y() / self.arena.tile_width)
-            self.arena.set_tile(tile_pos_x, tile_pos_y, self.current_draw_tile)
+            self.arena.set_tile(tile_pos_x,
+                                tile_pos_y,
+                                self.current_draw_tile)
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_1:

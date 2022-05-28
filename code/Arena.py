@@ -25,9 +25,12 @@ class Tile():
 
     def to_json_string(self):
         json_str = "{"
-        json_str += '"type":"{}", "x":{}, "y":{}'.format(self.tile_type, self.x, self.y)
+        json_str += '"type":"{}", "x":{}, "y":{}'.format(self.tile_type,
+                                                         self.x,
+                                                         self.y)
         json_str += "}"
         return json_str
+
 
 class Dirt(Tile):
     tile_type = "Dirt"
@@ -95,7 +98,7 @@ class Arena():
                                                    weights=[0.8, 0.05, 0,
                                                             0.1, 0, 0.05]
                                                    )[0]
-    
+
     def init_matrix_from_map(self, map_filepath):
         data = self.load_map(map_filepath)
         for t in data:
@@ -123,18 +126,19 @@ class Arena():
             for y in range(self.tile_count_y):
                 if self.matrix[x][y] is not None:
                     painter.drawImage(self.matrix[x][y].rect,
-                                    self.matrix[x][y].texture)
-    
+                                      self.matrix[x][y].texture)
+
     def load_map(self, map_filepath):
         with open(map_filepath) as f:
             return json.load(f)
 
-    def store_current_map(self, map_filepath):
-        map_file = open("maps/" + map_filepath, "w")
+    def save_current_map(self, map_filepath):
+        map_file = open("maps/" + map_filepath + ".json", "w")
         map_file.write("[\n")
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
-                if not (x == self.tile_count_x -1 and y == self.tile_count_y-1):
+                if not (x == self.tile_count_x - 1
+                        and y == self.tile_count_y - 1):
                     map_file.write(self.matrix[x][y].to_json_string() + ",\n")
                 else:
                     map_file.write(self.matrix[x][y].to_json_string() + "\n")
@@ -156,4 +160,3 @@ class Arena():
             self.matrix[x][y] = Water(x, y)
         else:
             self.matrix[x][y] = Tile(x, y)
-                
