@@ -1,12 +1,6 @@
-from PyQt5.QtGui import QImage
-from PyQt5.QtCore import QRect
-
-import random
 import numpy as np
 import json
-from os.path import exists
 
-import NameInput
 from Tile import *
 
 ARENA_WIDTH = 1000

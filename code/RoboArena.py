@@ -1,6 +1,8 @@
-import sys
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
+
+import sys
+from os.path import exists
 
 import Arena
 import BasicRobot
