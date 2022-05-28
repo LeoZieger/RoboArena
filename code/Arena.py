@@ -40,63 +40,6 @@ class Arena():
             for y in range(self.tile_count_y):
                 self.matrix[x][y] = Tile(x, y)
 
-    def init_matrix_from_map(self, map_name):
-        data = self.load_map("maps/" + map_name + ".json")
-        for t in data:
-            x = t["x"]
-            y = t["y"]
-            tile_type = t["type"]
-
-            if tile_type == "Dirt":
-                self.matrix[x][y] = Dirt(x, y)
-            elif tile_type == "Grass":
-                self.matrix[x][y] = Grass(x, y)
-            elif tile_type == "Lava":
-                self.matrix[x][y] = Lava(x, y)
-            elif tile_type == "Stone":
-                self.matrix[x][y] = Stone(x, y)
-            elif tile_type == "Wall":
-                self.matrix[x][y] = Wall(x, y)
-            elif tile_type == "Water":
-                self.matrix[x][y] = Water(x, y)
-            else:
-                self.matrix[x][y] = Tile(x, y)
-
-    def init_matrix_from_map_with_PROMT(self):
-        popup = NameInput.NameInput()
-        ok = popup.exec_()
-        name = popup.textValue()
-
-        while ok and (name == ""
-                      or len(name.split(" ")) > 1
-                      or not exists("maps/" + name + ".json")
-                      ):
-            popup.close()
-            ok = popup.exec_()
-            name = popup.textValue()
-        popup.close()
-
-        data = self.load_map("maps/" + name + ".json")
-        for t in data:
-            x = t["x"]
-            y = t["y"]
-            tile_type = t["type"]
-
-            if tile_type == "Dirt":
-                self.matrix[x][y] = Dirt(x, y)
-            elif tile_type == "Grass":
-                self.matrix[x][y] = Grass(x, y)
-            elif tile_type == "Lava":
-                self.matrix[x][y] = Lava(x, y)
-            elif tile_type == "Stone":
-                self.matrix[x][y] = Stone(x, y)
-            elif tile_type == "Wall":
-                self.matrix[x][y] = Wall(x, y)
-            elif tile_type == "Water":
-                self.matrix[x][y] = Water(x, y)
-            else:
-                self.matrix[x][y] = Tile(x, y)
-
     def render(self, painter):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
@@ -104,12 +47,31 @@ class Arena():
                     painter.drawImage(self.matrix[x][y].rect,
                                       self.matrix[x][y].texture)
 
-    def load_map(self, map_filepath):
-        with open(map_filepath) as f:
-            return json.load(f)
+    def loadMap(self, map_name):
+        with open("maps/" + map_name + ".json") as f:
+            data = json.load(f)
+            for t in data:
+                x = t["x"]
+                y = t["y"]
+                tile_type = t["type"]
 
-    def save_current_map(self, map_filepath):
-        map_file = open("maps/" + map_filepath + ".json", "w")
+                if tile_type == "Dirt":
+                    self.matrix[x][y] = Dirt(x, y)
+                elif tile_type == "Grass":
+                    self.matrix[x][y] = Grass(x, y)
+                elif tile_type == "Lava":
+                    self.matrix[x][y] = Lava(x, y)
+                elif tile_type == "Stone":
+                    self.matrix[x][y] = Stone(x, y)
+                elif tile_type == "Wall":
+                    self.matrix[x][y] = Wall(x, y)
+                elif tile_type == "Water":
+                    self.matrix[x][y] = Water(x, y)
+                else:
+                    self.matrix[x][y] = Tile(x, y)
+
+    def saveMap(self, map_name):
+        map_file = open("maps/" + map_name + ".json", "w")
         map_file.write("[\n")
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):

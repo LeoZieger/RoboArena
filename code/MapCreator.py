@@ -48,7 +48,7 @@ class MapCreator(QtWidgets.QMainWindow):
         elif e.key() == Qt.Key_2:
             self.current_draw_tile = "Grass"
         elif e.key() == Qt.Key_3:
-            self.current_draw_tile = "lava"
+            self.current_draw_tile = "Lava"
         elif e.key() == Qt.Key_4:
             self.current_draw_tile = "Stone"
         elif e.key() == Qt.Key_5:
@@ -66,7 +66,7 @@ class MapCreator(QtWidgets.QMainWindow):
                 name = popup.textValue()
             popup.close()
 
-            self.arena.save_current_map(name)
+            self.arena.saveMap(name)
             self.close()
             exit()
 

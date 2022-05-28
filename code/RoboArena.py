@@ -1,8 +1,10 @@
 import sys
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtCore import QTimer
+
 import Arena
 import BasicRobot
+import NameInput
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -14,10 +16,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
-
-        # self..arena.init_matrix_from_map("maps/test.json")
-        # self.arena.init_matrix_from_map(map_filepath)
-        self.arena.init_matrix_from_map_with_PROMT()
+        self.arena.loadMap("MyFirstMap")
 
         self.robot = BasicRobot.BasicRobot(50, 50, 50, 10)
 
@@ -40,6 +39,25 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot.move()
         self.update()
+
+    def loadMapByPrompt(self):
+        popup = NameInput.NameInput()
+        ok = popup.exec_()
+        name = popup.textValue()
+
+        while ok and (name == ""
+                      or len(name.split(" ")) > 1
+                      or not exists("maps/" + name + ".json")
+                      ):
+            popup.close()
+            ok = popup.exec_()
+            name = popup.textValue()
+        popup.close()
+
+        self.arena.loadMap(name)
+
+    def loadMap(self, name):
+        self.arena.loadMap(name)
 
 
 app = QtWidgets.QApplication(sys.argv)
