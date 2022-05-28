@@ -2,6 +2,7 @@ import numpy as np
 from PyQt5.QtGui import QImage
 from PyQt5.QtCore import QRect
 import random
+import NameInput
 import json
 
 ARENA_WIDTH = 1000
@@ -99,8 +100,34 @@ class Arena():
                                                             0.1, 0, 0.05]
                                                    )[0]
 
-    def init_matrix_from_map(self, map_filepath):
-        data = self.load_map(map_filepath)
+    def init_matrix_from_map(self, map_name):
+        data = self.load_map("maps/" + map_name + ".json")
+        for t in data:
+            x = t["x"]
+            y = t["y"]
+            tile_type = t["type"]
+
+            if tile_type == "Dirt":
+                self.matrix[x][y] = Dirt(x, y)
+            elif tile_type == "Grass":
+                self.matrix[x][y] = Grass(x, y)
+            elif tile_type == "Lava":
+                self.matrix[x][y] = Lava(x, y)
+            elif tile_type == "Stone":
+                self.matrix[x][y] = Stone(x, y)
+            elif tile_type == "Wall":
+                self.matrix[x][y] = Wall(x, y)
+            elif tile_type == "Water":
+                self.matrix[x][y] = Water(x, y)
+            else:
+                self.matrix[x][y] = Tile(x, y)
+
+    def init_matrix_from_map_with_PROMT(self):
+        popup = NameInput.NameInput()
+        popup.exec_()
+        name = popup.textValue()
+        
+        data = self.load_map("maps/" + name + ".json")
         for t in data:
             x = t["x"]
             y = t["y"]

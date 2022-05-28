@@ -14,7 +14,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
-        self.arena.init_matrix_from_map("maps/test.json")
+
+        # self..arena.init_matrix_from_map("maps/test.json")
+        # self.arena.init_matrix_from_map(map_filepath)
+        self.arena.init_matrix_from_map_with_PROMT()
 
         self.robot = BasicRobot.BasicRobot(50, 50, 50, 10)
 
