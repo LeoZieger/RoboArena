@@ -18,14 +18,21 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
-        self.arena.loadMap("MyFirstMap")
+        
 
-        self.robot = BasicRobot.BasicRobot(50, 50, 50, 10)
+        self.arena.loadMap("MyFirstMap")
+        self.robot = BasicRobot.BasicRobot(50, 50, 50, 10, 3)
+        self.keys_pressed = set()
+
+
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
         self.setCentralWidget(self.label)
+
+
+
 
         # Painter for all Classes on main Window
         self.painter = QtGui.QPainter(self.label.pixmap())
@@ -35,11 +42,22 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.tick)
         self.timer.start(1)
 
+    def keyPressEvent(self, event):
+        self.keys_pressed.add(event.key())
+
+    def keyReleaseEvent(self, event):
+        self.keys_pressed.remove(event.key())
+
     def tick(self):
+      
+     
+
+        self.robot.move(self.keys_pressed)
+        self.painter = QtGui.QPainter(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
+        self.painter.end()
 
-        self.robot.move()
         self.update()
 
     def loadMapByPrompt(self):
@@ -62,7 +80,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.loadMap(name)
 
 
-app = QtWidgets.QApplication(sys.argv)
-window = RoboArena()
-window.show()
-app.exec_()
+if __name__ == '__main__':
+    app = QtWidgets.QApplication(sys.argv)
+    window = RoboArena()
+    window.show()
+    app.exec_()
