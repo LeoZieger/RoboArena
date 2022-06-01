@@ -27,12 +27,20 @@ class Arena():
                                self.tile_count_y),
                                dtype=Tile)
 
+        self.boundingBoxes = []
+
         self.init_matrix_with_no_texture()
 
     def init_matrix_with_no_texture(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 self.matrix[x][y] = Tile(x, y)
+    
+    def init_bounding_boxes(self):
+        for x in range(self.tile_count_x):
+            for y in range(self.tile_count_y):
+                if self.matrix[x][y].collision:
+                    self.boundingBoxes.append(self.matrix[x][y].get_bounding_box())
 
     def render(self, painter):
         for x in range(self.tile_count_x):
@@ -63,6 +71,7 @@ class Arena():
                     self.matrix[x][y] = Water(x, y)
                 else:
                     self.matrix[x][y] = Tile(x, y)
+        self.init_bounding_boxes()
 
     def saveMap(self, map_name):
         map_file = open("maps/" + map_name + ".json", "w")

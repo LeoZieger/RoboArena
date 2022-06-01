@@ -28,20 +28,47 @@ class BasicRobot:
         painter.setPen(QPen(Qt.black, 8, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
         painter.drawEllipse(self.x, self.y, self.r, self.r)
+        painter.drawRect(self.get_bounding_box())
 
-    def move(self, keys_pressed):
+    def try_move(self, keys_pressed, other_objects):
+        COLLISION_OFFSET = 1
+
         if Qt.Key_W in keys_pressed:
-            self.y -= self.speed
+            col_obj, intersect, possible = self.move_is_possible(self.x, self.y - self.speed, other_objects)
+            if possible:
+                self.y -= self.speed
+            else:
+                self.y = self.y + intersect.height() + COLLISION_OFFSET
+
         if Qt.Key_S in keys_pressed:
-            self.y += self.speed
+            col_obj, intersect, possible = self.move_is_possible(self.x, self.y + self.speed, other_objects)
+            if possible:
+                self.y += self.speed
+            else:
+                self.y = self.y - intersect.height() - COLLISION_OFFSET
+
         if Qt.Key_A in keys_pressed:
-            self.x -= self.speed
+            col_obj, intersect, possible = self.move_is_possible(self.x - self.speed, self.y, other_objects)
+            if possible:
+                self.x -= self.speed
+            else:
+                self.x = self.x + intersect.width() + COLLISION_OFFSET
+
         if Qt.Key_D in keys_pressed:
-            self.x += self.speed
+            col_obj, intersect, possible = self.move_is_possible(self.x + self.speed, self.y, other_objects)
+            if possible:
+                self.x += self.speed
+            else:
+                self.x = self.x - intersect.width() - COLLISION_OFFSET
+    
+    def move_is_possible(self, fut_x, fut_y, other_objects):
+        for o in other_objects:
+            if self.get_bounding_box().intersects(o):
+                return o, self.get_bounding_box().intersected(o), False
+        return None, None, True
 
     def get_bounding_box(self):
         return QRect(self.x,
                      self.y,
                      self.r,
                      self.r)
-

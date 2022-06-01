@@ -8,6 +8,7 @@ TILE_HEIGHT = 10
 class Tile():
     texture = QImage("res/no_texture.png")
     tile_type = "None"
+    collision = False
 
     def __init__(self, pos_x, pos_y):
         self.x = pos_x
@@ -53,6 +54,7 @@ class Stone(Tile):
 class Wall(Tile):
     tile_type = "Wall"
     texture = QImage("res/wall_texture.png")
+    collision = True
 
 
 class Water(Tile):
