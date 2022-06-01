@@ -6,6 +6,7 @@ from os.path import exists
 
 import Arena
 import BasicRobot
+import BasicAIRobot
 import NameInput
 
 WINDOW_WIDTH = 1000
@@ -18,21 +19,19 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
-        
 
         self.arena.loadMap("MyFirstMap")
+
         self.robot = BasicRobot.BasicRobot(50, 50, 50, 10, 3)
+        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 10, 0)
+        self.robotAI2 = BasicAIRobot.BasicAIRobot(850, 850, 50, 10, 0)
+        self.robotAI3 = BasicAIRobot.BasicAIRobot(50, 850, 50, 10, 0)
         self.keys_pressed = set()
-
-
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
         self.setCentralWidget(self.label)
-
-
-
 
         # Painter for all Classes on main Window
         self.painter = QtGui.QPainter(self.label.pixmap())
@@ -49,18 +48,26 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-      
-     
 
+        self.robotAI1.move(self.keys_pressed)
+        self.robotAI2.move(self.keys_pressed)
+        self.robotAI3.move(self.keys_pressed)
         self.robot.move(self.keys_pressed)
+
         self.painter = QtGui.QPainter(self.label.pixmap())
+
         self.arena.render(self.painter)
+        self.robotAI1.render(self.painter)
+        self.robotAI2.render(self.painter)
+        self.robotAI3.render(self.painter)
         self.robot.render(self.painter)
+
         self.painter.end()
 
         self.update()
 
     def loadMapByPrompt(self):
+
         popup = NameInput.NameInput()
         ok = popup.exec_()
         name = popup.textValue()
