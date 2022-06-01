@@ -26,6 +26,9 @@ class Tile():
         json_str += "}"
         return json_str
 
+    def get_bounding_box(self):
+        return self.rect
+
 
 class Dirt(Tile):
     tile_type = "Dirt"

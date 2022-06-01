@@ -3,7 +3,7 @@
 
 # This is important for drawing the robot later
 from PyQt5.QtGui import QPen, QBrush
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRect
 
 
 class BasicRobot:
@@ -27,7 +27,7 @@ class BasicRobot:
     def render(self, painter):
         painter.setPen(QPen(Qt.black, 8, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
-        painter.drawEllipse(self.x, self.y, self.r*2, self.r*2)
+        painter.drawEllipse(self.x, self.y, self.r, self.r)
 
     def move(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -38,3 +38,10 @@ class BasicRobot:
             self.x -= self.speed
         if Qt.Key_D in keys_pressed:
             self.x += self.speed
+
+    def get_bounding_box(self):
+        return QRect(self.x,
+                     self.y,
+                     self.r,
+                     self.r)
+
