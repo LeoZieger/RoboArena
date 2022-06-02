@@ -23,7 +23,6 @@ Created a MapCreator for creating map files
 Created a Map
 
 
-
 Created a Player-Movement-Function
 - You can now controll a BasicRobot
 - There are 8 possible directions right now
@@ -33,6 +32,10 @@ Created a Ai-Robot-Class
 - spawns 3 robots in each corner of the map
 - no movement right now (in progress)
 
+
+Add simple colission Detection
+- Still very buggy
+- Idea to increase Tile size minimize complexity of colission
 
 
 
