@@ -25,3 +25,6 @@ Add simple colission Detection
 Created a Ai-Robot-Class
 - spawns 3 robots in each corner of the map
 - no movement right now (in progress)
+
+
+![image](https://user-images.githubusercontent.com/72664329/171642921-aa986363-cba5-41e2-b0b3-235c26b4afa2.png)
