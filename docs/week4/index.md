@@ -16,12 +16,11 @@ Created a MapCreator for creating map files
 - You can increase and decrease the size (number of Tiles) you are placing with the up-/ down-arrow.
 - By pressing "S" you can save the map and choose a name for it
 
-For now the MapCreator is a different programm than our main-programm (RoboArena.py) but we want implement it
-in the main menu.
+- For now the MapCreator is a different programm than our main-programm (RoboArena.py) but we want implement it
+  in the main menu.
 
 
 Created a Map
-
 
 
 Created a Player-Movement-Function
@@ -33,6 +32,10 @@ Created a Ai-Robot-Class
 - spawns 3 robots in each corner of the map
 - no movement right now (in progress)
 
+
+Add simple colission Detection
+- Still very buggy
+- Idea to increase Tile size minimize complexity of colission
 
 
 
