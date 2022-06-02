@@ -27,4 +27,4 @@ Created a Ai-Robot-Class
 - no movement right now (in progress)
 
 
-![image](https://user-images.githubusercontent.com/72664329/171642921-aa986363-cba5-41e2-b0b3-235c26b4afa2.png)
+![bewegug](https://user-images.githubusercontent.com/72664329/171643269-1b180567-3a04-4dda-850f-a341294e2f45.gif)
