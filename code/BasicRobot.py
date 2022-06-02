@@ -28,7 +28,6 @@ class BasicRobot:
         painter.setPen(QPen(Qt.black, 8, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
         painter.drawEllipse(self.x, self.y, self.r, self.r)
-        painter.drawRect(self.get_bounding_box())
 
     def try_move(self, keys_pressed, other_objects):
         COLLISION_OFFSET = 7
