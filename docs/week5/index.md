@@ -20,3 +20,8 @@ Created 2 Maps with the MapCreator:
 Add simple colission Detection
 - Still very buggy
 - Idea to increase Tile size minimize complexity of colission
+
+
+Created a Ai-Robot-Class
+- spawns 3 robots in each corner of the map
+- no movement right now (in progress)

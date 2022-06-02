@@ -20,7 +20,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
 
-        self.arena.loadMap("MyFirstMap")
+        self.arena.loadMap("Example_2Player")
 
         self.robot = BasicRobot.BasicRobot(50, 50, 50, 10, 3)
         self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 10, 0)

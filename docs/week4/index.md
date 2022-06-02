@@ -26,6 +26,4 @@ Created a Player-Movement-Function
 - There are 8 possible directions right now
 
 
-Created a Ai-Robot-Class
-- spawns 3 robots in each corner of the map
-- no movement right now (in progress)
+Added Roadmap for better planing
