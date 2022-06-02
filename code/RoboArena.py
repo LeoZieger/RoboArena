@@ -52,7 +52,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robotAI1.move(self.keys_pressed)
         self.robotAI2.move(self.keys_pressed)
         self.robotAI3.move(self.keys_pressed)
-        self.robot.move(self.keys_pressed)
+        self.robot.try_move(self.keys_pressed, self.arena.boundingBoxes)
 
         self.painter = QtGui.QPainter(self.label.pixmap())
 

@@ -3,7 +3,7 @@
 
 # This is important for drawing the robot later
 from PyQt5.QtGui import QPen, QBrush
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QRect
 
 
 class BasicRobot:
@@ -27,14 +27,48 @@ class BasicRobot:
     def render(self, painter):
         painter.setPen(QPen(Qt.black, 8, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
-        painter.drawEllipse(self.x, self.y, self.r*2, self.r*2)
+        painter.drawEllipse(self.x, self.y, self.r, self.r)
+        painter.drawRect(self.get_bounding_box())
 
-    def move(self, keys_pressed):
+    def try_move(self, keys_pressed, other_objects):
+        COLLISION_OFFSET = 7
+
         if Qt.Key_W in keys_pressed:
-            self.y -= self.speed
+            intersect, possible = self.move_is_possible(self.x, self.y - self.speed, other_objects)
+            if possible:
+                self.y -= self.speed
+            else:
+                self.y = self.y + intersect.height() + COLLISION_OFFSET
+
         if Qt.Key_S in keys_pressed:
-            self.y += self.speed
+            intersect, possible = self.move_is_possible(self.x, self.y + self.speed, other_objects)
+            if possible:
+                self.y += self.speed
+            else:
+                self.y = self.y - intersect.height() - COLLISION_OFFSET
+
         if Qt.Key_A in keys_pressed:
-            self.x -= self.speed
+            intersect, possible = self.move_is_possible(self.x - self.speed, self.y, other_objects)
+            if possible:
+                self.x -= self.speed
+            else:
+                self.x = self.x + intersect.width() + COLLISION_OFFSET
+
         if Qt.Key_D in keys_pressed:
-            self.x += self.speed
+            intersect, possible = self.move_is_possible(self.x + self.speed, self.y, other_objects)
+            if possible:
+                self.x += self.speed
+            else:
+                self.x = self.x - intersect.width() - COLLISION_OFFSET
+    
+    def move_is_possible(self, fut_x, fut_y, other_objects):
+        for o in other_objects:
+            if self.get_bounding_box().intersects(o):
+                return self.get_bounding_box().intersected(o), False
+        return None, True
+
+    def get_bounding_box(self):
+        return QRect(self.x,
+                     self.y,
+                     self.r,
+                     self.r)
