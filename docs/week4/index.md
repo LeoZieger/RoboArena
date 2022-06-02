@@ -16,7 +16,7 @@ Created a MapCreator for creating map files
 - You can increase and decrease the size (number of Tiles) you are placing with the up-/ down-arrow.
 - By pressing "S" you can save the map and choose a name for it
 - The map is stored in a .json file
-
+- ![image](https://user-images.githubusercontent.com/72664329/171642081-3715ea69-aa58-4b82-a11b-bb214627906c.png)
 - For now the MapCreator is a different programm than our main-programm (RoboArena.py) but we want implement it
   in the main menu.
 
