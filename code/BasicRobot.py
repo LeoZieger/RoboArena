@@ -5,11 +5,16 @@
 from PyQt5.QtGui import QPen, QBrush
 from PyQt5.QtCore import Qt, QRect
 
+MAX_SPEED = 5
+MIN_SPEED = 3
+
 
 class BasicRobot:
 
     # Basic-Robot constructor
+
     def __init__(self, x, y, r, alpha, speed):
+
         self.x = x                          # x-position
         self.y = y                          # y-position
         self.r = r                          # radius
@@ -59,7 +64,13 @@ class BasicRobot:
                 self.x += self.speed
             else:
                 self.x = self.x - intersect.width() - COLLISION_OFFSET
-    
+
+        if Qt.Key_Shift in keys_pressed:
+            if self.speed < MAX_SPEED:
+                self.speed += 2
+        elif self.speed == MAX_SPEED:
+            self.speed = MIN_SPEED
+
     def move_is_possible(self, fut_x, fut_y, other_objects):
         for o in other_objects:
             if self.get_bounding_box().intersects(o):

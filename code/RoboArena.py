@@ -23,10 +23,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.loadMap("Example_2Player")
 
-        self.robot = BasicRobot.BasicRobot(50, 50, 50, 10, 3)
-        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 10, 0)
-        self.robotAI2 = BasicAIRobot.BasicAIRobot(850, 850, 50, 10, 0)
-        self.robotAI3 = BasicAIRobot.BasicAIRobot(50, 850, 50, 10, 0)
+        self.robot = BasicRobot.BasicRobot(50, 50, 50, [0, 0], 3)
+        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, [-1, 0], 2)
+        self.robotAI2 = BasicAIRobot.BasicAIRobot(900, 850, 50, [-1, -1], 2)
+        self.robotAI3 = BasicAIRobot.BasicAIRobot(175, 880, 50, [1, -1], 2)
         self.keys_pressed = set()
 
         self.label = QtWidgets.QLabel()
@@ -50,9 +50,9 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def tick(self):
 
-        self.robotAI1.move(self.keys_pressed)
-        self.robotAI2.move(self.keys_pressed)
-        self.robotAI3.move(self.keys_pressed)
+        self.robotAI1.moveAI1(self.keys_pressed)
+        self.robotAI2.moveAI2(self.keys_pressed)
+        self.robotAI3.moveAI3(self.keys_pressed)
         self.robot.try_move(self.keys_pressed, self.arena.boundingBoxes)
 
         self.painter = QtGui.QPainter(self.label.pixmap())
