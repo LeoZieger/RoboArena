@@ -60,7 +60,6 @@ class MainMenu(QMainWindow):
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
-        self.map_creator.show()
         
 
 if __name__ == '__main__':

@@ -18,18 +18,21 @@ class MapCreator(QtWidgets.QMainWindow):
         self.current_draw_tile = "Grass"
         self.current_draw_size = 1
 
-        self.label = QtWidgets.QLabel()
-        canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
-        self.label.setPixmap(canvas)
-        self.setCentralWidget(self.label)
-
-        # Painter for all Classes on main Window
-        self.painter = QtGui.QPainter(self.label.pixmap())
+        self.initUI()
 
         # Timer for ticks
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(1)
+
+    def initUI(self):
+        self.label = QtWidgets.QLabel()
+        canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
+        self.label.setPixmap(canvas)
+        self.setCentralWidget(self.label)
+        self.painter = QtGui.QPainter(self.label.pixmap())
+
+        self.show()
 
     def tick(self):
         self.arena.render(self.painter)
