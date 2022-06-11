@@ -25,6 +25,8 @@ class MapCreator(QtWidgets.QMainWindow):
         self.timer.start(1)
 
     def initUI(self):
+        self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
