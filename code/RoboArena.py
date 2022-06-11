@@ -2,7 +2,6 @@ from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
 
 
-import sys
 from os.path import exists
 
 import Arena
@@ -29,6 +28,15 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robotAI3 = BasicAIRobot.BasicAIRobot(175, 880, 50, [1, -1], 2)
         self.keys_pressed = set()
 
+        self.initUI()
+        self.initSoundrack()
+
+        # Timer for ticks
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.tick)
+        self.timer.start(1)
+
+    def initUI(self):
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
@@ -37,10 +45,16 @@ class RoboArena(QtWidgets.QMainWindow):
         # Painter for all Classes on main Window
         self.painter = QtGui.QPainter(self.label.pixmap())
 
-        # Timer for ticks
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.tick)
-        self.timer.start(1)
+        self.show()
+
+    def initSoundrack(self):
+        # This is the part where we can setup the soundtrack
+        soundtrack = 'RoboArena_Soundtrack_Demo.wav'
+        self.sound = QtMultimedia.QSoundEffect()
+        self.sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
+        self.sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
+        self.sound.setVolume(0.3)    # Choose a value between 0 and 1
+        self.sound.play()
 
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
@@ -86,21 +100,3 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def loadMap(self, name):
         self.arena.loadMap(name)
-
-
-if __name__ == '__main__':
-
-    app = QtWidgets.QApplication(sys.argv)
-
-    # This is the part where we can setup the soundtrack
-    soundtrack = 'RoboArena_Soundtrack_Demo.wav'
-    sound = QtMultimedia.QSoundEffect()
-    sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
-    sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
-    sound.setVolume(0.3)    # Choose a value between 0 and 1
-    sound.play()
-    # -----------------------------------------------------
-
-    window = RoboArena()
-    window.show()
-    app.exec_()
