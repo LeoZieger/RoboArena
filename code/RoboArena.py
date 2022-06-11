@@ -101,21 +101,3 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def loadMap(self, name):
         self.arena.loadMap(name)
-
-
-if __name__ == '__main__':
-
-    app = QtWidgets.QApplication(sys.argv)
-
-    # This is the part where we can setup the soundtrack
-    soundtrack = 'RoboArena_Soundtrack_Demo.wav'
-    sound = QtMultimedia.QSoundEffect()
-    sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
-    sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
-    sound.setVolume(0.3)    # Choose a value between 0 and 1
-    sound.play()
-    # -----------------------------------------------------
-
-    window = RoboArena()
-    window.show()
-    app.exec_()
