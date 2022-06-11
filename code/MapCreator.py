@@ -29,12 +29,15 @@ class MapCreator(QtWidgets.QMainWindow):
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
         self.setCentralWidget(self.label)
-        self.painter = QtGui.QPainter(self.label.pixmap())
+        self.painter = QtGui.QPainter()
 
         self.show()
 
     def tick(self):
+        self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
+        self.painter.end()
+
         self.update()
 
     def mousePressEvent(self, e):

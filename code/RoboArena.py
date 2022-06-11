@@ -43,7 +43,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.setCentralWidget(self.label)
 
         # Painter for all Classes on main Window
-        self.painter = QtGui.QPainter(self.label.pixmap())
+        self.painter = QtGui.QPainter()
 
         self.show()
 
@@ -63,13 +63,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-
         self.robotAI1.moveAI1(self.keys_pressed)
         self.robotAI2.moveAI2(self.keys_pressed)
         self.robotAI3.moveAI3(self.keys_pressed)
         self.robot.try_move(self.keys_pressed, self.arena.boundingBoxes)
 
-        self.painter = QtGui.QPainter(self.label.pixmap())
+        # Here all the objetcs in the game are drawn to the canvas ------
+        self.painter.begin(self.label.pixmap())
 
         self.arena.render(self.painter)
         self.robotAI1.render(self.painter)
@@ -78,6 +78,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robot.render(self.painter)
 
         self.painter.end()
+        # ---------------------------------------------------------------
 
         self.update()
 
