@@ -29,6 +29,14 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robotAI3 = BasicAIRobot.BasicAIRobot(175, 880, 50, [1, -1], 2)
         self.keys_pressed = set()
 
+        self.initUI()
+
+        # Timer for ticks
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.tick)
+        self.timer.start(1)
+
+    def initUI(self):
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
@@ -37,10 +45,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # Painter for all Classes on main Window
         self.painter = QtGui.QPainter(self.label.pixmap())
 
-        # Timer for ticks
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.tick)
-        self.timer.start(1)
+        self.show()
 
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())

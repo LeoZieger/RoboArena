@@ -55,7 +55,6 @@ class MainMenu(QMainWindow):
     def start_game(self):
         self.hide()
         self.game_window = RoboArena.RoboArena()
-        self.game_window.show()
 
     def start_map_creator(self):
         self.hide()
