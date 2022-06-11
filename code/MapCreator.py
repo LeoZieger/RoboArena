@@ -87,9 +87,3 @@ class MapCreator(QtWidgets.QMainWindow):
             self.arena.saveMap(name)
             self.close()
             exit()
-
-
-app = QtWidgets.QApplication(sys.argv)
-window = MapCreator()
-window.show()
-app.exec_()
