@@ -30,6 +30,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed = set()
 
         self.initUI()
+        self.initSoundrack()
 
         # Timer for ticks
         self.timer = QTimer()
@@ -46,6 +47,15 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter = QtGui.QPainter(self.label.pixmap())
 
         self.show()
+
+    def initSoundrack(self):
+        # This is the part where we can setup the soundtrack
+        soundtrack = 'RoboArena_Soundtrack_Demo.wav'
+        sound = QtMultimedia.QSoundEffect()
+        sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
+        sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
+        sound.setVolume(0.3)    # Choose a value between 0 and 1
+        sound.play()
 
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
