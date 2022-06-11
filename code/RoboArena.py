@@ -51,11 +51,11 @@ class RoboArena(QtWidgets.QMainWindow):
     def initSoundrack(self):
         # This is the part where we can setup the soundtrack
         soundtrack = 'RoboArena_Soundtrack_Demo.wav'
-        sound = QtMultimedia.QSoundEffect()
-        sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
-        sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
-        sound.setVolume(0.3)    # Choose a value between 0 and 1
-        sound.play()
+        self.sound = QtMultimedia.QSoundEffect()
+        self.sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
+        self.sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
+        self.sound.setVolume(0.3)    # Choose a value between 0 and 1
+        self.sound.play()
 
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
