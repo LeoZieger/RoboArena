@@ -1,4 +1,3 @@
-import sys
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt
 import Arena

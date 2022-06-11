@@ -1,7 +1,6 @@
 import numpy as np
 import json
-
-from Tile import *
+import Tile
 
 ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
@@ -11,8 +10,8 @@ class Arena():
     def __init__(self,
                  _arena_width=ARENA_WIDTH,
                  _arena_height=ARENA_HEIGHT,
-                 _tile_width=TILE_WIDTH,
-                 _tile_height=TILE_HEIGHT):
+                 _tile_width=Tile.TILE_WIDTH,
+                 _tile_height=Tile.TILE_HEIGHT):
 
         self.arena_width = _arena_width
         self.arena_height = _arena_height
@@ -25,7 +24,7 @@ class Arena():
 
         self.matrix = np.empty(shape=(self.tile_count_x,
                                self.tile_count_y),
-                               dtype=Tile)
+                               dtype=Tile.Tile)
 
         self.boundingBoxes = []
 
@@ -34,13 +33,15 @@ class Arena():
     def init_matrix_with_no_texture(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
-                self.matrix[x][y] = Tile(x, y)
-    
+                self.matrix[x][y] = Tile.Tile(x, y)
+
     def init_bounding_boxes(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 if self.matrix[x][y].collision:
-                    self.boundingBoxes.append(self.matrix[x][y].get_bounding_box())
+                    self.boundingBoxes.append(
+                        self.matrix[x][y].get_bounding_box()
+                        )
 
     def render(self, painter):
         for x in range(self.tile_count_x):
@@ -58,19 +59,19 @@ class Arena():
                 tile_type = t["type"]
 
                 if tile_type == "Dirt":
-                    self.matrix[x][y] = Dirt(x, y)
+                    self.matrix[x][y] = Tile.Dirt(x, y)
                 elif tile_type == "Grass":
-                    self.matrix[x][y] = Grass(x, y)
+                    self.matrix[x][y] = Tile.Grass(x, y)
                 elif tile_type == "Lava":
-                    self.matrix[x][y] = Lava(x, y)
+                    self.matrix[x][y] = Tile.Lava(x, y)
                 elif tile_type == "Stone":
-                    self.matrix[x][y] = Stone(x, y)
+                    self.matrix[x][y] = Tile.Stone(x, y)
                 elif tile_type == "Wall":
-                    self.matrix[x][y] = Wall(x, y)
+                    self.matrix[x][y] = Tile.Wall(x, y)
                 elif tile_type == "Water":
-                    self.matrix[x][y] = Water(x, y)
+                    self.matrix[x][y] = Tile.Water(x, y)
                 else:
-                    self.matrix[x][y] = Tile(x, y)
+                    self.matrix[x][y] = Tile.ile(x, y)
         self.init_bounding_boxes()
 
     def saveMap(self, map_name):
@@ -88,16 +89,16 @@ class Arena():
 
     def set_tile(self, x, y, tile_type):
         if tile_type == "Dirt":
-            self.matrix[x][y] = Dirt(x, y)
+            self.matrix[x][y] = Tile.Dirt(x, y)
         elif tile_type == "Grass":
-            self.matrix[x][y] = Grass(x, y)
+            self.matrix[x][y] = Tile.Grass(x, y)
         elif tile_type == "Lava":
-            self.matrix[x][y] = Lava(x, y)
+            self.matrix[x][y] = Tile.Lava(x, y)
         elif tile_type == "Stone":
-            self.matrix[x][y] = Stone(x, y)
+            self.matrix[x][y] = Tile.Stone(x, y)
         elif tile_type == "Wall":
-            self.matrix[x][y] = Wall(x, y)
+            self.matrix[x][y] = Tile.Wall(x, y)
         elif tile_type == "Water":
-            self.matrix[x][y] = Water(x, y)
+            self.matrix[x][y] = Tile.Water(x, y)
         else:
-            self.matrix[x][y] = Tile(x, y)
+            self.matrix[x][y] = Tile.Tile(x, y)

@@ -2,7 +2,6 @@ from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
 
 
-import sys
 from os.path import exists
 
 import Arena

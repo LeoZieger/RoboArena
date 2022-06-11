@@ -38,28 +38,36 @@ class BasicRobot:
         COLLISION_OFFSET = 7
 
         if Qt.Key_W in keys_pressed:
-            intersect, possible = self.move_is_possible(self.x, self.y - self.speed, other_objects)
+            intersect, possible = self.move_is_possible(self.x,
+                                                        self.y - self.speed,
+                                                        other_objects)
             if possible:
                 self.y -= self.speed
             else:
                 self.y = self.y + intersect.height() + COLLISION_OFFSET
 
         if Qt.Key_S in keys_pressed:
-            intersect, possible = self.move_is_possible(self.x, self.y + self.speed, other_objects)
+            intersect, possible = self.move_is_possible(self.x,
+                                                        self.y + self.speed,
+                                                        other_objects)
             if possible:
                 self.y += self.speed
             else:
                 self.y = self.y - intersect.height() - COLLISION_OFFSET
 
         if Qt.Key_A in keys_pressed:
-            intersect, possible = self.move_is_possible(self.x - self.speed, self.y, other_objects)
+            intersect, possible = self.move_is_possible(self.x - self.speed,
+                                                        self.y,
+                                                        other_objects)
             if possible:
                 self.x -= self.speed
             else:
                 self.x = self.x + intersect.width() + COLLISION_OFFSET
 
         if Qt.Key_D in keys_pressed:
-            intersect, possible = self.move_is_possible(self.x + self.speed, self.y, other_objects)
+            intersect, possible = self.move_is_possible(self.x + self.speed,
+                                                        self.y,
+                                                        other_objects)
             if possible:
                 self.x += self.speed
             else:

@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QPushButton, QApplication, QMainWindow, QApplication, QLabel
+from PyQt5.QtWidgets import QPushButton, QApplication, \
+                            QMainWindow, QLabel
 import PyQt5.QtCore
 
 import sys
@@ -9,6 +10,7 @@ import MapCreator
 WINDOW_WIDTH = 700
 WINDOW_HEIGHT = 250
 BUTTON_HEIGHT = 50
+
 
 class MainMenu(QMainWindow):
     def __init__(self):
@@ -49,9 +51,9 @@ class MainMenu(QMainWindow):
         quit_btn.resize(WINDOW_WIDTH, 50)
         quit_btn.move(0, 200)
         quit_btn.clicked.connect(QApplication.instance().quit)
-        
+
         self.show()
-    
+
     def start_game(self):
         self.hide()
         self.game_window = RoboArena.RoboArena()
@@ -59,7 +61,7 @@ class MainMenu(QMainWindow):
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
-        
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
