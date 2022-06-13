@@ -13,9 +13,13 @@ class MapCreator(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
+        self.arena.init_matrix_with_texture("Grass")
 
         self.current_draw_tile = "Grass"
         self.current_draw_size = 1
+
+        self.left_mouseButton_pressed = False
+        self.mouse_pos = QtCore.QPoint()
 
         self.initUI()
 
@@ -25,6 +29,8 @@ class MapCreator(QtWidgets.QMainWindow):
         self.timer.start(1)
 
     def initUI(self):
+        self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
@@ -38,28 +44,24 @@ class MapCreator(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.painter.end()
 
+        self.check_for_paint()
+
         self.update()
 
     def mousePressEvent(self, e):
         if e.buttons() == QtCore.Qt.LeftButton:
-            tile_pos_x = int(e.x() / self.arena.tile_width)
-            tile_pos_y = int(e.y() / self.arena.tile_width)
+            self.left_mouseButton_pressed = True
+            self.mouse_pos = e.pos()
 
-            offset = (self.current_draw_size - 1)
+    def mouseReleaseEvent(self, e):
+        self.left_mouseButton_pressed = False
 
-            if offset == 0:
-                self.arena.set_tile(tile_pos_x,
-                                    tile_pos_y,
-                                    self.current_draw_tile)
-            else:
-                for i in range(-offset, offset):
-                    for j in range(-offset, offset):
-                        if ((0 <= (tile_pos_x + i) < self.arena.tile_count_x)
-                           and
-                           (0 <= (tile_pos_y + j) < self.arena.tile_count_y)):
-                            self.arena.set_tile(tile_pos_x + i,
-                                                tile_pos_y + j,
-                                                self.current_draw_tile)
+    def mouseMoveEvent(self, e):
+        self.mouse_pos = QtCore.QPoint(e.x(), e.y())
+
+    def check_for_paint(self):
+        if self.left_mouseButton_pressed:
+            self.draw_current_tile()
 
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_1:
@@ -88,7 +90,26 @@ class MapCreator(QtWidgets.QMainWindow):
                 ok = popup.exec_()
                 name = popup.textValue()
             popup.close()
-
             self.arena.saveMap(name)
             self.close()
             exit()
+
+    def draw_current_tile(self):
+        tile_pos_x = int(self.mouse_pos.x() / self.arena.tile_width)
+        tile_pos_y = int(self.mouse_pos.y() / self.arena.tile_width)
+
+        offset = (self.current_draw_size - 1)
+
+        if offset == 0:
+            self.arena.set_tile(tile_pos_x,
+                                tile_pos_y,
+                                self.current_draw_tile)
+        else:
+            for i in range(-offset, offset):
+                for j in range(-offset, offset):
+                    if ((0 <= (tile_pos_x + i) < self.arena.tile_count_x)
+                    and
+                    (0 <= (tile_pos_y + j) < self.arena.tile_count_y)):
+                        self.arena.set_tile(tile_pos_x + i,
+                                            tile_pos_y + j,
+                                            self.current_draw_tile)
