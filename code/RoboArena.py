@@ -22,10 +22,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.loadMap("Example_2Player")
 
-        self.robot = BasicRobot.BasicRobot(50, 50, 50, [0, 0], 3)
-        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, [-1, 0], 2)
-        self.robotAI2 = BasicAIRobot.BasicAIRobot(900, 850, 50, [-1, -1], 2)
-        self.robotAI3 = BasicAIRobot.BasicAIRobot(175, 880, 50, [1, -1], 2)
+        self.robot = BasicRobot.BasicRobot(100, 50, 50, 0, 3)
+        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 180, 2)
+        self.robotAI2 = BasicAIRobot.BasicAIRobot(850, 850, 50, 0, 2)
+        self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 850, 50, 0, 2)
         self.keys_pressed = set()
 
         self.initUI()
@@ -65,19 +65,28 @@ class RoboArena(QtWidgets.QMainWindow):
     def tick(self):
         self.robotAI1.moveAI1(self.keys_pressed)
         self.robotAI2.moveAI2(self.keys_pressed)
-        self.robotAI3.moveAI3(self.keys_pressed)
-        self.robot.try_move(self.keys_pressed, self.arena.boundingBoxes)
+        #self.robotAI3.moveAI3(self.keys_pressed)
+        self.robot.move(self.keys_pressed)
 
         # Here all the objetcs in the game are drawn to the canvas ------
+
         self.painter.begin(self.label.pixmap())
-
         self.arena.render(self.painter)
-        self.robotAI1.render(self.painter)
-        self.robotAI2.render(self.painter)
-        self.robotAI3.render(self.painter)
         self.robot.render(self.painter)
-
         self.painter.end()
+
+        self.painter.begin(self.label.pixmap())
+        self.robotAI1.render(self.painter)
+        self.painter.end()
+
+        self.painter.begin(self.label.pixmap())
+        self.robotAI2.render(self.painter)
+        self.painter.end()
+
+        self.painter.begin(self.label.pixmap())
+        self.robotAI3.render(self.painter)
+        self.painter.end()
+
         # ---------------------------------------------------------------
 
         self.update()
