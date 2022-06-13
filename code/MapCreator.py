@@ -13,6 +13,7 @@ class MapCreator(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
+        self.arena.init_matrix_with_texture("Grass")
 
         self.current_draw_tile = "Grass"
         self.current_draw_size = 1

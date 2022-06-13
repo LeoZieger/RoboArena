@@ -35,6 +35,24 @@ class Arena():
             for y in range(self.tile_count_y):
                 self.matrix[x][y] = Tile.Tile(x, y)
 
+    def init_matrix_with_texture(self, tile_type):
+        for x in range(self.tile_count_x):
+            for y in range(self.tile_count_y):
+                if tile_type == "Dirt":
+                    self.matrix[x][y] = Tile.Dirt(x, y)
+                elif tile_type == "Grass":
+                    self.matrix[x][y] = Tile.Grass(x, y)
+                elif tile_type == "Lava":
+                    self.matrix[x][y] = Tile.Lava(x, y)
+                elif tile_type == "Stone":
+                    self.matrix[x][y] = Tile.Stone(x, y)
+                elif tile_type == "Wall":
+                    self.matrix[x][y] = Tile.Wall(x, y)
+                elif tile_type == "Water":
+                    self.matrix[x][y] = Tile.Water(x, y)
+                else:
+                    self.matrix[x][y] = Tile.ile(x, y)
+
     def init_bounding_boxes(self):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
