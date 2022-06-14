@@ -3,18 +3,20 @@
 
 # This is important for drawing the robot later
 from PyQt5.QtGui import QPen, QBrush
-from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtCore import Qt, QRect, QPoint
+from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
 import numpy as np
 
 MAX_SPEED = 5
 MIN_SPEED = 3
 
 
-class BasicRobot:
+class BasicRobot(QGraphicsRectItem):
 
     # Basic-Robot constructor
 
     def __init__(self, x, y, r, alpha, speed):
+        super().__init__()
 
         self.x = x                          # x-position
         self.y = y                          # y-position
@@ -66,3 +68,5 @@ class BasicRobot:
                 self.speed += 2
         else:
             self.speed = MIN_SPEED
+
+        self.setRect(int(self.x), int(self.y), self.r, self.r)

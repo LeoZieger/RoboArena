@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import Tile
+from PyQt5.QtWidgets import QGraphicsScene
 
 ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
@@ -26,8 +27,6 @@ class Arena():
                                self.tile_count_y),
                                dtype=Tile.Tile)
 
-        self.boundingBoxes = []
-
         self.init_matrix_with_no_texture()
 
     def init_matrix_with_no_texture(self):
@@ -51,21 +50,13 @@ class Arena():
                 elif tile_type == "Water":
                     self.matrix[x][y] = Tile.Water(x, y)
                 else:
-                    self.matrix[x][y] = Tile.ile(x, y)
-
-    def init_bounding_boxes(self):
-        for x in range(self.tile_count_x):
-            for y in range(self.tile_count_y):
-                if self.matrix[x][y].collision:
-                    self.boundingBoxes.append(
-                        self.matrix[x][y].get_bounding_box()
-                        )
+                    self.matrix[x][y] = Tile.Tile(x, y)
 
     def render(self, painter):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 if self.matrix[x][y] is not None:
-                    painter.drawImage(self.matrix[x][y].rect,
+                    painter.drawImage(self.matrix[x][y].rect(),
                                       self.matrix[x][y].texture)
 
     def loadMap(self, map_name):
@@ -90,7 +81,6 @@ class Arena():
                     self.matrix[x][y] = Tile.Water(x, y)
                 else:
                     self.matrix[x][y] = Tile.ile(x, y)
-        self.init_bounding_boxes()
 
     def saveMap(self, map_name):
         map_file = open("maps/" + map_name + ".json", "w")
@@ -120,3 +110,12 @@ class Arena():
             self.matrix[x][y] = Tile.Water(x, y)
         else:
             self.matrix[x][y] = Tile.Tile(x, y)
+    
+    def add_tiles_to_scene(self, scene):
+        new_scene = scene
+
+        for x in range(self.tile_count_x):
+            for y in range(self.tile_count_y):
+                if self.matrix[x][y].collision:
+                    new_scene.addItem(self.matrix[x][y])
+        return new_scene

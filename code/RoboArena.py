@@ -1,5 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
 
 
 from os.path import exists
@@ -27,6 +28,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robotAI2 = BasicAIRobot.BasicAIRobot(800, 850, 50, 0, 2)
         self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 850, 50, 0, 2)
         self.keys_pressed = set()
+
+        self.scene = QGraphicsScene()
+        self.scene = self.arena.add_tiles_to_scene(self.scene)
+        self.scene.addItem(self.robot)
 
         self.initUI()
         self.initSoundrack()
