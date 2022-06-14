@@ -14,7 +14,7 @@ MIN_SPEED = 3
 class BasicRobot(QGraphicsRectItem):
 
     # Basic-Robot constructor
-    debug = True
+    debug = False
 
     def __init__(self, x, y, r, alpha, speed):
         super().__init__()
