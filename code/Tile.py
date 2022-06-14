@@ -1,23 +1,27 @@
 from PyQt5.QtGui import QImage
 from PyQt5.QtCore import QRect
 
+from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
+
 TILE_WIDTH = 10
 TILE_HEIGHT = 10
 
 
-class Tile():
+class Tile(QGraphicsRectItem):
     texture = QImage("res/no_texture.png")
     tile_type = "None"
     collision = False
 
     def __init__(self, pos_x, pos_y):
+        super().__init__()
+
         self.x = pos_x
         self.y = pos_y
 
-        self.rect = QRect(self.x * TILE_WIDTH,
-                          self.y * TILE_HEIGHT,
-                          TILE_WIDTH,
-                          TILE_HEIGHT)
+        self.setRect(self.x * TILE_WIDTH,
+                     self.y * TILE_HEIGHT,
+                     TILE_WIDTH,
+                     TILE_HEIGHT)
 
     def to_json_string(self):
         json_str = "{"
@@ -26,9 +30,6 @@ class Tile():
                                                          self.y)
         json_str += "}"
         return json_str
-
-    def get_bounding_box(self):
-        return self.rect
 
 
 class Dirt(Tile):
@@ -60,3 +61,4 @@ class Wall(Tile):
 class Water(Tile):
     tile_type = "Water"
     texture = QImage("res/water_texture.png")
+    collision = True
