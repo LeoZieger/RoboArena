@@ -14,6 +14,7 @@ MIN_SPEED = 3
 class BasicRobot(QGraphicsRectItem):
 
     # Basic-Robot constructor
+    debug = True
 
     def __init__(self, x, y, r, alpha, speed):
         super().__init__()
@@ -55,15 +56,16 @@ class BasicRobot(QGraphicsRectItem):
 
         painter.drawRect(self.rect())
 
-        painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
-
         painter.resetTransform()
 
-        painter.drawRect(self.rect())
+        if self.debug:
+            painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
-        painter.drawLine(QPoint(int(self.x), int(self.y)),
-                         QPoint(int(self.x + (self.getVector()[0] * 40)),
-                                int(self.y + (self.getVector()[1] * 40))))
+            painter.drawRect(self.rect())
+
+            painter.drawLine(QPoint(int(self.x), int(self.y)),
+                            QPoint(int(self.x + (self.getVector()[0] * 40)),
+                                    int(self.y + (self.getVector()[1] * 40))))
         
     def move(self, keys_pressed, scene):
         if Qt.Key_W in keys_pressed:
@@ -117,10 +119,10 @@ class BasicRobot(QGraphicsRectItem):
                     break
 
         if Qt.Key_A in keys_pressed:
-            self.alpha += 1
+            self.alpha -= 1
 
         if Qt.Key_D in keys_pressed:
-            self.alpha -= 1
+            self.alpha += 1
 
         if Qt.Key_Shift in keys_pressed:
             if self.speed < MAX_SPEED:
