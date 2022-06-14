@@ -27,7 +27,7 @@ class BasicAIRobot(BasicRobot):
         painter.rotate(-self.alpha)
         painter.translate(-(self.x + offset), -(self.y + offset))
 
-        painter.drawRect(QRect(self.x, self.y, self.r, self.r))
+        painter.drawRect(QRect(int(self.x), int(self.y), self.r, self.r))
 
     def moveAI1(self, keys_pressed):
         if self.x > 850:
