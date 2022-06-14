@@ -30,15 +30,26 @@ class BasicAIRobot(BasicRobot):
         painter.drawRect(QRect(self.x, self.y, self.r, self.r))
 
     def moveAI1(self, keys_pressed):
+        if self.x > 850:
+            self.alpha = 180
+        if self.x < 650:
+            self.alpha = 0
         self.x += self.getVector()[0] * self.speed / 2
         self.y -= self.getVector()[1] * self.speed / 2
-
 
     def moveAI2(self, keys_pressed):
+        self.alpha += 1
         self.x += self.getVector()[0] * self.speed / 2
         self.y -= self.getVector()[1] * self.speed / 2
-        self.alpha += 1
 
-    #def moveAI3(self, keys_pressed):
+    def moveAI3(self, keys_pressed):
+        if self.alpha > 180:
+            self.alpha = 0
 
-
+        if self.y > 200:
+            self.alpha += 1
+            self.x += self.getVector()[0] * self.speed / 2
+            self.y -= self.getVector()[1] * self.speed / 2
+        else:
+            self.x = 100
+            self.y = 850

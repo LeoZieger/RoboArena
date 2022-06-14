@@ -24,7 +24,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = BasicRobot.BasicRobot(100, 50, 50, 0, 3)
         self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 180, 2)
-        self.robotAI2 = BasicAIRobot.BasicAIRobot(850, 850, 50, 0, 2)
+        self.robotAI2 = BasicAIRobot.BasicAIRobot(800, 850, 50, 0, 2)
         self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 850, 50, 0, 2)
         self.keys_pressed = set()
 
@@ -65,7 +65,7 @@ class RoboArena(QtWidgets.QMainWindow):
     def tick(self):
         self.robotAI1.moveAI1(self.keys_pressed)
         self.robotAI2.moveAI2(self.keys_pressed)
-        #self.robotAI3.moveAI3(self.keys_pressed)
+        self.robotAI3.moveAI3(self.keys_pressed)
         self.robot.move(self.keys_pressed)
 
         # Here all the objetcs in the game are drawn to the canvas ------
