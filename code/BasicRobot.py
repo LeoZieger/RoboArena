@@ -44,7 +44,7 @@ class BasicRobot:
         painter.rotate(-self.alpha)
         painter.translate(-(self.x + offset), -(self.y + offset))
 
-        painter.drawRect(QRect(self.x, self.y, self.r, self.r))
+        painter.drawRect(QRect(int(self.x), int(self.y), self.r, self.r))
 
     def move(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
