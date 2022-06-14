@@ -61,9 +61,9 @@ class BasicRobot(QGraphicsRectItem):
 
         painter.drawRect(self.rect())
 
-        painter.drawLine(QPoint(self.x, self.y),
-                         QPoint(self.x + (self.getVector()[0] * 40),
-                                self.y + (self.getVector()[1] * 40)))
+        painter.drawLine(QPoint(int(self.x), int(self.y)),
+                         QPoint(int(self.x + (self.getVector()[0] * 40)),
+                                int(self.y + (self.getVector()[1] * 40))))
         
     def move(self, keys_pressed, scene):
         if Qt.Key_W in keys_pressed:
