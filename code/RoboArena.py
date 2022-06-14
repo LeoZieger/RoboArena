@@ -71,7 +71,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robotAI1.moveAI1(self.keys_pressed)
         self.robotAI2.moveAI2(self.keys_pressed)
         self.robotAI3.moveAI3(self.keys_pressed)
-        self.robot.move(self.keys_pressed)
+        self.robot.move(self.keys_pressed, self.scene)
 
         # Here all the objetcs in the game are drawn to the canvas ------
 

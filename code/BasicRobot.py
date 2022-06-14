@@ -24,9 +24,16 @@ class BasicRobot(QGraphicsRectItem):
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
 
-    def getVector(self):
+        self.setRect(int(self.x), int(self.y), self.r, self.r)
 
+    def getVector(self):
         return [np.cos(np.deg2rad(self.alpha)), np.sin(np.deg2rad(self.alpha))]
+
+    def getUnitVector(self, old_x, old_y, new_x, new_y):
+        l = np.sqrt(np.power(new_x - old_x, 2) + np.power(new_y - old_y, 2))
+        v_unit = [(self.getVector()[0] * self.speed) / l,
+                (self.getVector()[1] * self.speed) / l]
+        return v_unit
 
     # Small function that shows all robot-info.
     def info(self):
@@ -43,19 +50,71 @@ class BasicRobot(QGraphicsRectItem):
         painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
 
         painter.translate(self.x + offset, self.y + offset)
-        painter.rotate(-self.alpha)
+        painter.rotate(self.alpha)
         painter.translate(-(self.x + offset), -(self.y + offset))
 
-        painter.drawRect(QRect(int(self.x), int(self.y), self.r, self.r))
+        painter.drawRect(self.rect())
 
-    def move(self, keys_pressed):
+        painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
+
+        painter.resetTransform()
+
+        painter.drawRect(self.rect())
+
+        painter.drawLine(QPoint(self.x, self.y),
+                         QPoint(self.x + (self.getVector()[0] * 40),
+                                self.y + (self.getVector()[1] * 40)))
+        
+    def move(self, keys_pressed, scene):
         if Qt.Key_W in keys_pressed:
-            self.x += self.getVector()[0] * self.speed / 2
-            self.y -= self.getVector()[1] * self.speed / 2
+            v_unit = self.getUnitVector(self.x, 
+                                     self.y,
+                                     self.x + (self.getVector()[0] * self.speed),
+                                     self.y +(self.getVector()[1] * self.speed))
+            
+            # Checking UV for UV, if collision takes place
+            for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
+                collision = False
+
+                self.x += v_unit[0]
+                self.y += v_unit[1]
+
+                self.setRect(int(self.x), int(self.y), self.r, self.r)
+
+                # If collision takes place we step back
+                while len(scene.collidingItems(self)) > 0:
+                    self.x -= v_unit[0]
+                    self.y -= v_unit[1]
+                    self.setRect(int(self.x), int(self.y), self.r, self.r)
+                    collision = True
+                
+                if collision:
+                    break
 
         if Qt.Key_S in keys_pressed:
-            self.x -= self.getVector()[0] * self.speed / 2
-            self.y += self.getVector()[1] * self.speed / 2
+            v_unit = self.getUnitVector(self.x, 
+                                     self.y,
+                                     self.x - (self.getVector()[0] * self.speed),
+                                     self.y - (self.getVector()[1] * self.speed))
+            
+            # Checking UV for UV, if collision takes place
+            for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
+                collision = False
+
+                self.x -= v_unit[0]
+                self.y -= v_unit[1]
+
+                self.setRect(int(self.x), int(self.y), self.r, self.r)
+
+                # If collision takes place we step back
+                while len(scene.collidingItems(self)) > 0:
+                    self.x += v_unit[0]
+                    self.y += v_unit[1]
+                    self.setRect(int(self.x), int(self.y), self.r, self.r)
+                    collision = True
+                
+                if collision:
+                    break
 
         if Qt.Key_A in keys_pressed:
             self.alpha += 1
