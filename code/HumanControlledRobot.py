@@ -3,69 +3,20 @@
 
 # This is important for drawing the robot later
 from PyQt5.QtGui import QPen, QBrush
-from PyQt5.QtCore import Qt, QRect, QPoint
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
+from PyQt5.QtCore import Qt, QRect, QPoint, QRunnable, QRectF
+from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene, QGraphicsObject, QGraphicsItem
 import numpy as np
+
+from BaseRobot import BaseRobot
 
 MAX_SPEED = 5
 MIN_SPEED = 3
 
 
-class BasicRobot(QGraphicsRectItem):
-
-    # Basic-Robot constructor
-    debug = False
+class HumanControlledRobot(BaseRobot):
 
     def __init__(self, x, y, r, alpha, speed):
-        super().__init__()
-
-        self.x = x                          # x-position
-        self.y = y                          # y-position
-        self.r = r                          # width
-        self.alpha = alpha                  # direction
-        self.speed = speed                  # speed
-
-        self.setRect(int(self.x), int(self.y), self.r, self.r)
-
-    def getVector(self):
-        return [np.cos(np.deg2rad(self.alpha)), np.sin(np.deg2rad(self.alpha))]
-
-    def getUnitVector(self, old_x, old_y, new_x, new_y):
-        l = np.sqrt(np.power(new_x - old_x, 2) + np.power(new_y - old_y, 2))
-        v_unit = [(self.getVector()[0] * self.speed) / l,
-                (self.getVector()[1] * self.speed) / l]
-        return v_unit
-
-    # Small function that shows all robot-info.
-    def info(self):
-        print(self.x)
-        print(self.y)
-        print(self.r)
-        print(self.alpha)
-        print(self.speed)
-
-    def render(self, painter):
-        offset = self.r / 2
-
-        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-        painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
-
-        painter.translate(self.x + offset, self.y + offset)
-        painter.rotate(self.alpha)
-        painter.translate(-(self.x + offset), -(self.y + offset))
-
-        painter.drawRect(self.rect())
-
-        painter.resetTransform()
-
-        if self.debug:
-            painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
-
-            painter.drawRect(self.rect())
-
-            painter.drawLine(QPoint(int(self.x), int(self.y)),
-                            QPoint(int(self.x + (self.getVector()[0] * 40)),
-                                    int(self.y + (self.getVector()[1] * 40))))
+        BaseRobot.__init__(self, x, y, r, alpha, speed)
         
     def move(self, keys_pressed, scene):
         if Qt.Key_W in keys_pressed:
@@ -81,13 +32,13 @@ class BasicRobot(QGraphicsRectItem):
                 self.x += v_unit[0]
                 self.y += v_unit[1]
 
-                self.setRect(int(self.x), int(self.y), self.r, self.r)
+                # self.setRect(int(self.x), int(self.y), self.r, self.r)
 
                 # If collision takes place we step back
                 while len(scene.collidingItems(self)) > 0:
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
-                    self.setRect(int(self.x), int(self.y), self.r, self.r)
+                    # self.setRect(int(self.x), int(self.y), self.r, self.r)
                     collision = True
                 
                 if collision:
@@ -106,13 +57,13 @@ class BasicRobot(QGraphicsRectItem):
                 self.x -= v_unit[0]
                 self.y -= v_unit[1]
 
-                self.setRect(int(self.x), int(self.y), self.r, self.r)
+                # self.setRect(int(self.x), int(self.y), self.r, self.r)
 
                 # If collision takes place we step back
                 while len(scene.collidingItems(self)) > 0:
                     self.x += v_unit[0]
                     self.y += v_unit[1]
-                    self.setRect(int(self.x), int(self.y), self.r, self.r)
+                    # self.setRect(int(self.x), int(self.y), self.r, self.r)
                     collision = True
                 
                 if collision:
@@ -130,4 +81,7 @@ class BasicRobot(QGraphicsRectItem):
         else:
             self.speed = MIN_SPEED
 
-        self.setRect(int(self.x), int(self.y), self.r, self.r)
+        # self.setRect(int(self.x), int(self.y), self.r, self.r)
+
+    def boundingRect(self):
+        return QRectF(int(self.x), int(self.y), self.r, self.r)

@@ -1,13 +1,13 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QThreadPool, QThread
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
 
 
 from os.path import exists
 
 import Arena
-import BasicRobot
-import BasicAIRobot
+import HumanControlledRobot
+import AIControlledRobot
 import NameInput
 
 WINDOW_WIDTH = 1000
@@ -23,10 +23,14 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.loadMap("Example_2Player")
 
-        self.robot = BasicRobot.BasicRobot(100, 50, 50, 0, 3)
-        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 180, 2)
-        self.robotAI2 = BasicAIRobot.BasicAIRobot(800, 850, 50, 0, 2)
-        self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 850, 50, 0, 2)
+        self.robot = HumanControlledRobot.HumanControlledRobot(100, 50, 50, 0, 3)
+
+        self.robotAI1 = AIControlledRobot.BasicAIRobot(850, 50, 50, 180, 2)
+        self.robotAI2 = AIControlledRobot.BasicAIRobot(800, 850, 50, 0, 2)
+        self.robotAI3 = AIControlledRobot.BasicAIRobot(100, 850, 50, 0, 2)
+
+        self.pool = QThreadPool()
+
         self.keys_pressed = set()
 
         self.scene = QGraphicsScene()
@@ -68,9 +72,9 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-        self.robotAI1.moveAI1(self.keys_pressed)
-        self.robotAI2.moveAI2(self.keys_pressed)
-        self.robotAI3.moveAI3(self.keys_pressed)
+        # self.robotAI1.moveAI1(self.keys_pressed)
+        # self.robotAI2.moveAI2(self.keys_pressed)
+        # self.robotAI3.moveAI3(self.keys_pressed)
         self.robot.move(self.keys_pressed, self.scene)
 
         # Here all the objetcs in the game are drawn to the canvas ------
