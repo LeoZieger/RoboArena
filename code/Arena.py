@@ -1,7 +1,6 @@
 import numpy as np
 import json
 import Tile
-from PyQt5.QtWidgets import QGraphicsScene
 
 ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
@@ -110,7 +109,7 @@ class Arena():
             self.matrix[x][y] = Tile.Water(x, y)
         else:
             self.matrix[x][y] = Tile.Tile(x, y)
-    
+
     def add_tiles_to_scene(self, scene):
         new_scene = scene
 

@@ -2,9 +2,9 @@
 
 
 # This is important for drawing the robot later
-from PyQt5.QtGui import QPen, QBrush, QImage
-from PyQt5.QtCore import Qt, QRect, QPoint
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
+from PyQt5.QtGui import QPen, QImage
+from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtWidgets import QGraphicsRectItem
 import numpy as np
 
 MAX_SPEED = 5
@@ -32,9 +32,9 @@ class BasicRobot(QGraphicsRectItem):
         return [np.cos(np.deg2rad(self.alpha)), np.sin(np.deg2rad(self.alpha))]
 
     def getUnitVector(self, old_x, old_y, new_x, new_y):
-        l = np.sqrt(np.power(new_x - old_x, 2) + np.power(new_y - old_y, 2))
-        v_unit = [(self.getVector()[0] * self.speed) / l,
-                (self.getVector()[1] * self.speed) / l]
+        length = np.sqrt(np.power(new_x - old_x, 2) + np.power(new_y - old_y, 2))
+        v_unit = [(self.getVector()[0] * self.speed) / length,
+                  (self.getVector()[1] * self.speed) / length]
         return v_unit
 
     # Small function that shows all robot-info.
@@ -64,16 +64,16 @@ class BasicRobot(QGraphicsRectItem):
             painter.drawRect(self.rect())
 
             painter.drawLine(QPoint(int(self.x), int(self.y)),
-                            QPoint(int(self.x + (self.getVector()[0] * 40)),
+                             QPoint(int(self.x + (self.getVector()[0] * 40)),
                                     int(self.y + (self.getVector()[1] * 40))))
-        
+
     def move(self, keys_pressed, scene):
         if Qt.Key_W in keys_pressed:
-            v_unit = self.getUnitVector(self.x, 
-                                     self.y,
-                                     self.x + (self.getVector()[0] * self.speed),
-                                     self.y +(self.getVector()[1] * self.speed))
-            
+            v_unit = self.getUnitVector(self.x,
+                                        self.y,
+                                        self.x + (self.getVector()[0] * self.speed),
+                                        self.y + (self.getVector()[1] * self.speed))
+
             # Checking UV for UV, if collision takes place
             for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
                 collision = False
@@ -89,16 +89,16 @@ class BasicRobot(QGraphicsRectItem):
                     self.y -= v_unit[1]
                     self.setRect(int(self.x), int(self.y), self.r, self.r)
                     collision = True
-                
+
                 if collision:
                     break
 
         if Qt.Key_S in keys_pressed:
-            v_unit = self.getUnitVector(self.x, 
-                                     self.y,
-                                     self.x - (self.getVector()[0] * self.speed),
-                                     self.y - (self.getVector()[1] * self.speed))
-            
+            v_unit = self.getUnitVector(self.x,
+                                        self.y,
+                                        self.x - (self.getVector()[0] * self.speed),
+                                        self.y - (self.getVector()[1] * self.speed))
+
             # Checking UV for UV, if collision takes place
             for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
                 collision = False
@@ -114,7 +114,7 @@ class BasicRobot(QGraphicsRectItem):
                     self.y += v_unit[1]
                     self.setRect(int(self.x), int(self.y), self.r, self.r)
                     collision = True
-                
+
                 if collision:
                     break
 

@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
+from PyQt5.QtWidgets import QGraphicsScene
 
 
 from os.path import exists

@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel
-from PyQt5.QtGui import QImage, QPalette, QBrush, QPixmap
+from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
 
@@ -13,6 +13,7 @@ WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 BUTTON_HEIGHT = 80
 
+
 class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -21,14 +22,16 @@ class MainMenu(QMainWindow):
     def initUI(self):
         self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
 
-        #Background
+        # Background
         background_image = QImage("background.jpg")
-        sImage = background_image.scaled(QSize(WINDOW_WIDTH, WINDOW_WIDTH))  # resize Image to widgets size
+
+        # resize Image to widgets size
+        sImage = background_image.scaled(QSize(WINDOW_WIDTH, WINDOW_WIDTH))
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
 
-        #Header
+        # Header
         name_label = QLabel("ROBO ARENA", self)
         name_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         name_label.resize(WINDOW_WIDTH, BUTTON_HEIGHT)
@@ -40,35 +43,34 @@ class MainMenu(QMainWindow):
             "font-weight: 1000;"
         )
 
-
-        #Start Game
+        # Start Game
         start_btn = QPushButton('Start Game', self)
         start_btn.resize(500, BUTTON_HEIGHT)
         start_btn.move(250, 370)
         start_btn.clicked.connect(self.start_game)
 
-        #Settings
+        # Settings
         settings_btn = QPushButton('Settings', self)
         settings_btn.resize(247, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        #Difficulty
+        # Difficulty
         difficulty_btn = QPushButton('Difficulty', self)
         difficulty_btn.resize(247, BUTTON_HEIGHT)
         difficulty_btn.move(503, 460)
 
-        #Edit Robot
+        # Edit Robot
         editRob_btn = QPushButton('Edit Robot', self)
         editRob_btn.resize(247, BUTTON_HEIGHT)
         editRob_btn.move(250, 550)
 
-        #Map Editor
+        # Map Editor
         editMap_btn = QPushButton('Map Editor', self)
         editMap_btn.resize(247, BUTTON_HEIGHT)
         editMap_btn.move(503, 550)
         editMap_btn.clicked.connect(self.start_map_creator)
 
-        #Quit
+        # Quit
         quit_btn = QPushButton('Quit', self)
         quit_btn.resize(500, BUTTON_HEIGHT)
         quit_btn.move(250, 640)
@@ -90,7 +92,7 @@ class MainMenu(QMainWindow):
                         background-color: #f2eded;
                     }
                     QPushButton:pressed{
-                        background-color: #c7bfbf;     
+                        background-color: #c7bfbf;
                     }
                         """
         start_btn.setStyleSheet(buttonstyle)
@@ -100,10 +102,7 @@ class MainMenu(QMainWindow):
         editMap_btn.setStyleSheet(buttonstyle)
         quit_btn.setStyleSheet(buttonstyle)
 
-
         self.show()
-
-
 
     def start_game(self):
         self.hide()
