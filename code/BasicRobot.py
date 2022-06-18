@@ -2,7 +2,7 @@
 
 
 # This is important for drawing the robot later
-from PyQt5.QtGui import QPen, QBrush
+from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QRect, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
 import numpy as np
@@ -14,7 +14,7 @@ MIN_SPEED = 3
 class BasicRobot(QGraphicsRectItem):
 
     # Basic-Robot constructor
-    debug = False
+    debug = True
 
     def __init__(self, x, y, r, alpha, speed):
         super().__init__()
@@ -24,6 +24,7 @@ class BasicRobot(QGraphicsRectItem):
         self.r = r                          # width
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
+        self.texture = QImage("res/blue_tank.png")              # texture
 
         self.setRect(int(self.x), int(self.y), self.r, self.r)
 
@@ -48,13 +49,12 @@ class BasicRobot(QGraphicsRectItem):
         offset = self.r / 2
 
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-        painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
 
         painter.translate(self.x + offset, self.y + offset)
         painter.rotate(self.alpha)
         painter.translate(-(self.x + offset), -(self.y + offset))
 
-        painter.drawRect(self.rect())
+        painter.drawImage(self.rect(), self.texture)
 
         painter.resetTransform()
 
