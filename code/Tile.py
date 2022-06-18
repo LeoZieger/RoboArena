@@ -1,7 +1,5 @@
 from PyQt5.QtGui import QImage
-from PyQt5.QtCore import QRect
-
-from PyQt5.QtWidgets import QGraphicsRectItem, QGraphicsScene
+from PyQt5.QtWidgets import QGraphicsRectItem
 
 TILE_WIDTH = 10
 TILE_HEIGHT = 10
