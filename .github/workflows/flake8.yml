@@ -3,7 +3,7 @@ name: Flake8
 on:
   pull_request:
     paths:
-      - '*.py'
+      - 'code/*.py'
 
 jobs:
   flake8_py3:
