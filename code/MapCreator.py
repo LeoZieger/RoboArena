@@ -107,9 +107,8 @@ class MapCreator(QtWidgets.QMainWindow):
         else:
             for i in range(-offset, offset):
                 for j in range(-offset, offset):
-                    if ((0 <= (tile_pos_x + i) < self.arena.tile_count_x)
-                    and
-                    (0 <= (tile_pos_y + j) < self.arena.tile_count_y)):
+                    if (0 <= (tile_pos_x + i) < self.arena.tile_count_x) and \
+                       (0 <= (tile_pos_y + j) < self.arena.tile_count_y):
                         self.arena.set_tile(tile_pos_x + i,
                                             tile_pos_y + j,
                                             self.current_draw_tile)
