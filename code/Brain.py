@@ -1,12 +1,14 @@
-from PyQt5.QtCore import Qt, QRect, QRunnable, pyqtSignal, QObject, QPoint, QPointF
+from PyQt5.QtCore import QRunnable, pyqtSignal, QObject, QPoint
 import time
 
 import Arena
 import BaseRobot
 
+
 class Signals(QObject):
     finished = pyqtSignal(int)
     informAboutNextPoint = pyqtSignal(int, QPoint)
+
 
 class BrainLVL1(QRunnable):
     signals = Signals()
@@ -28,9 +30,9 @@ class BrainLVL1(QRunnable):
         time.sleep(1)
         if self.stop:
             return
-            
+
         # TODO PATHFINDING To Point
         self.signals.informAboutNextPoint.emit(self.n,
-                                            QPoint(self.human_player.x,
-                                                    self.human_player.y))
+                                               QPoint(self.human_player.x,
+                                                      self.human_player.y))
         self.signals.finished.emit(self.n)
