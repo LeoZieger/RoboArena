@@ -3,7 +3,7 @@ name: Flake8
 on:
   pull_request:
     paths:
-      - '*.py'
+      - 'code/*.py'
 
 jobs:
   flake8_py3:
@@ -12,11 +12,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9.12
+          python-version: 3.9.13
           architecture: x64
       - name: Checkout PyTorch
         uses: actions/checkout@master
       - name: Install flake8
         run: pip install flake8
       - name: Run flake8
-        run: flake8 .
+        run: flake8 . --max-line-length=85
