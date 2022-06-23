@@ -27,6 +27,7 @@ class MainMenu(QMainWindow):
 
         # resize Image to widgets size
         sImage = background_image.scaled(QSize(WINDOW_WIDTH, WINDOW_WIDTH))
+
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
