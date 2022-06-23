@@ -1,6 +1,6 @@
 # Author: Lasse Niederkrome
 
-from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtCore import Qt
 
 from BaseRobot import BaseRobot
 
@@ -21,7 +21,7 @@ class HumanControlledRobot(BaseRobot):
             self.moveForward = True
         else:
             self.moveForward = False
-        
+
         if Qt.Key_S in keys_pressed:
             self.moveBackward = True
         else:
@@ -37,7 +37,7 @@ class HumanControlledRobot(BaseRobot):
             self.alpha += 2
         if Qt.Key_D in keys_pressed:
             self.alpha -= 2
-        
+
     def move(self, scene):
         if self.moveForward:
             v_unit = self.getUnitVector(self.x,
