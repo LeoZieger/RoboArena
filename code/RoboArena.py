@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QGraphicsScene
 from os.path import exists
 
 import Arena
-import BasicRobot
-import BasicAIRobot
+from HumanControlledRobot import HumanControlledRobot
+from AIControlledRobot import AIControlledRobot
 import NameInput
 
 WINDOW_WIDTH = 1000
@@ -23,10 +23,17 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.loadMap("Example_2Player")
 
-        self.robot = BasicRobot.BasicRobot(100, 50, 50, 0, 3)
-        self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 180, 2)
-        self.robotAI2 = BasicAIRobot.BasicAIRobot(800, 800, 50, 0, 2)
-        self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 900, 50, 315, 2)
+        self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
+
+        self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
+        self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
+        self.robotAI3 = AIControlledRobot(100, 850, 50, 0, 2, n=3)
+
+        self.AI_robots = []
+        self.AI_robots.append(self.robotAI1)
+        self.AI_robots.append(self.robotAI2)
+        self.AI_robots.append(self.robotAI3)
+
         self.keys_pressed = set()
 
         self.scene = QGraphicsScene()
@@ -68,10 +75,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-        self.robotAI1.moveAI1(self.keys_pressed)
-        self.robotAI2.moveAI2(self.keys_pressed)
-        self.robotAI3.moveAI3(self.keys_pressed)
-        self.robot.move(self.keys_pressed, self.scene)
+        self.robot.move(self.scene)
+        self.robot.reactToUserInput(self.keys_pressed)
+
+        for ai_r in self.AI_robots:
+            ai_r.move(QGraphicsScene())
+            ai_r.followPoints()
+            ai_r.inform_brain(self.arena, self.robot)
 
         # Here all the objetcs in the game are drawn to the canvas ------
 
@@ -80,17 +90,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robot.render(self.painter)
         self.painter.end()
 
-        self.painter.begin(self.label.pixmap())
-        self.robotAI1.render(self.painter)
-        self.painter.end()
-
-        self.painter.begin(self.label.pixmap())
-        self.robotAI2.render(self.painter)
-        self.painter.end()
-
-        self.painter.begin(self.label.pixmap())
-        self.robotAI3.render(self.painter)
-        self.painter.end()
+        for ai_r in self.AI_robots:
+            self.painter.begin(self.label.pixmap())
+            ai_r.render(self.painter)
+            self.painter.end()
 
         # ---------------------------------------------------------------
 
@@ -115,3 +118,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def loadMap(self, name):
         self.arena.loadMap(name)
+
+    def closeEvent(self, event):
+        print("Alle Threads werden auf stop gesetzt!")
+        for ai_r in self.AI_robots:
+            ai_r.stopAllThreads()
