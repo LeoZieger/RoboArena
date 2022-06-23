@@ -13,8 +13,33 @@ class HumanControlledRobot(BaseRobot):
     def __init__(self, x, y, r, alpha, speed):
         BaseRobot.__init__(self, x, y, r, alpha, speed)
 
-    def move(self, keys_pressed, scene):
+        self.moveForward = False
+        self.moveBackward = False
+
+    def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
+            self.moveForward = True
+        else:
+            self.moveForward = False
+        
+        if Qt.Key_S in keys_pressed:
+            self.moveBackward = True
+        else:
+            self.moveBackward = False
+
+        if Qt.Key_Shift in keys_pressed:
+            if self.speed < MAX_SPEED:
+                self.speed += 2
+        else:
+            self.speed = MIN_SPEED
+
+        if Qt.Key_A in keys_pressed:
+            self.alpha += 2
+        if Qt.Key_D in keys_pressed:
+            self.alpha -= 2
+        
+    def move(self, scene):
+        if self.moveForward:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
                                         self.x + (self.getVector()[0] * self.speed),
@@ -36,7 +61,7 @@ class HumanControlledRobot(BaseRobot):
                 if collision:
                     break
 
-        if Qt.Key_S in keys_pressed:
+        if self.moveBackward:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
                                         self.x - (self.getVector()[0] * self.speed),
@@ -57,18 +82,3 @@ class HumanControlledRobot(BaseRobot):
 
                 if collision:
                     break
-
-        if Qt.Key_A in keys_pressed:
-            self.alpha += 1
-
-        if Qt.Key_D in keys_pressed:
-            self.alpha -= 1
-
-        if Qt.Key_Shift in keys_pressed:
-            if self.speed < MAX_SPEED:
-                self.speed += 2
-        else:
-            self.speed = MIN_SPEED
-
-    def boundingRect(self):
-        return QRectF(int(self.x), int(self.y), self.r, self.r)

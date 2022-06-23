@@ -75,7 +75,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-        self.robot.move(self.keys_pressed, self.scene)
+        self.robot.move(self.scene)
+        self.robot.reactToUserInput(self.keys_pressed)
 
         for ai_r in self.AI_robots:
             ai_r.move(QGraphicsScene())

@@ -1,6 +1,6 @@
 # Author: Lasse Niederkrome
 
-from PyQt5.QtGui import QPen, QBrush, QImage
+from PyQt5.QtGui import QPen, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
 from PyQt5.QtWidgets import QGraphicsObject
 import numpy as np
