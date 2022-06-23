@@ -119,10 +119,10 @@ class BasicRobot(QGraphicsRectItem):
                     break
 
         if Qt.Key_A in keys_pressed:
-            self.alpha -= 1
+            self.alpha -= 2
 
         if Qt.Key_D in keys_pressed:
-            self.alpha += 1
+            self.alpha += 2
 
         if Qt.Key_Shift in keys_pressed:
             if self.speed < MAX_SPEED:
