@@ -11,7 +11,7 @@
 
 what we did this week:
 
-- New MainMenu Design </br>
+- New MainMenu Design
   ![image](https://user-images.githubusercontent.com/72664329/175298864-811295f2-d46f-40ea-845c-69e33d713c99.png)
 
 
@@ -22,7 +22,7 @@ what we did this week:
   ![green_tank](https://user-images.githubusercontent.com/72664329/175299997-50c674df-ea83-43e6-b850-f1cd3720618b.png) 
 
 - We added a background soundrack for the Main-Window
-- <video src="https://user-images.githubusercontent.com/70483582/175304746-e3736f6a-d2d2-4758-b867-1b6c8850c1bb.mp4" </video>
+  <video src="https://user-images.githubusercontent.com/70483582/175304746-e3736f6a-d2d2-4758-b867-1b6c8850c1bb.mp4" controls="controls" style="max-width: 500px;"> </video>
 
 
 - We fixed some errors with the Mapcreator and made it more convenient to edit!
