@@ -25,8 +25,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = BasicRobot.BasicRobot(100, 50, 50, 0, 3)
         self.robotAI1 = BasicAIRobot.BasicAIRobot(850, 50, 50, 180, 2)
-        self.robotAI2 = BasicAIRobot.BasicAIRobot(800, 850, 50, 0, 2)
-        self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 850, 50, 0, 2)
+        self.robotAI2 = BasicAIRobot.BasicAIRobot(800, 800, 50, 0, 2)
+        self.robotAI3 = BasicAIRobot.BasicAIRobot(100, 900, 50, 315, 2)
         self.keys_pressed = set()
 
         self.scene = QGraphicsScene()

@@ -33,15 +33,12 @@ class BasicAIRobot(BasicRobot):
         self.setRect(int(self.x), int(self.y), self.r, self.r)
 
     def moveAI3(self, keys_pressed):
-        if self.alpha > 180:
-            self.alpha = 0
+        if self.x <= 100:
+            self.alpha = 315
+        if self.x >= 200:
+            self.alpha = 135
 
-        if self.y > 200:
-            self.alpha += 1
-            self.x += self.getVector()[0] * self.speed / 2
-            self.y += self.getVector()[1] * self.speed / 2
-        else:
-            self.x = 100
-            self.y = 850
+        self.x += self.getVector()[0] * self.speed / 2
+        self.y += self.getVector()[1] * self.speed / 2
 
         self.setRect(int(self.x), int(self.y), self.r, self.r)
