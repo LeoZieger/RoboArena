@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QGraphicsScene
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem
 
 
 from os.path import exists
@@ -34,11 +34,26 @@ class RoboArena(QtWidgets.QMainWindow):
         self.AI_robots.append(self.robotAI2)
         self.AI_robots.append(self.robotAI3)
 
+        self.mapborder_top = QGraphicsRectItem(0, 0,
+                                               Arena.ARENA_HEIGHT, 5)
+        self.mapborder_left = QGraphicsRectItem(-5, 0,
+                                                5, Arena.ARENA_HEIGHT)
+        self.mapborder_bottom = QGraphicsRectItem(0, Arena.ARENA_HEIGHT,
+                                                  Arena.ARENA_WIDTH, 5)
+        self.mapborder_right = QGraphicsRectItem(Arena.ARENA_WIDTH, 0,
+                                                 5, Arena.ARENA_HEIGHT)
+
         self.keys_pressed = set()
 
+        # All objects where we want to enforce detection need to be in the scene
         self.scene = QGraphicsScene()
+
         self.scene = self.arena.add_tiles_to_scene(self.scene)
         self.scene.addItem(self.robot)
+        self.scene.addItem(self.mapborder_top)
+        self.scene.addItem(self.mapborder_left)
+        self.scene.addItem(self.mapborder_bottom)
+        self.scene.addItem(self.mapborder_right)
 
         self.initUI()
         self.initSoundrack()
