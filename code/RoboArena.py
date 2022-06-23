@@ -34,10 +34,14 @@ class RoboArena(QtWidgets.QMainWindow):
         self.AI_robots.append(self.robotAI2)
         self.AI_robots.append(self.robotAI3)
 
-        self.mapborder1 = QGraphicsRectItem(0, 0, Arena.ARENA_HEIGHT, 5)
-        self.mapborder2 = QGraphicsRectItem(-5, 0, 5, Arena.ARENA_HEIGHT)
-        self.mapborder3 = QGraphicsRectItem(0, Arena.ARENA_HEIGHT, Arena.ARENA_WIDTH, 5)
-        self.mapborder4 = QGraphicsRectItem(Arena.ARENA_WIDTH, 0, 5, Arena.ARENA_HEIGHT)
+        self.mapborder_top = QGraphicsRectItem(0, 0,
+                                               Arena.ARENA_HEIGHT, 5)
+        self.mapborder_left = QGraphicsRectItem(-5, 0,
+                                                5, Arena.ARENA_HEIGHT)
+        self.mapborder_bottom = QGraphicsRectItem(0, Arena.ARENA_HEIGHT,
+                                                  Arena.ARENA_WIDTH, 5)
+        self.mapborder_right = QGraphicsRectItem(Arena.ARENA_WIDTH, 0,
+                                                 5, Arena.ARENA_HEIGHT)
 
         self.keys_pressed = set()
 
@@ -46,10 +50,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.scene = self.arena.add_tiles_to_scene(self.scene)
         self.scene.addItem(self.robot)
-        self.scene.addItem(self.mapborder1)
-        self.scene.addItem(self.mapborder2)
-        self.scene.addItem(self.mapborder3)
-        self.scene.addItem(self.mapborder4)
+        self.scene.addItem(self.mapborder_top)
+        self.scene.addItem(self.mapborder_left)
+        self.scene.addItem(self.mapborder_bottom)
+        self.scene.addItem(self.mapborder_right)
 
         self.initUI()
         self.initSoundrack()
