@@ -12,7 +12,7 @@
 what we did this week:
 
 - New MainMenu Design </br>
-  <img src="https://user-images.githubusercontent.com/72664329/175298864-811295f2-d46f-40ea-845c-69e33d713c99.png" width=50% height=50% />
+  ![image](https://user-images.githubusercontent.com/72664329/175298864-811295f2-d46f-40ea-845c-69e33d713c99.png)
 
 
 - We implemented a new Movement for the robots based on a vector and "tank"-movement
