@@ -1,5 +1,5 @@
 # Teamprojekt RoboArena
-## Week 5
+## Week 6
 
 | Team 2 |
 | ----------------- |
@@ -11,20 +11,14 @@
 
 what we did this week:
 
+- New MainMenu Design
+  ![image](https://user-images.githubusercontent.com/72664329/175298864-811295f2-d46f-40ea-845c-69e33d713c99.png)
 
-Created 2 Maps with the MapCreator:
-- ![image](https://user-images.githubusercontent.com/72664329/171627386-373bccd1-26c9-4f97-a0e6-97b5cec75098.png)
-- ![image](https://user-images.githubusercontent.com/72664329/171627493-6eb94e27-cbac-4dd0-8c61-bd12d077b0e2.png)
+- We implemented a new Movement for the robots based on a vector and "tank"-movement
+- We implemented a new Collision with the PyQt5 with resources already in PyQt5
+- We added new Textures for the Tiles and Robots
+  ![blue_tank](https://user-images.githubusercontent.com/72664329/175300309-9258626c-8105-484f-8b4c-608851903282.png)
+  ![green_tank](https://user-images.githubusercontent.com/72664329/175299997-50c674df-ea83-43e6-b850-f1cd3720618b.png) 
 
-
-Add simple colission Detection
-- Still very buggy
-- Idea to increase Tile size minimize complexity of colission
-
-
-Created a Ai-Robot-Class
-- spawns 3 robots in each corner of the map
-- no movement right now (in progress)
-
-
-![bewegug](https://user-images.githubusercontent.com/72664329/171643269-1b180567-3a04-4dda-850f-a341294e2f45.gif)
+- We added a background soundrack for the Main-Window
+- We fixed some errors with the Mapcreator and made it more convenient to edit!
