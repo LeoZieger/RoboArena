@@ -33,6 +33,6 @@ class BrainLVL1(QRunnable):
 
         # TODO PATHFINDING To Point
         self.signals.informAboutNextPoint.emit(self.n,
-                                               QPoint(self.human_player.x,
-                                                      self.human_player.y))
+                                               QPoint(int(self.human_player.x),
+                                                      int(self.human_player.y)))
         self.signals.finished.emit(self.n)
