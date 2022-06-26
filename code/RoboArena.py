@@ -9,6 +9,7 @@ import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
 import NameInput
+import BasePowerup
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -24,6 +25,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.loadMap("Example_2Player")
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
+
+        self.powerup = BasePowerup(100,100, 5)
 
         self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
         self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
@@ -103,6 +106,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
+        self.powerup.render(self.painter)
         self.painter.end()
 
         for ai_r in self.AI_robots:

@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsObject
-from PyQt5.QtGui import QPen
+from PyQt5.QtGui import QPen, QBrush
 from PyQt5.QtCore import Qt
+
 
 class BasePowerup():
 
@@ -18,3 +19,9 @@ class BasePowerup():
     def render(self, painter):
 
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+        painter.setBrush(QBrush(Qt.darkGray, Qt.SolidPattern))
+        painter.drawEllipse(self.x, self.y, 50, 50)
+
+
+
+
