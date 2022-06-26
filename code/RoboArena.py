@@ -26,7 +26,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.powerup = BasePowerup(100,100, 5)
+        self.powerup = BasePowerup.BasePowerup(100,100, 5)
 
         self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
         self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
