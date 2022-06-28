@@ -10,9 +10,13 @@ from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
 import NameInput
 import BasePowerup
+import random
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
+RANDOM_X = random.randint(100, 900)
+RANDOM_Y = RANDOM_X
+
 
 
 class RoboArena(QtWidgets.QMainWindow):
@@ -26,7 +30,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.powerup = BasePowerup.BasePowerup(100,100, 5)
+        # HIER LASSE JUNGE
+        self.powerup = BasePowerup.BasePowerup(RANDOM_X, RANDOM_Y, 20)
 
         self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
         self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
@@ -57,6 +62,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
         self.scene.addItem(self.mapborder_right)
+        self.scene.addItem(self.powerup)
 
         self.initUI()
         self.initSoundrack()
@@ -65,6 +71,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(1)
+
 
     def initUI(self):
         self.label = QtWidgets.QLabel()
@@ -93,8 +100,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
+
         self.robot.move(self.scene)
         self.robot.reactToUserInput(self.keys_pressed)
+#       self.robot.collisionWithPowerup(self.powerup)
 
         for ai_r in self.AI_robots:
             ai_r.move(QGraphicsScene())

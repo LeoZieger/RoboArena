@@ -1,8 +1,10 @@
 # Author: Lasse Niederkrome
 
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QGraphicsItem
 
 from BaseRobot import BaseRobot
+import BasePowerup
 
 MAX_SPEED = 5
 MIN_SPEED = 3
@@ -82,3 +84,8 @@ class HumanControlledRobot(BaseRobot):
 
                 if collision:
                     break
+
+# This should tell the Robot if there is a collision with a powerup and change the speed after that collison
+#    def collisionWithPowerup(self, basePowerup):
+#        if QGraphicsItem.collidingItems(self, basePowerup):
+#            print("yeah")
