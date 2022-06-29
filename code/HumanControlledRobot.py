@@ -15,6 +15,7 @@ class HumanControlledRobot(BaseRobot):
 
         self.moveForward = False
         self.moveBackward = False
+        self.shooting = False
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -37,6 +38,14 @@ class HumanControlledRobot(BaseRobot):
             self.alpha += 2
         if Qt.Key_D in keys_pressed:
             self.alpha -= 2
+
+        # Bullet
+        if Qt.Key_Space in keys_pressed:
+            if not self.shooting:
+                self.createBullet()
+            self.shooting = True
+        else:
+            self.shooting = False
 
     def move(self, scene):
         if self.moveForward:

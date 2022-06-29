@@ -4,6 +4,7 @@ from PyQt5.QtGui import QPen, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
 from PyQt5.QtWidgets import QGraphicsObject
 import numpy as np
+import Bullet
 
 MAX_SPEED = 5
 MIN_SPEED = 3
@@ -24,6 +25,7 @@ class BaseRobot(QGraphicsObject):
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
         self.texture = QImage("res/blue_tank.png")              # texture
+        self.bullets = []                   # Bullets
 
     def getVector(self):
         return [np.cos(np.deg2rad(self.alpha)), -1 * np.sin(np.deg2rad(self.alpha))]
@@ -65,6 +67,11 @@ class BaseRobot(QGraphicsObject):
 
         painter.resetTransform()
 
+        # Bullet
+        for bullet in self.bullets:
+            bullet.render(painter)
+            bullet.trajectory()
+
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
@@ -75,6 +82,7 @@ class BaseRobot(QGraphicsObject):
                                     int(self.y + (self.getVector()[1] * 40))))
 
     def move(self, scene):
+
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -99,3 +107,6 @@ class BaseRobot(QGraphicsObject):
 
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
+
+    def createBullet(self):
+        self.bullets.append(Bullet.Bullet(self, 5, 10))
