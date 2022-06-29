@@ -14,10 +14,10 @@ import random
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
+
+# Used for random spawning location @powerups
 RANDOM_X = random.randint(100, 900)
 RANDOM_Y = RANDOM_X
-
-
 
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
@@ -74,6 +74,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.tick)
         self.timer.start(16)
 
+        # Variables for renderRandomPowerUp
+        self.leftborder = 50
+        self.rightborder = 200
+
     def getTime(self):
         timeInSec = self.clock / 62.5
 
@@ -109,6 +113,11 @@ class RoboArena(QtWidgets.QMainWindow):
     # Takes 2 numbers, spawns a powerup after a random time between these 2 numbers
     def renderRandomTimePowerup(self, leftBorder, rightBorder):
         if self.clock > random.randint(leftBorder, rightBorder):
+
+            # this prevents the powerup from respawning over and over again
+            self.leftborder = 0
+            self.rightborder = 0
+
             self.powerup.render(self.painter)
 
 
@@ -130,7 +139,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
-        self.renderRandomTimePowerup(50, 200)
+        self.renderRandomTimePowerup(self.leftborder, self.rightborder)
         self.robot.collisionWithPowerup(self.scene)
 
         self.painter.end()
