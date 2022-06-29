@@ -28,12 +28,14 @@ class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
 
+
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
 
 
         self.wasCollisionWithPowerup = False
         self.timeWhenPowerupIsCollected = 0
+        self.timeWhenPowerupIsRendered = 0
 
         self.arena.loadMap("Example_2Player")
 
@@ -146,9 +148,6 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.clock += 1
         self.robot.move(self.scene)
-
-        self.collectedPowerup()
-
         self.robot.reactToUserInput(self.keys_pressed)
 
         for ai_r in self.AI_robots:
@@ -161,7 +160,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.robot.render(self.painter)
 
-        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
+        if self.timeWhenPowerupIsRendered + POWERUP_LIFE_TIME > int(self.getTime()) and not self.wasCollisionWithPowerup:
+            self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
+
+        self.collectedPowerup()
 
         self.painter.end()
 

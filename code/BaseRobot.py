@@ -12,7 +12,7 @@ class BaseRobot(QGraphicsObject):
     SPRINT_SPEED = 5
     MIN_SPEED = 3
 
-    debug = True
+    debug = False
 
     # Basic-Robot constructor
 
