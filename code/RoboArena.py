@@ -69,8 +69,15 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Timer for ticks
         self.timer = QTimer()
+        self.clock = 0
+        self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.tick)
-        self.timer.start(1)
+        self.timer.start(16)
+
+    def getTime(self):
+        timeInSec = self.clock / 62.5
+
+        return timeInSec
 
 
     def initUI(self):
@@ -99,11 +106,20 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
-    def tick(self):
+    # Takes 2 numbers, spawns a powerup after a random time between these 2 numbers
+    def renderRandomTimePowerup(self, leftBorder, rightBorder):
+        if self.clock > random.randint(leftBorder, rightBorder):
+            self.powerup.render(self.painter)
 
+
+    def tick(self):
+        # JUST FOR DEBUG
+        # print(self.clock)
+        # # # # # # # # #
+
+        self.clock += 1
         self.robot.move(self.scene)
         self.robot.reactToUserInput(self.keys_pressed)
-#       self.robot.collisionWithPowerup(self.powerup)
 
         for ai_r in self.AI_robots:
             ai_r.move(QGraphicsScene())
@@ -111,11 +127,12 @@ class RoboArena(QtWidgets.QMainWindow):
             ai_r.inform_brain(self.arena, self.robot)
 
         # Here all the objetcs in the game are drawn to the canvas ------
-
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
-        self.powerup.render(self.painter)
+        self.renderRandomTimePowerup(50, 200)
+        self.robot.collisionWithPowerup(self.scene)
+
         self.painter.end()
 
         for ai_r in self.AI_robots:

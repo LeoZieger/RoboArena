@@ -19,7 +19,6 @@ class BasePowerup(QGraphicsObject):
         print(self.duration)
 
     def render(self, painter):
-        # time.sleep(randint(1,20))
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
         painter.drawEllipse(self.x, self.y, 20, 20)

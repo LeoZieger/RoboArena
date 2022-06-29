@@ -75,6 +75,7 @@ class BaseRobot(QGraphicsObject):
                                     int(self.y + (self.getVector()[1] * 40))))
 
     def move(self, scene):
+
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -99,3 +100,6 @@ class BaseRobot(QGraphicsObject):
 
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
+
+    def collisionWithPowerup(self,scene):
+        print(scene.collidingItems(self))
