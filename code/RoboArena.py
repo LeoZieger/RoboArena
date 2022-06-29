@@ -126,7 +126,9 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.clock += 1
         self.robot.move(self.scene)
+
         self.robot.collisionWithPowerup(self.scene)
+
         self.robot.reactToUserInput(self.keys_pressed)
 
         for ai_r in self.AI_robots:

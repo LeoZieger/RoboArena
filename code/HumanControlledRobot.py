@@ -13,7 +13,6 @@ class HumanControlledRobot(BaseRobot):
         self.moveForward = False
         self.moveBackward = False
 
-
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
             self.moveForward = True
@@ -26,7 +25,7 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_Shift in keys_pressed:
-            if self.speed < self.MAX_SPEED:
+            if self.speed < self.SPRINT_SPEED:
                 self.speed += 2
         else:
             self.speed = self.MIN_SPEED
@@ -76,7 +75,8 @@ class HumanControlledRobot(BaseRobot):
 
                 # If collision takes place we step back
                 while self.collisonWithTile(scene):
-                    print(self.collisonWithTile(scene))
+                    if BaseRobot.debug:
+                        print("collision with wall!")
                     self.x += v_unit[0]
                     self.y += v_unit[1]
                     collision = True
@@ -84,6 +84,15 @@ class HumanControlledRobot(BaseRobot):
                 if collision:
                     break
 
+    # Checks, if there is a collision with a Tile or an QGraphicsRectItem.
+    # A Tile is a one of:
+    # -WaterTile
+    # -LavaTile
+    #
+    # a QGraphicsRectItem is one of:
+    # -Wall around the map
+    #
+    # Returns Boolean
     def collisonWithTile(self, scene):
         if len(scene.collidingItems(self)) > 0:
             for o in scene.collidingItems(self):
@@ -91,9 +100,22 @@ class HumanControlledRobot(BaseRobot):
                     return True
         return False
 
+    # Checks, if there is a collision with a powerup. Increasing speed
+    # to MAX_SPEED@BaseRobot.py if True
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0:
             if BaseRobot.debug:
                 print("collision with powerup!")
-            self.MIN_SPEED += 2
-            self.speed = self.MIN_SPEED
+
+            print(self.MIN_SPEED)
+            print(self.MAX_SPEED)
+
+            if self.speed < self.MAX_SPEED:
+                self.MIN_SPEED += 2
+                self.SPRINT_SPEED += 3
+
+    # This function can reset the speed of a HumanControlledRobot
+    def resetSpeed(self):
+        self.MAX_SPEED = BaseRobot.MAX_SPEED
+        self.SPRINT_SPEED = BaseRobot.SPRINT_SPEED
+        self.MIN_SPEED = BaseRobot.MIN_SPEED

@@ -8,10 +8,11 @@ import numpy as np
 
 class BaseRobot(QGraphicsObject):
 
-    MAX_SPEED = 5
+    MAX_SPEED = 6
+    SPRINT_SPEED = 5
     MIN_SPEED = 3
 
-    debug = True
+    debug = False
 
     # Basic-Robot constructor
 
