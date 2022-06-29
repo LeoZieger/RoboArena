@@ -20,7 +20,7 @@ class MainMenu(QMainWindow):
         self.initUI()
 
     def initUI(self):
-        self.resize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
 
         # Background
         background_image = QImage("background.jpg")
