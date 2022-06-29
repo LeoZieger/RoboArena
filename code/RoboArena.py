@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 
 
 from os.path import exists
@@ -65,6 +65,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        self.centerWindowOnScreen()
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -75,6 +76,12 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter = QtGui.QPainter()
 
         self.show()
+
+    def centerWindowOnScreen(self):
+        outerRect = self.frameGeometry()
+        centerOfScreen = QDesktopWidget().availableGeometry().center()
+        outerRect.moveCenter(centerOfScreen)
+        self.move(outerRect.topLeft())
 
     def initSoundrack(self):
         # This is the part where we can setup the soundtrack

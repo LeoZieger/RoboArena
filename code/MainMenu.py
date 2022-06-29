@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
-                            QMainWindow, QLabel
+                            QMainWindow, QLabel, QDesktopWidget
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
@@ -21,6 +21,7 @@ class MainMenu(QMainWindow):
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        self.centerWindowOnScreen()
 
         # Background
         background_image = QImage("background.jpg")
@@ -103,6 +104,12 @@ class MainMenu(QMainWindow):
         quit_btn.setStyleSheet(buttonstyle)
 
         self.show()
+
+    def centerWindowOnScreen(self):
+        outerRect = self.frameGeometry()
+        centerOfScreen = QDesktopWidget().availableGeometry().center()
+        outerRect.moveCenter(centerOfScreen)
+        self.move(outerRect.topLeft())
 
     def start_game(self):
         self.hide()
