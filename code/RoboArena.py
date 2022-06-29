@@ -17,7 +17,8 @@ WINDOW_HEIGHT = 1000
 
 # Used for random spawning location @powerups
 RANDOM_X = random.randint(100, 900)
-RANDOM_Y = RANDOM_X
+RANDOM_Y = random.randint(100, 900)
+
 
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
@@ -30,7 +31,6 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        # HIER LASSE JUNGE
         self.powerup = BasePowerup.BasePowerup(RANDOM_X, RANDOM_Y, 20)
 
         self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
@@ -75,14 +75,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.start(16)
 
         # Variables for renderRandomPowerUp
-        self.leftborder = 50
-        self.rightborder = 200
+        self.leftIntBorder = 200
+        self.rightIntBorder = 800
 
     def getTime(self):
         timeInSec = self.clock / 62.5
 
         return timeInSec
-
 
     def initUI(self):
         self.label = QtWidgets.QLabel()
@@ -111,15 +110,14 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     # Takes 2 numbers, spawns a powerup after a random time between these 2 numbers
-    def renderRandomTimePowerup(self, leftBorder, rightBorder):
-        if self.clock > random.randint(leftBorder, rightBorder):
+    def renderRandomTimePowerup(self, leftIntBorder, rightIntBorder):
+        if self.clock > random.randint(leftIntBorder, rightIntBorder):
 
             # this prevents the powerup from respawning over and over again
-            self.leftborder = 0
-            self.rightborder = 0
+            self.leftIntBorder = 0
+            self.rightIntBorder = 0
 
             self.powerup.render(self.painter)
-
 
     def tick(self):
         # JUST FOR DEBUG
@@ -128,6 +126,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.clock += 1
         self.robot.move(self.scene)
+        self.robot.collisionWithPowerup(self.scene)
         self.robot.reactToUserInput(self.keys_pressed)
 
         for ai_r in self.AI_robots:
@@ -139,8 +138,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
-        self.renderRandomTimePowerup(self.leftborder, self.rightborder)
-        self.robot.collisionWithPowerup(self.scene)
+        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
 
         self.painter.end()
 

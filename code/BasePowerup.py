@@ -1,8 +1,6 @@
 from PyQt5.QtWidgets import QGraphicsObject
 from PyQt5.QtGui import QPen, QBrush
 from PyQt5.QtCore import Qt, QRectF
-import time
-from  random import randint
 
 
 class BasePowerup(QGraphicsObject):

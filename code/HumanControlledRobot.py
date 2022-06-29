@@ -1,13 +1,8 @@
 # Author: Lasse Niederkrome
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QGraphicsItem
-
 from BaseRobot import BaseRobot
-import BasePowerup
-
-MAX_SPEED = 5
-MIN_SPEED = 3
+from Tile import *
 
 
 class HumanControlledRobot(BaseRobot):
@@ -17,6 +12,7 @@ class HumanControlledRobot(BaseRobot):
 
         self.moveForward = False
         self.moveBackward = False
+
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -30,10 +26,10 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_Shift in keys_pressed:
-            if self.speed < MAX_SPEED:
+            if self.speed < self.MAX_SPEED:
                 self.speed += 2
         else:
-            self.speed = MIN_SPEED
+            self.speed = self.MIN_SPEED
 
         if Qt.Key_A in keys_pressed:
             self.alpha += 2
@@ -55,7 +51,9 @@ class HumanControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while self.collisonWithTile(scene):
+                    if BaseRobot.debug:
+                        print("collision with wall!")
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
@@ -77,7 +75,8 @@ class HumanControlledRobot(BaseRobot):
                 self.y -= v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while self.collisonWithTile(scene):
+                    print(self.collisonWithTile(scene))
                     self.x += v_unit[0]
                     self.y += v_unit[1]
                     collision = True
@@ -85,7 +84,16 @@ class HumanControlledRobot(BaseRobot):
                 if collision:
                     break
 
-# This should tell the Robot if there is a collision with a powerup and change the speed after that collison
-#    def collisionWithPowerup(self, basePowerup):
-#        if QGraphicsItem.collidingItems(self, basePowerup):
-#            print("yeah")
+    def collisonWithTile(self, scene):
+        if len(scene.collidingItems(self)) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
+                    return True
+        return False
+
+    def collisionWithPowerup(self, scene):
+        if (len(scene.collidingItems(self))) > 0:
+            if BaseRobot.debug:
+                print("collision with powerup!")
+            self.MIN_SPEED += 2
+            self.speed = self.MIN_SPEED

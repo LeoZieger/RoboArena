@@ -5,13 +5,13 @@ from PyQt5.QtCore import Qt, QPoint, QRectF
 from PyQt5.QtWidgets import QGraphicsObject
 import numpy as np
 
-MAX_SPEED = 5
-MIN_SPEED = 3
-
 
 class BaseRobot(QGraphicsObject):
 
-    debug = False
+    MAX_SPEED = 5
+    MIN_SPEED = 3
+
+    debug = True
 
     # Basic-Robot constructor
 
@@ -75,7 +75,6 @@ class BaseRobot(QGraphicsObject):
                                     int(self.y + (self.getVector()[1] * 40))))
 
     def move(self, scene):
-
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -91,6 +90,7 @@ class BaseRobot(QGraphicsObject):
 
                 # If collision takes place we step back
                 while len(scene.collidingItems(self)) > 0:
+
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
@@ -100,6 +100,3 @@ class BaseRobot(QGraphicsObject):
 
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
-
-    def collisionWithPowerup(self,scene):
-        print(scene.collidingItems(self))
