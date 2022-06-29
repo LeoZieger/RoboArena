@@ -107,12 +107,12 @@ class HumanControlledRobot(BaseRobot):
             if BaseRobot.debug:
                 print("collision with powerup!")
 
-            print(self.MIN_SPEED)
-            print(self.MAX_SPEED)
-
             if self.speed < self.MAX_SPEED:
                 self.MIN_SPEED += 2
                 self.SPRINT_SPEED += 3
+            return True
+
+
 
     # This function can reset the speed of a HumanControlledRobot
     def resetSpeed(self):

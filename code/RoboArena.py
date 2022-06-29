@@ -12,8 +12,12 @@ import NameInput
 import BasePowerup
 import random
 
+# Height and width of the Window
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
+
+# How long the Powerup stays on the map in seconds
+POWERUP_LIFE_TIME = 30
 
 # Used for random spawning location @powerups
 RANDOM_X = random.randint(100, 900)
@@ -27,11 +31,15 @@ class RoboArena(QtWidgets.QMainWindow):
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
 
+
+        self.wasCollisionWithPowerup = False
+        self.timeWhenPowerupIsCollected = 0
+
         self.arena.loadMap("Example_2Player")
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.powerup = BasePowerup.BasePowerup(RANDOM_X, RANDOM_Y, 20)
+        self.powerup = BasePowerup.BasePowerup(RANDOM_X, RANDOM_Y, 5)
 
         self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
         self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
@@ -75,8 +83,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.start(16)
 
         # Variables for renderRandomPowerUp
-        self.leftIntBorder = 200
-        self.rightIntBorder = 800
+        self.leftIntBorder = 5
+        self.rightIntBorder = 15
 
     def getTime(self):
         timeInSec = self.clock / 62.5
@@ -111,7 +119,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
     # Takes 2 numbers, spawns a powerup after a random time between these 2 numbers
     def renderRandomTimePowerup(self, leftIntBorder, rightIntBorder):
-        if self.clock > random.randint(leftIntBorder, rightIntBorder):
+        if self.getTime() > random.randint(leftIntBorder, rightIntBorder):
 
             # this prevents the powerup from respawning over and over again
             self.leftIntBorder = 0
@@ -119,15 +127,27 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.powerup.render(self.painter)
 
+    # Checks, if a player picked up a PowerUp. If True, PlayerSpeed is increasing
+    # for the length of Powerup duration.
+    def collectedPowerup(self):
+        if self.robot.collisionWithPowerup(self.scene):
+            self.timeWhenPowerupIsCollected = self.getTime()
+            self.wasCollisionWithPowerup = True
+
+        if self.wasCollisionWithPowerup:
+            if self.timeWhenPowerupIsCollected + self.powerup.duration < self.getTime():
+                self.robot.resetSpeed()
+                self.wasCollisionWithPowerup = False
+
     def tick(self):
         # JUST FOR DEBUG
-        # print(self.clock)
+        # print(int(self.getTime()))
         # # # # # # # # #
 
         self.clock += 1
         self.robot.move(self.scene)
 
-        self.robot.collisionWithPowerup(self.scene)
+        self.collectedPowerup()
 
         self.robot.reactToUserInput(self.keys_pressed)
 
@@ -140,6 +160,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
+
         self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
 
         self.painter.end()
