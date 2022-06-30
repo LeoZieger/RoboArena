@@ -160,10 +160,11 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.robot.render(self.painter)
 
+        self.collectedPowerup()
+
+        # The powerup will disappear if collected or POWEREUP_LIFE_TIME is over
         if self.timeWhenPowerupIsRendered + POWERUP_LIFE_TIME > int(self.getTime()) and not self.wasCollisionWithPowerup:
             self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
-
-        self.collectedPowerup()
 
         self.painter.end()
 
