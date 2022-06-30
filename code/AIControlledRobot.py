@@ -4,6 +4,7 @@ import numpy as np
 
 from BaseRobot import BaseRobot
 import Brain
+from PyQt5.QtGui import QImage
 
 
 class AIControlledRobot(BaseRobot):
@@ -22,6 +23,7 @@ class AIControlledRobot(BaseRobot):
         self.pool = QThreadPool()
         self.pool.start(self.brain)
         self.brain.setAutoDelete(False)
+        self.texture = QImage("res/red_tank.png")
 
         self.point_queue = []
 
