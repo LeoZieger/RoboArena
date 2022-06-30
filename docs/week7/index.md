@@ -18,14 +18,14 @@ what we did this week:
 
 2. Powerups!
 - You can now pick up Powerups! 
-![ezgif com-gif-maker (2)](https://user-images.githubusercontent.com/70483582/176686038-db3ea129-4406-45f7-a9af-243501430bf8.gif)
+![ezgif com-gif-maker (4)](https://user-images.githubusercontent.com/70483582/176688723-3f9803f2-8014-4535-bcd3-27f4aca5879e.gif)
 - SpeedPowerup right now
 - Lasts for a given duration (5secs right now)
 - Will despawn after u collected one!
 - BUT: Still few bugs left, so not pull-requested yet!
 
 3. Shooting-mechanic
-![ezgif com-gif-maker (3)](https://user-images.githubusercontent.com/70483582/176686687-dd39c749-7c11-4a40-ad38-44878a83f60b.gif)
+![ezgif com-gif-maker (5)](https://user-images.githubusercontent.com/70483582/176689361-596fe03d-0758-4e7b-b093-8bbfe97a0b7b.gif)
 - You can now shoot! Use space for this!
 - No collisions yet, so this branch is not pull-requested yet as well.
 
