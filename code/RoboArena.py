@@ -60,8 +60,15 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Timer for ticks
         self.timer = QTimer()
+        self.clock = 0
+        self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.tick)
-        self.timer.start(1)
+        self.timer.start(16)
+
+    def getTime(self):
+        timeInSec = self.clock / 62.5
+
+        return timeInSec
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -99,6 +106,9 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
+
+        self.clock += 1
+
         self.robot.move(self.scene)
         self.robot.reactToUserInput(self.keys_pressed)
 
