@@ -1,8 +1,8 @@
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QGraphicsRectItem
 
-TILE_WIDTH = 10
-TILE_HEIGHT = 10
+TILE_WIDTH = 25
+TILE_HEIGHT = 25
 
 
 class Tile(QGraphicsRectItem):
