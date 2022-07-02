@@ -1,6 +1,6 @@
 [
 {"type":"Grass", "x":0, "y":0},
-{"type":"Grass", "x":0, "y":1},
+{"type":"Dirt", "x":0, "y":1},
 {"type":"Grass", "x":0, "y":2},
 {"type":"Grass", "x":0, "y":3},
 {"type":"Grass", "x":0, "y":4},
