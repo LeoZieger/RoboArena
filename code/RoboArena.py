@@ -113,11 +113,6 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
-    def displayFPS(self):
-        fps = self.getFPS()
-
-        print(fps)
-
     def tick(self):
 
         delta_time = time.time_ns() // 1_000_000 - self.t_last
@@ -155,7 +150,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.update()
 
         if self.clock % 300 == 0:
-            print(self.getFPS())
+            print(str(self.getFPS()) + " FPS")
 
     def loadMapByPrompt(self):
 
