@@ -12,6 +12,7 @@ import NameInput
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
+UPDATE_TIME = 16
 
 
 class RoboArena(QtWidgets.QMainWindow):
@@ -59,24 +60,24 @@ class RoboArena(QtWidgets.QMainWindow):
         self.initSoundrack()
 
         # Timer for ticks
-        self.timer = QTimer()
+
         self.clock = 0
         self.clock_time = 0
-        self.t_last = time.time_ns() // 1_000_000
         self.t_accumulator = 0
+
+        self.timer = QTimer()
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.tick)
+        self.t_last = time.time_ns() // 1_000_000
         self.timer.start(1)
 
     def getTimeInSec(self):
-        time_in_sec = self.clock_time / 1000
 
-        return time_in_sec
+        return self.clock_time / 1000
 
     def getFPS(self):
-        fps = int(self.clock / self.getTimeInSec())
 
-        return fps
+        return int(self.clock / self.getTimeInSec())
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -121,7 +122,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_last += delta_time
         self.t_accumulator += delta_time
 
-        while self.t_accumulator > 16:
+        while self.t_accumulator > UPDATE_TIME:
 
             self.robot.move(self.scene)
             self.robot.reactToUserInput(self.keys_pressed)
@@ -131,7 +132,9 @@ class RoboArena(QtWidgets.QMainWindow):
                 ai_r.followPoints()
                 ai_r.inform_brain(self.arena, self.robot)
 
-            self.t_accumulator -= 16
+            self.t_accumulator -= UPDATE_TIME
+
+            self.update()
 
         # Here all the objetcs in the game are drawn to the canvas ------
 
@@ -146,8 +149,6 @@ class RoboArena(QtWidgets.QMainWindow):
             self.painter.end()
 
         # ---------------------------------------------------------------
-
-        self.update()
 
         if self.clock % 300 == 0:
             print(str(self.getFPS()) + " FPS")
