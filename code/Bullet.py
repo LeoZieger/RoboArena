@@ -37,4 +37,4 @@ class Bullet():
     # Renders the bullet on the canvas
     def render(self, painter):
         painter.setPen(QPen(Qt.black, 5, Qt.DashLine))
-        painter.drawEllipse(self.x, self.y, self.width, self.width)
+        painter.drawEllipse(int(self.x), int(self.y), int(self.width), int(self.width))
