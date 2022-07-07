@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 
 
 from os.path import exists
+import copy
 
 import Arena
 from HumanControlledRobot import HumanControlledRobot
@@ -25,9 +26,12 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
-        self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
-        self.robotAI3 = AIControlledRobot(100, 850, 50, 0, 2, n=3)
+        self.robotAI1 = AIControlledRobot(800, 100, 50,
+                                          0, 2, copy.copy(self.arena), n=1)
+        self.robotAI2 = AIControlledRobot(800, 850, 50,
+                                          0, 2, copy.copy(self.arena), n=2)
+        self.robotAI3 = AIControlledRobot(100, 850, 50,
+                                          0, 2, copy.copy(self.arena), n=3)
 
         self.AI_robots = []
         self.AI_robots.append(self.robotAI1)
@@ -106,16 +110,15 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-
         self.clock += 1
 
         self.robot.move(self.scene)
         self.robot.reactToUserInput(self.keys_pressed)
 
         for ai_r in self.AI_robots:
+            ai_r.inform_brain(self.robot, ai_r)
             ai_r.move(QGraphicsScene())
             ai_r.followPoints()
-            ai_r.inform_brain(self.arena, self.robot)
 
         # Here all the objetcs in the game are drawn to the canvas ------
 
@@ -134,7 +137,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.update()
 
     def loadMapByPrompt(self):
-
         popup = NameInput.NameInput()
         ok = popup.exec_()
         name = popup.textValue()

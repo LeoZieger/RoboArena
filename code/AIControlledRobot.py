@@ -9,52 +9,49 @@ from PyQt5.QtGui import QImage
 
 class AIControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, n=0):
+    def __init__(self, x, y, r, alpha, speed, arena, n=0):
         BaseRobot.__init__(self, x, y, r, alpha, speed)
         self.n = n
 
-        self.thread_is_finished = False
-
-        self.brain = Brain.BrainLVL1(self.n)
+        self.brain = Brain.BrainLVL1(self.n, arena)
 
         self.brain.signals.informAboutNextPoint.connect(self.setNewPointToMoveTo)
         self.brain.signals.finished.connect(self.setThreadToFinished)
+        self.brain.signals.informToClearQueue.connect(self.clearFollowPointQueue)
 
         self.pool = QThreadPool()
-        self.pool.start(self.brain)
         self.brain.setAutoDelete(False)
+        self.pool.start(self.brain)
+
         self.texture = QImage("res/red_tank.png")
 
         self.point_queue = []
 
-    def inform_brain(self, arena, human_player):
-        self.brain.inform_brain(arena, human_player)
+    def inform_brain(self, human_player, robo_player):
+        self.brain.inform_brain(human_player, robo_player)
 
-        if self.thread_is_finished:
-            self.thread_is_finished = False
-            self.pool.tryStart(self.brain)
-
-    def setNewPointToMoveTo(self, n, new_point):
-        if n == self.n:
-            if len(self.point_queue) > 0:
-                if self.point_queue[0] != new_point:
-                    self.point_queue.append(new_point)
-            else:
-                self.point_queue.append(new_point)
+    def setNewPointToMoveTo(self, new_point):
+        self.point_queue.append(new_point)
 
     def followPoints(self):
         if len(self.point_queue) > 0:
             if self.hasReachedPoint(self.point_queue[0]):
-                self.point_queue.pop()
+                self.point_queue.pop(0)
             else:
+                self.speed = 1
                 new_alpha = self.calculateAlphaToReachPoint(self.point_queue[0])
                 self.alpha = new_alpha
+        else:
+            self.speed = 0
 
     def hasReachedPoint(self, point):
-        offset = 2  # precission of radius when robot reached Point
+        offset = 2
         dist = np.sqrt(np.power(point.x() - self.x, 2)
                        + np.power(point.y() - self.y, 2))
         return dist <= offset
+
+    def clearFollowPointQueue(self):
+        self.point_queue.clear()
 
     def calculateAlphaToReachPoint(self, point):
         d_x = (point.x() - self.x)
@@ -66,9 +63,11 @@ class AIControlledRobot(BaseRobot):
         else:
             return self.getAlpha([d_x, d_y])
 
-    def setThreadToFinished(self, n):
-        if n == self.n:
-            self.thread_is_finished = True
+    def setThreadToFinished(self):
+        self.restart_brain()
+
+    def restart_brain(self):
+        self.pool.tryStart(self.brain)
 
     def stopAllThreads(self):
         self.brain.stop = True
