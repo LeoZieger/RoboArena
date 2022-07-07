@@ -4,7 +4,6 @@ from math import floor
 from igraph import Graph, plot
 
 import BaseRobot
-import Arena
 
 
 class Signals(QObject):
@@ -22,7 +21,7 @@ class BrainLVL1(QRunnable):
 
         self.signals = Signals()
 
-        self.arena = Arena.Arena()
+        self.arena = arena
         self.arena_graph = Graph()
 
         self.human_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0)
@@ -58,7 +57,12 @@ class BrainLVL1(QRunnable):
                                                              ngbrTileIndexInGraph)])
         print(f"[{self.n}] Stop GraphGenerator")
 
+    def isLegalTileInArena(self, x, y):
+        return (0 <= x < self.arena.tile_count_x) and \
+               (0 <= y < self.arena.tile_count_y)
+
     def plotGraph(self):
+        print(f"[{self.n}] Starte Plot")
         layout = []
         for i in range(self.arena_graph.vcount()):
             layout.append(self.getTilePositionInArena(i))
@@ -68,10 +72,7 @@ class BrainLVL1(QRunnable):
              vertex_size=1,
              vertex_color=['blue'],
              edge_color=['red'])
-
-    def isLegalTileInArena(self, x, y):
-        return (0 <= x < self.arena.tile_count_x) and \
-               (0 <= y < self.arena.tile_count_y)
+        print(f"[{self.n}] Stop Plot")
 
     def getTileIndexInGraph(self, x, y):
         return int(x) * self.arena.tile_count_y + int(y)
