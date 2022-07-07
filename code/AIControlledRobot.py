@@ -1,5 +1,3 @@
-from PyQt5.QtCore import QThreadPool
-
 import numpy as np
 
 from BaseRobot import BaseRobot
@@ -9,19 +7,20 @@ from PyQt5.QtGui import QImage
 
 class AIControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, arena, n=0):
+    def __init__(self, x, y, r, alpha, speed, arena, pool, n=0):
         BaseRobot.__init__(self, x, y, r, alpha, speed)
         self.n = n
 
         self.brain = Brain.BrainLVL1(self.n, arena)
 
+        self.threadpool = pool
+
         self.brain.signals.informAboutNextPoint.connect(self.setNewPointToMoveTo)
         self.brain.signals.finished.connect(self.setThreadToFinished)
         self.brain.signals.informToClearQueue.connect(self.clearFollowPointQueue)
 
-        self.pool = QThreadPool()
         self.brain.setAutoDelete(False)
-        self.pool.start(self.brain)
+        self.threadpool.start(self.brain)
 
         self.texture = QImage("res/red_tank.png")
 
@@ -67,7 +66,7 @@ class AIControlledRobot(BaseRobot):
         self.restart_brain()
 
     def restart_brain(self):
-        self.pool.tryStart(self.brain)
+        self.threadpool.tryStart(self.brain)
 
     def stopAllThreads(self):
         self.brain.stop = True

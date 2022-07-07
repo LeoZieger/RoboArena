@@ -1,5 +1,5 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QThreadPool
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 
 
@@ -21,17 +21,25 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
-
         self.arena.loadMap("Example_2Player")
+
+        # hreadPool where each AI starts their Threads in
+        self.threadpool = QThreadPool.globalInstance()
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
         self.robotAI1 = AIControlledRobot(800, 100, 50,
-                                          0, 2, copy.copy(self.arena), n=1)
+                                          0, 2, copy.copy(self.arena),
+                                          self.threadpool,
+                                          n=1)
         self.robotAI2 = AIControlledRobot(800, 850, 50,
-                                          0, 2, copy.copy(self.arena), n=2)
+                                          0, 2, copy.copy(self.arena),
+                                          self.threadpool,
+                                          n=2)
         self.robotAI3 = AIControlledRobot(100, 850, 50,
-                                          0, 2, copy.copy(self.arena), n=3)
+                                          0, 2, copy.copy(self.arena),
+                                          self.threadpool,
+                                          n=3)
 
         self.AI_robots = []
         self.AI_robots.append(self.robotAI1)
