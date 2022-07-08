@@ -172,7 +172,9 @@ class BrainLVL1(QRunnable):
                                                                       int(y)))
 
                 time.sleep(3)
-                self.signals.finished.emit(self.n)
+                
+                if not self.stop:
+                    self.signals.finished.emit(self.n)
             else:
-                print(f"[{self.n}] not informed enaugh")
-                self.signals.finished.emit(self.n)
+                if not self.stop:
+                    self.signals.finished.emit(self.n)
