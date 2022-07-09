@@ -1,8 +1,9 @@
 import numpy as np
 
-from BaseRobot import BaseRobot
+from BaseRobot import BaseRobot, MIN_SPEED
 import Brain
-from PyQt5.QtGui import QImage
+from PyQt5.QtGui import QImage, QPen
+from PyQt5.QtCore import Qt, QPoint
 
 
 class AIControlledRobot(BaseRobot):
@@ -71,7 +72,49 @@ class AIControlledRobot(BaseRobot):
     def stopAllThreads(self):
         self.brain.stop = True
 
-    # For now, the Robots will drive against walls which isnt that impressive
     def move(self, scene):
-        self.x += self.getVector()[0] * self.speed
-        self.y += self.getVector()[1] * self.speed
+        if self.speed != 0:
+            v_unit = self.getUnitVector(self.x,
+                                        self.y,
+                                        self.x + (self.getVector()[0] * self.speed),
+                                        self.y + (self.getVector()[1] * self.speed))
+
+            for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
+                collision = False
+
+                self.x += v_unit[0]
+                self.y += v_unit[1]
+
+                # If collision takes place we step back
+                while len(scene.collidingItems(self)) > 0:
+                    self.x -= v_unit[0]
+                    self.y -= v_unit[1]
+                    collision = True
+
+                if collision:
+                    break
+
+    def render(self, painter):
+        offset = self.r / 2
+
+        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+
+        painter.translate(self.x + offset, self.y + offset)
+        painter.rotate(-self.alpha)
+        painter.translate(-(self.x + offset), -(self.y + offset))
+
+        painter.drawImage(self.boundingRect(), self.texture)
+
+        painter.resetTransform()
+
+        if self.debug:
+            painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
+
+            painter.drawRect(self.boundingRect())
+
+            painter.drawLine(QPoint(int(self.x), int(self.y)),
+                             QPoint(int(self.x + (self.getVector()[0] * 40)),
+                                    int(self.y + (self.getVector()[1] * 40))))
+
+            for p in self.point_queue:
+                painter.drawPoint(p)
