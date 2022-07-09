@@ -62,6 +62,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.scene = self.arena.add_tiles_to_scene(self.scene)
         self.scene.addItem(self.robot)
+
+        for ai_r in self.AI_robots:
+            self.scene.addItem(ai_r)
+
         self.scene.addItem(self.mapborder_top)
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
