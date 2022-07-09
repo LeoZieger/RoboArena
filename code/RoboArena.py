@@ -28,7 +28,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.robotAI1 = AIControlledRobot(800, 100, 50,
+        self.robotAI1 = AIControlledRobot(500, 500, 50,
                                           0, 2, copy.copy(self.arena),
                                           self.threadpool,
                                           n=1)
