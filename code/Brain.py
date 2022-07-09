@@ -37,7 +37,6 @@ class BrainLVL1(QRunnable):
         self.robo_player = robo_player
 
     def createGraph(self):
-        print(f"[{self.n}] Starte GraphGenerator")
         self.arena_graph.add_vertices(self.arena.tile_count_x *
                                       self.arena.tile_count_y)
 
@@ -90,7 +89,6 @@ class BrainLVL1(QRunnable):
                                     self.arena_graph.add_edge(tileIndexInGraph,
                                                               ngbrTileIndexInGraph,
                                                               weight=sqrt(2))
-        print(f"[{self.n}] Stop GraphGenerator")
 
     def calculateUnreachableTiles(self):
         unreachableTiles = []
@@ -142,8 +140,6 @@ class BrainLVL1(QRunnable):
         return False
 
     def plotGraph(self):
-        print(f"[{self.n}] Starte Plot")
-
         layout = []
         for i in range(self.arena_graph.vcount()):
             layout.append(self.getTilePositionInArena(i))
@@ -153,8 +149,6 @@ class BrainLVL1(QRunnable):
              vertex_size=1,
              vertex_color=['blue'],
              edge_color=['red'])
-
-        print(f"[{self.n}] Stop Plot")
 
     def getTileIndexInGraph(self, x, y):
         return int(y) * self.arena.tile_count_x + int(x)
