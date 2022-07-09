@@ -125,7 +125,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         for ai_r in self.AI_robots:
             ai_r.inform_brain(self.robot, ai_r)
-            ai_r.move(QGraphicsScene())
+            ai_r.move(self.scene)
             ai_r.followPoints()
 
         # Here all the objetcs in the game are drawn to the canvas ------

@@ -35,10 +35,10 @@ class AIControlledRobot(BaseRobot):
 
     def followPoints(self):
         if len(self.point_queue) > 0:
+            self.speed = MIN_SPEED
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)
             else:
-                self.speed = 1
                 new_alpha = self.calculateAlphaToReachPoint(self.point_queue[0])
                 self.alpha = new_alpha
         else:
@@ -46,22 +46,28 @@ class AIControlledRobot(BaseRobot):
 
     def hasReachedPoint(self, point):
         offset = 2
-        dist = np.sqrt(np.power(point.x() - self.x, 2)
-                       + np.power(point.y() - self.y, 2))
+        dist = np.sqrt(np.power(point.x() - (self.x + 0.5 * self.r), 2)
+                       + np.power(point.y() - (self.y + 0.5 * self.r), 2))
+
         return dist <= offset
 
     def clearFollowPointQueue(self):
         self.point_queue.clear()
 
     def calculateAlphaToReachPoint(self, point):
-        d_x = (point.x() - self.x)
-        d_y = (point.y() - self.y)
+        centered_x = (self.x + (0.5 * self.r))
+        centered_y = (self.y + (0.5 * self.r))
+
+        d_x = (point.x() - centered_x)
+        d_y = (point.y() - centered_y)
+
+        new_alpha = self.getAlpha([d_x, d_y])
 
         # This switch case is because of the arccos
-        if point.y() >= self.y:
-            return 360 - self.getAlpha([d_x, d_y])
+        if point.y() >= centered_y:
+            return 360 - new_alpha
         else:
-            return self.getAlpha([d_x, d_y])
+            return new_alpha
 
     def setThreadToFinished(self):
         self.restart_brain()
