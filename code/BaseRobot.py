@@ -40,9 +40,12 @@ class BaseRobot(QGraphicsObject):
 
     def getUnitVector(self, old_x, old_y, new_x, new_y):
         dist = np.sqrt(np.power(new_x - old_x, 2) + np.power(new_y - old_y, 2))
-        v_unit = [(self.getVector()[0] * self.speed) / dist,
-                  (self.getVector()[1] * self.speed) / dist]
-        return v_unit
+        if dist != 0:
+            v_unit = [(self.getVector()[0] * self.speed) / dist,
+                      (self.getVector()[1] * self.speed) / dist]
+            return v_unit
+        else:
+            return [0, 0]
 
     # Small function that shows all robot-info.
     def info(self):
