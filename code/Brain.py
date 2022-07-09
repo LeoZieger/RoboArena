@@ -227,7 +227,7 @@ class BrainLVL1(QRunnable):
                         self.signals.informAboutNextPoint.emit(QPoint(int(x),
                                                                       int(y)))
 
-                time.sleep(3)
+                time.sleep(1)
 
                 if not self.stop:
                     self.signals.finished.emit(self.n)
