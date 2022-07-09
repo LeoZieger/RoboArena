@@ -169,7 +169,7 @@ class BrainLVL1(QRunnable):
     def run(self):
         if self.arena_graph.vcount() == 0:
             self.createGraph()
-            self.plotGraph()
+            # self.plotGraph()
 
         if self.stop:
             return
