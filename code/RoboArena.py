@@ -145,7 +145,7 @@ class RoboArena(QtWidgets.QMainWindow):
             for ai_r in self.AI_robots:
                 ai_r.move(self.scene)
                 ai_r.followPoints()
-                ai_r.inform_brain(self.robot, air_r)
+                ai_r.inform_brain(self.robot, ai_r)
 
             self.t_accumulator -= UPDATE_TIME
 
