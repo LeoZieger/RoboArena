@@ -3,6 +3,7 @@
 from PyQt5.QtCore import Qt
 from BaseRobot import BaseRobot
 from Tile import *
+from BasePowerup import *
 
 
 class HumanControlledRobot(BaseRobot):
@@ -104,6 +105,9 @@ class HumanControlledRobot(BaseRobot):
     # to MAX_SPEED@BaseRobot.py if True
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), BasePowerup):
+                    print("hi")
             if BaseRobot.debug:
                 print("collision with powerup!")
 
