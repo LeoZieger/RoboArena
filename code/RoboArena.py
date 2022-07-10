@@ -2,7 +2,7 @@ from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 
-
+import time
 from os.path import exists
 
 import Arena
@@ -12,6 +12,7 @@ import NameInput
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
+UPDATE_TIME = 16
 
 
 class RoboArena(QtWidgets.QMainWindow):
@@ -59,16 +60,24 @@ class RoboArena(QtWidgets.QMainWindow):
         self.initSoundrack()
 
         # Timer for ticks
-        self.timer = QTimer()
+
         self.clock = 0
+        self.clock_time = 0
+        self.t_accumulator = 0
+
+        self.timer = QTimer()
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.tick)
-        self.timer.start(16)
+        self.t_last = time.time_ns() // 1_000_000
+        self.timer.start(1)
 
-    def getTime(self):
-        timeInSec = self.clock / 62.5
+    def getTimeInSec(self):
 
-        return timeInSec
+        return self.clock_time / 1000
+
+    def getFPS(self):
+
+        return int(self.clock / self.getTimeInSec())
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -107,15 +116,25 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def tick(self):
 
+        delta_time = time.time_ns() // 1_000_000 - self.t_last
         self.clock += 1
+        self.clock_time += delta_time
+        self.t_last += delta_time
+        self.t_accumulator += delta_time
 
-        self.robot.move(self.scene)
-        self.robot.reactToUserInput(self.keys_pressed)
+        while self.t_accumulator > UPDATE_TIME:
 
-        for ai_r in self.AI_robots:
-            ai_r.move(QGraphicsScene())
-            ai_r.followPoints()
-            ai_r.inform_brain(self.arena, self.robot)
+            self.robot.move(self.scene)
+            self.robot.reactToUserInput(self.keys_pressed)
+
+            for ai_r in self.AI_robots:
+                ai_r.move(QGraphicsScene())
+                ai_r.followPoints()
+                ai_r.inform_brain(self.arena, self.robot)
+
+            self.t_accumulator -= UPDATE_TIME
+
+            self.update()
 
         # Here all the objetcs in the game are drawn to the canvas ------
 
@@ -131,7 +150,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # ---------------------------------------------------------------
 
-        self.update()
+        if self.clock % 300 == 0:
+            print(str(self.getFPS()) + " FPS")
 
     def loadMapByPrompt(self):
 
