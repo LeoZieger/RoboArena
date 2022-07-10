@@ -36,6 +36,7 @@ class AIControlledRobot(BaseRobot):
     def followPoints(self):
         if len(self.point_queue) > 0:
             self.speed = MIN_SPEED
+
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)
             else:

@@ -221,6 +221,7 @@ class BrainLVL1(QRunnable):
 
                 self.signals.informToClearQueue.emit()
 
+                path[0].pop(0)
                 for p in path[0]:
                     x, y = self.getTilePositionInArena(p)
                     if not self.stop:
