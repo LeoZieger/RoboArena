@@ -78,6 +78,12 @@ class AIControlledRobot(BaseRobot):
     def stopAllThreads(self):
         self.brain.stop = True
 
+    def isCollisionWithRobot(self, scene):
+        for o in scene.collidingItems(self):
+            if issubclass(type(o), BaseRobot):
+                return True
+        return False
+
     def move(self, scene):
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
@@ -92,7 +98,8 @@ class AIControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while (len(scene.collidingItems(self)) > 0 and not
+                       self.isCollisionWithRobot(scene)):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
