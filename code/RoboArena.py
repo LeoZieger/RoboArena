@@ -1,9 +1,10 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, QThreadPool
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 
 import time
 from os.path import exists
+import copy
 
 import Arena
 from HumanControlledRobot import HumanControlledRobot
@@ -21,14 +22,25 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
-
         self.arena.loadMap("Example_2Player")
+
+        # hreadPool where each AI starts their Threads in
+        self.threadpool = QThreadPool.globalInstance()
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.robotAI1 = AIControlledRobot(500, 500, 50, 0, 2, n=1)
-        self.robotAI2 = AIControlledRobot(800, 850, 50, 0, 2, n=2)
-        self.robotAI3 = AIControlledRobot(100, 850, 50, 0, 2, n=3)
+        self.robotAI1 = AIControlledRobot(500, 500, 50,
+                                          0, 2, copy.copy(self.arena),
+                                          self.threadpool,
+                                          n=1)
+        self.robotAI2 = AIControlledRobot(800, 850, 50,
+                                          0, 2, copy.copy(self.arena),
+                                          self.threadpool,
+                                          n=2)
+        self.robotAI3 = AIControlledRobot(100, 850, 50,
+                                          0, 2, copy.copy(self.arena),
+                                          self.threadpool,
+                                          n=3)
 
         self.AI_robots = []
         self.AI_robots.append(self.robotAI1)
@@ -51,6 +63,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.scene = self.arena.add_tiles_to_scene(self.scene)
         self.scene.addItem(self.robot)
+
+        for ai_r in self.AI_robots:
+            self.scene.addItem(ai_r)
+
         self.scene.addItem(self.mapborder_top)
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
@@ -115,22 +131,21 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-
         delta_time = time.time_ns() // 1_000_000 - self.t_last
+
         self.clock += 1
         self.clock_time += delta_time
         self.t_last += delta_time
         self.t_accumulator += delta_time
 
         while self.t_accumulator > UPDATE_TIME:
-
             self.robot.move(self.scene)
             self.robot.reactToUserInput(self.keys_pressed)
 
             for ai_r in self.AI_robots:
-                ai_r.move(QGraphicsScene())
+                ai_r.move(self.scene)
                 ai_r.followPoints()
-                ai_r.inform_brain(self.arena, self.robot)
+                ai_r.inform_brain(self.robot, ai_r)
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -154,7 +169,6 @@ class RoboArena(QtWidgets.QMainWindow):
             print(str(self.getFPS()) + " FPS")
 
     def loadMapByPrompt(self):
-
         popup = NameInput.NameInput()
         ok = popup.exec_()
         name = popup.textValue()
