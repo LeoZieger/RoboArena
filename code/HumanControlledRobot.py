@@ -27,12 +27,6 @@ class HumanControlledRobot(BaseRobot):
         else:
             self.moveBackward = False
 
-        if Qt.Key_Shift in keys_pressed:
-            if self.speed < MAX_SPEED:
-                self.speed += 2
-        else:
-            self.speed = MIN_SPEED
-
         if Qt.Key_A in keys_pressed:
             self.alpha += 2
         if Qt.Key_D in keys_pressed:
