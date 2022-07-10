@@ -79,7 +79,7 @@ class Arena():
                 elif tile_type == "Water":
                     self.matrix[x][y] = Tile.Water(x, y)
                 else:
-                    self.matrix[x][y] = Tile.ile(x, y)
+                    self.matrix[x][y] = Tile.Tile(x, y)
 
     def saveMap(self, map_name):
         map_file = open("maps/" + map_name + ".json", "w")

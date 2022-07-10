@@ -28,12 +28,6 @@ class HumanControlledRobot(BaseRobot):
         else:
             self.moveBackward = False
 
-        if Qt.Key_Shift in keys_pressed:
-            if self.speed < MAX_SPEED:
-                self.speed += 2
-        else:
-            self.speed = MIN_SPEED
-
         if Qt.Key_A in keys_pressed:
             self.alpha += 2
         if Qt.Key_D in keys_pressed:
@@ -46,6 +40,12 @@ class HumanControlledRobot(BaseRobot):
             self.shooting = True
         else:
             self.shooting = False
+
+    def isCollisionWithRobot(self, scene):
+        for o in scene.collidingItems(self):
+            if issubclass(type(o), BaseRobot):
+                return True
+        return False
 
     def move(self, scene):
         if self.moveForward:
@@ -62,7 +62,8 @@ class HumanControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while (len(scene.collidingItems(self)) > 0 and not
+                       self.isCollisionWithRobot(scene)):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
