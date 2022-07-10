@@ -112,9 +112,7 @@ class HumanControlledRobot(BaseRobot):
                 self.SPRINT_SPEED += 3
             return True
 
-
-
-    # This function can reset the speed of a HumanControlledRobot
+    # Void: This function resets the speed of a HumanControlledRobot
     def resetSpeed(self):
         self.MAX_SPEED = BaseRobot.MAX_SPEED
         self.SPRINT_SPEED = BaseRobot.SPRINT_SPEED

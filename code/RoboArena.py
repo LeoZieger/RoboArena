@@ -133,6 +133,7 @@ class RoboArena(QtWidgets.QMainWindow):
     # for the length of Powerup duration.
     def collectedPowerup(self):
         if self.robot.collisionWithPowerup(self.scene):
+            QGraphicsScene.removeItem(self.scene, self.powerup)
             self.timeWhenPowerupIsCollected = self.getTime()
             self.wasCollisionWithPowerup = True
 
