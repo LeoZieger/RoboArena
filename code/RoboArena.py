@@ -1,5 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
-from PyQt5.QtCore import QTimer, QThreadPool
+from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
+from PyQt5.QtGui import QPen, QFont
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 
 import time
@@ -80,20 +81,18 @@ class RoboArena(QtWidgets.QMainWindow):
         self.clock = 0
         self.clock_time = 0
         self.t_accumulator = 0
+        self.fps = 0
 
         self.timer = QTimer()
         self.timer.setTimerType(QtCore.Qt.PreciseTimer)
         self.timer.timeout.connect(self.tick)
         self.t_last = time.time_ns() // 1_000_000
+        self.t_start = time.time_ns() // 1_000_000
         self.timer.start(1)
 
     def getTimeInSec(self):
 
-        return self.clock_time / 1000
-
-    def getFPS(self):
-
-        return int(self.clock / self.getTimeInSec())
+        return int(((time.time_ns() // 1_000_000) - self.t_start) / 1000)
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
@@ -131,7 +130,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def tick(self):
-        delta_time = time.time_ns() // 1_000_000 - self.t_last
+        delta_time = (time.time_ns() // 1_000_000) - self.t_last
 
         self.clock += 1
         self.clock_time += delta_time
@@ -165,8 +164,16 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # ---------------------------------------------------------------
 
-        if self.clock % 300 == 0:
-            print(str(self.getFPS()) + " FPS")
+        if self.clock_time > 1000:
+            self.fps = int(self.clock / (self.clock_time / 1000))
+            self.clock_time = 0
+            self.clock = 0
+
+        self.painter.begin(self.label.pixmap())
+        self.painter.setPen(QPen(Qt.white, 10, Qt.SolidLine))
+        self.painter.setFont(QFont("Verdana", 12))
+        self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
+        self.painter.end()
 
     def loadMapByPrompt(self):
         popup = NameInput.NameInput()
