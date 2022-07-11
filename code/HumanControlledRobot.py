@@ -1,11 +1,10 @@
 # Author: Lasse Niederkrome
 
-from PyQt5.QtCore import Qt
 
+from Tile import *
 from BaseRobot import BaseRobot
+from BasePowerup import *
 
-MAX_SPEED = 5
-MIN_SPEED = 3
 
 
 class HumanControlledRobot(BaseRobot):
@@ -83,3 +82,40 @@ class HumanControlledRobot(BaseRobot):
 
                 if collision:
                     break
+
+    # Checks, if there is a collision with a Tile or an QGraphicsRectItem.
+    # A Tile is a one of:
+    # -WaterTile
+    # -LavaTile
+    #
+    # a QGraphicsRectItem is one of:
+    # -Wall around the map
+    #
+    # Returns Boolean
+    def collisonWithTile(self, scene):
+        if len(scene.collidingItems(self)) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
+                    return True
+        return False
+
+    # Checks, if there is a collision with a powerup. Increasing speed
+    # to MAX_SPEED@BaseRobot.py if True
+    def collisionWithPowerup(self, scene):
+        if (len(scene.collidingItems(self))) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), BasePowerup):
+                    print("hi")
+            if BaseRobot.debug:
+                print("collision with powerup!")
+
+            if self.speed < self.MAX_SPEED:
+                self.MIN_SPEED += 2
+                self.SPRINT_SPEED += 3
+            return True
+
+    # Void: This function resets the speed of a HumanControlledRobot
+    def resetSpeed(self):
+        self.MAX_SPEED = BaseRobot.MAX_SPEED
+        self.SPRINT_SPEED = BaseRobot.SPRINT_SPEED
+        self.MIN_SPEED = BaseRobot.MIN_SPEED

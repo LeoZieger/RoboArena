@@ -11,6 +11,8 @@ import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
 import NameInput
+import SpeedPowerup
+import random
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -23,9 +25,28 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
+
+        self.wasCollisionWithPowerup = False
+        self.timeWhenPowerupIsCollected = 0
+        self.timeWhenPowerupIsRendered = 0
+
         self.arena.loadMap("Example_2Player")
 
-        # hreadPool where each AI starts their Threads in
+        # This is where the powerups are initialised
+        listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
+        # Creates 3 Powerups which are written into a List
+        self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
+        self.powerup1 = SpeedPowerup.SpeedPowerup(self.randomTile.x, self.randomTile.y, 5)
+        self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
+        self.powerup2 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5)
+        self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
+        self.powerup3 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5)
+        self.powerupList = []
+        self.powerupList.append(self.powerup1)
+        self.powerupList.append(self.powerup2)
+        self.powerupList.append(self.powerup3)
+
+        # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
@@ -68,6 +89,9 @@ class RoboArena(QtWidgets.QMainWindow):
         for ai_r in self.AI_robots:
             self.scene.addItem(ai_r)
 
+        for powerUpIndex in self.powerupList:
+            self.scene.addItem(powerUpIndex)
+
         self.scene.addItem(self.mapborder_top)
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
@@ -89,6 +113,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_last = time.time_ns() // 1_000_000
         self.t_start = time.time_ns() // 1_000_000
         self.timer.start(1)
+
+        # Variables for renderRandomPowerUp
+        self.leftIntBorder = 5
+        self.rightIntBorder = 15
 
     def getTimeInSec(self):
 
@@ -129,6 +157,16 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
+        # Takes 2 numbers, spawns all powerups after a random time between these 2 numbers
+
+    def renderRandomTimePowerup(self, leftIntBorder, rightIntBorder):
+        if self.getTimeInSec() > random.randint(leftIntBorder, rightIntBorder):
+            # this prevents the powerup from respawning over and over again
+            self.leftIntBorder = 0
+            self.rightIntBorder = 0
+            for powerUpIndex in self.powerupList:
+                powerUpIndex.render(self.painter)
+
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
 
@@ -155,6 +193,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
+        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
+        self.robot.collisionWithPowerup(self.scene)
         self.painter.end()
 
         for ai_r in self.AI_robots:
