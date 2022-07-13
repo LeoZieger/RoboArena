@@ -4,6 +4,7 @@
 from Tile import *
 from BaseRobot import BaseRobot
 from BasePowerup import *
+from RoboArena import *
 
 
 
@@ -37,6 +38,14 @@ class HumanControlledRobot(BaseRobot):
                 return True
         return False
 
+    def collisionWithTile(self, scene):
+        if len(scene.collidingItems(self)) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
+                    return True
+        return False
+
+
     def move(self, scene):
         if self.moveForward:
             v_unit = self.getUnitVector(self.x,
@@ -52,8 +61,7 @@ class HumanControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while (len(scene.collidingItems(self)) > 0 and not
-                       self.isCollisionWithRobot(scene)):
+                while self.collisionWithTile(scene) and not self.isCollisionWithRobot(scene):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
@@ -75,7 +83,7 @@ class HumanControlledRobot(BaseRobot):
                 self.y -= v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while self.collisionWithTile(scene):
                     self.x += v_unit[0]
                     self.y += v_unit[1]
                     collision = True
@@ -92,12 +100,9 @@ class HumanControlledRobot(BaseRobot):
     # -Wall around the map
     #
     # Returns Boolean
-    def collisonWithTile(self, scene):
-        if len(scene.collidingItems(self)) > 0:
-            for o in scene.collidingItems(self):
-                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
-                    return True
-        return False
+
+
+
 
     # Checks, if there is a collision with a powerup. Increasing speed
     # to MAX_SPEED@BaseRobot.py if True
@@ -110,12 +115,10 @@ class HumanControlledRobot(BaseRobot):
                 print("collision with powerup!")
 
             if self.speed < self.MAX_SPEED:
-                self.MIN_SPEED += 2
-                self.SPRINT_SPEED += 3
+                self.speed += 2
             return True
 
     # Void: This function resets the speed of a HumanControlledRobot
     def resetSpeed(self):
         self.MAX_SPEED = BaseRobot.MAX_SPEED
-        self.SPRINT_SPEED = BaseRobot.SPRINT_SPEED
         self.MIN_SPEED = BaseRobot.MIN_SPEED
