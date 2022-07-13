@@ -110,12 +110,13 @@ class HumanControlledRobot(BaseRobot):
         if (len(scene.collidingItems(self))) > 0:
             for o in scene.collidingItems(self):
                 if issubclass(type(o), BasePowerup):
-                    print("hi")
+                    o.isCollected = True
             if BaseRobot.debug:
                 print("collision with powerup!")
 
             if self.speed < self.MAX_SPEED:
                 self.speed += 2
+
             return True
 
     # Void: This function resets the speed of a HumanControlledRobot

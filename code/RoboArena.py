@@ -36,11 +36,11 @@ class RoboArena(QtWidgets.QMainWindow):
         listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
         # Creates 3 Powerups which are written into a List
         self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-        self.powerup1 = SpeedPowerup.SpeedPowerup(self.randomTile.x, self.randomTile.y, 5)
+        self.powerup1 = SpeedPowerup.SpeedPowerup(self.randomTile.x, self.randomTile.y, 5, False)
         self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-        self.powerup2 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5)
+        self.powerup2 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5, False)
         self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-        self.powerup3 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5)
+        self.powerup3 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5, False)
         self.powerupList = []
         self.powerupList.append(self.powerup1)
         self.powerupList.append(self.powerup2)
@@ -166,6 +166,8 @@ class RoboArena(QtWidgets.QMainWindow):
             self.rightIntBorder = 0
             for powerUpIndex in self.powerupList:
                 powerUpIndex.render(self.painter)
+                if powerUpIndex.isCollected:
+                    self.powerupList.remove(powerUpIndex)
 
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
@@ -238,3 +240,5 @@ class RoboArena(QtWidgets.QMainWindow):
         print("Alle Threads werden auf stop gesetzt!")
         for ai_r in self.AI_robots:
             ai_r.stopAllThreads()
+
+

@@ -5,16 +5,18 @@ from PyQt5.QtCore import Qt, QRectF
 
 class BasePowerup(QGraphicsObject):
 
-    def __init__(self, x, y, duration):
+    def __init__(self, x, y, duration, isCollected):
         QGraphicsObject.__init__(self)
         self.x = x
         self.y = y
         self.duration = duration
+        self.isCollected = isCollected
 
     def info(self):
         print(self.x)
         print(self.y)
         print(self.duration)
+        print(self.isCollected)
 
     def render(self, painter):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
