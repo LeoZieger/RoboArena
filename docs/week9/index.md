@@ -16,7 +16,7 @@ what we did this week:
 ![image](https://user-images.githubusercontent.com/72664329/178989409-e085ecc1-bdc8-4649-8e80-e1fdda294d34.png)
 
 2. Our UML Diagramm
-![Roboarena](https://user-images.githubusercontent.com/72664329/178820844-da3e1651-eca5-4797-a63e-2d87ab01e0fd.svg)
+![Roboarena (2)](https://user-images.githubusercontent.com/72664329/178992969-1b71a3bd-c59d-441f-9f07-5e5ada070899.svg)
  
 3. AI-Pathfinding for our AIControlled Robots
 ![2player](https://user-images.githubusercontent.com/72664329/178823922-b1893f55-a244-45b9-828a-575a6b1f659b.png)
