@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsObject
-from PyQt5.QtGui import QPen, QBrush
+from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QRectF
+
 
 
 class BasePowerup(QGraphicsObject):
@@ -11,6 +12,7 @@ class BasePowerup(QGraphicsObject):
         self.y = y
         self.duration = duration
         self.isCollected = isCollected
+        self.texture = QImage("res/pixil-frame-0.png")
 
     def info(self):
         print(self.x)
@@ -21,7 +23,7 @@ class BasePowerup(QGraphicsObject):
     def render(self, painter):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
-        painter.drawEllipse(self.x, self.y, 20, 20)
+        painter.drawImage(self.boundingRect(), self.texture)
 
     def boundingRect(self):
-        return QRectF(int(self.x), int(self.y), 20, 20)
+        return QRectF(int(self.x), int(self.y), 40, 40)
