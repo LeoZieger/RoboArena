@@ -27,8 +27,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena = Arena.Arena()
 
         self.wasCollisionWithPowerup = False
-        self.timeWhenPowerupIsCollected = 0
-        self.timeWhenPowerupIsRendered = 0
+        self.collectedPowerup = False
+
 
         self.arena.loadMap("Example_2Player")
 
@@ -196,7 +196,18 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.robot.render(self.painter)
         self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
-        self.robot.collisionWithPowerup(self.scene)
+
+        if self.robot.collisionWithPowerup(self.scene):
+            self.timeWhenPowerupIsCollected = self.getTimeInSec()
+            self.collectedPowerup = True
+
+        if self.collectedPowerup:
+            if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                print(2)
+                self.robot.resetSpeed()
+                self.collectedPowerup = False
+
+
         self.painter.end()
 
         for ai_r in self.AI_robots:
@@ -240,5 +251,7 @@ class RoboArena(QtWidgets.QMainWindow):
         print("Alle Threads werden auf stop gesetzt!")
         for ai_r in self.AI_robots:
             ai_r.stopAllThreads()
+
+
 
 

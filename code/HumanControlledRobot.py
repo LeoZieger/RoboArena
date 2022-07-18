@@ -117,9 +117,9 @@ class HumanControlledRobot(BaseRobot):
             if self.speed < self.MAX_SPEED:
                 self.speed += 2
 
+
             return True
 
     # Void: This function resets the speed of a HumanControlledRobot
     def resetSpeed(self):
-        self.MAX_SPEED = BaseRobot.MAX_SPEED
-        self.MIN_SPEED = BaseRobot.MIN_SPEED
+        self.speed -= 2
