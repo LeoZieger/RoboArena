@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
-                            QMainWindow, QLabel, QDesktopWidget
+                            QMainWindow, QLabel, QDesktopWidget, \
+                            QMenu, QAction
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
@@ -52,23 +53,29 @@ class MainMenu(QMainWindow):
 
         # Settings
         settings_btn = QPushButton('Settings', self)
-        settings_btn.resize(247, BUTTON_HEIGHT)
+        settings_btn.resize(500, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        # Difficulty
-        difficulty_btn = QPushButton('Difficulty', self)
-        difficulty_btn.resize(247, BUTTON_HEIGHT)
-        difficulty_btn.move(503, 460)
+        #SubWindow Settings
+        def add_menu(self, menu, sub, name):
+            submenu = sub
+            submenu = QAction(name, self)
+            menu.addAction(submenu)
 
-        # Edit Robot
-        editRob_btn = QPushButton('Edit Robot', self)
-        editRob_btn.resize(247, BUTTON_HEIGHT)
-        editRob_btn.move(250, 550)
+        settings_menu = QMenu()
+        settings_btn.setMenu(settings_menu)
+        difficulty = settings_menu.addMenu("Difficulty")
+        #easy = QAction("Easy", self)
+        #difficulty.addAction(easy)
+        add_menu(self, difficulty, "easy", "Easy")
+        #easy.trigger.connect(QApplication.instance().quit)
+        normal = QAction("Normal", self)
+        difficulty.addAction(normal)
 
         # Map Editor
         editMap_btn = QPushButton('Map Editor', self)
-        editMap_btn.resize(247, BUTTON_HEIGHT)
-        editMap_btn.move(503, 550)
+        editMap_btn.resize(500, BUTTON_HEIGHT)
+        editMap_btn.move(250, 550)
         editMap_btn.clicked.connect(self.start_map_creator)
 
         # Quit
@@ -80,28 +87,24 @@ class MainMenu(QMainWindow):
         # Stylesheet for Buttons
         buttonstyle = """
                     QWidget{
-                        border-style: outset;
-                        border: 5px solid #0a0a0a;
-                        border-radius: 20px;
+                        border: 3px solid #0a0a0a;
                         background-color: #c7bfbf;
                         font:20px;
                     }
                     QPushButton:hover{
-                        border-style: outset;
-                        border: 5px solid #0a0a0a;
-                        border-radius: 20px;
+                        border: 3px solid #0a0a0a;
                         background-color: #f2eded;
                     }
                     QPushButton:pressed{
                         background-color: #c7bfbf;
                     }
                         """
+
         start_btn.setStyleSheet(buttonstyle)
         settings_btn.setStyleSheet(buttonstyle)
-        difficulty_btn.setStyleSheet(buttonstyle)
-        editRob_btn.setStyleSheet(buttonstyle)
         editMap_btn.setStyleSheet(buttonstyle)
         quit_btn.setStyleSheet(buttonstyle)
+        settings_menu.setStyleSheet(buttonstyle)
 
         self.show()
 
@@ -118,7 +121,6 @@ class MainMenu(QMainWindow):
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
