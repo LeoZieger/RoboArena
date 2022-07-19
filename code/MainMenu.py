@@ -1,6 +1,10 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
+<<<<<<< HEAD
                             QMenu, QAction
+=======
+                            QMenu
+>>>>>>> 0df1a3655c2ecddfbb8c2ee9f01b6567776be710
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
@@ -57,6 +61,7 @@ class MainMenu(QMainWindow):
         settings_btn.move(250, 460)
 
         #SubWindow Settings
+<<<<<<< HEAD
         def add_menu(self, menu, sub, name):
             submenu = sub
             submenu = QAction(name, self)
@@ -71,6 +76,15 @@ class MainMenu(QMainWindow):
         #easy.trigger.connect(QApplication.instance().quit)
         normal = QAction("Normal", self)
         difficulty.addAction(normal)
+=======
+        settings = [
+            {'Difficulty': ["Easy", "Normal", "Hard"]},
+            {'Keybindings': ['Movement', 'Shoot']}
+        ]
+        settings_menu = QMenu()
+        settings_btn.setMenu(settings_menu)
+        self.add_menu(settings, settings_menu)
+>>>>>>> 0df1a3655c2ecddfbb8c2ee9f01b6567776be710
 
         # Map Editor
         editMap_btn = QPushButton('Map Editor', self)
@@ -122,6 +136,24 @@ class MainMenu(QMainWindow):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
 
+<<<<<<< HEAD
+=======
+    # Adds a menu
+    def add_menu(self, data, menu_obj):
+        if isinstance(data, dict):
+            for k, v in data.items():
+                sub_menu = QMenu(k, menu_obj)
+                menu_obj.addMenu(sub_menu)
+                self.add_menu(v, sub_menu)
+        elif isinstance(data, list):
+            for element in data:
+                self.add_menu(element, menu_obj)
+        else:
+            action = menu_obj.addAction(data)
+            action.setIconVisibleInMenu(False)
+
+
+>>>>>>> 0df1a3655c2ecddfbb8c2ee9f01b6567776be710
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainMenu()
