@@ -165,14 +165,12 @@ class MainMenu(QMainWindow):
     def start_game(self):
         SoundFX.transitionSound(self)
         self.hide()
-        self.game_window = RoboArena.RoboArena(False)
+        self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked())
         SoundFX.initMenuSoundtrack(self, False)
 
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
-
-
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
