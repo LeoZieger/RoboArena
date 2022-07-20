@@ -34,7 +34,7 @@ class Bullet(QGraphicsRectItem):
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.width, self.width)
 
-    def isHittingObject(self, scene):
-        if len(scene.collidingItems(self)) > 0:
-            return True, scene.collidingItems(self)[0]
+    def isHittingObject(self):
+        if len(self.scene().collidingItems(self)) > 0:
+            return True, self.scene().collidingItems(self)[0]
         return False, None

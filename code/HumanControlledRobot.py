@@ -45,13 +45,13 @@ class HumanControlledRobot(BaseRobot):
         else:
             self.shooting = False
 
-    def isCollisionWithRobot(self, scene):
-        for o in scene.collidingItems(self):
+    def isCollisionWithRobot(self):
+        for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):
                 return True
         return False
 
-    def move(self, scene):
+    def move(self):
         if self.moveForward:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -68,7 +68,7 @@ class HumanControlledRobot(BaseRobot):
                 self.setRect(self.boundingRect())
 
                 # If collision takes place we step back
-                while self.isCollidingWithTile(scene):
+                while self.isCollidingWithTile():
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
 
@@ -95,7 +95,7 @@ class HumanControlledRobot(BaseRobot):
                 self.setRect(self.boundingRect())
 
                 # If collision takes place we step back
-                while self.isCollidingWithTile(scene):
+                while self.isCollidingWithTile():
                     self.x += v_unit[0]
                     self.y += v_unit[1]
 

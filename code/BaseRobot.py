@@ -96,8 +96,8 @@ class BaseRobot(QGraphicsRectItem):
                       self.getVector(),
                       15, 10)
 
-    def isCollidingWithTile(self, scene):
-        for o in scene.collidingItems(self):
+    def isCollidingWithTile(self):
+        for o in self.scene().collidingItems(self):
             if (issubclass(type(o), Tile) or
                type(o) == QGraphicsRectItem):
                 return True

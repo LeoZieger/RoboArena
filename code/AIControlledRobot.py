@@ -79,7 +79,7 @@ class AIControlledRobot(BaseRobot):
     def stopAllThreads(self):
         self.brain.stop = True
 
-    def move(self, scene):
+    def move(self):
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -95,7 +95,7 @@ class AIControlledRobot(BaseRobot):
                 self.setRect(self.boundingRect())
 
                 # If collision takes place we step back
-                while self.isCollidingWithTile(scene):
+                while self.isCollidingWithTile():
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
 

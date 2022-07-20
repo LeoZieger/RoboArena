@@ -163,17 +163,17 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.scene.addItem(bullet)
                 self.bullets.append(bullet)
 
-            self.robot.move(self.scene)
+            self.robot.move()
 
             for ai_r in self.AI_robots:
-                ai_r.move(self.scene)
+                ai_r.move()
                 ai_r.followPoints()
                 ai_r.inform_brain(self.robot, ai_r)
 
             hit = False
             for b in self.bullets:
                 b.trajectory()
-                hit, o = b.isHittingObject(self.scene)
+                hit, o = b.isHittingObject()
                 if hit:
                     self.bullets.remove(b)
                     # TODO: Impelemt Damage or something
