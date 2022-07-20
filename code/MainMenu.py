@@ -117,7 +117,15 @@ class MainMenu(QMainWindow):
 
         self.show()
 
-    def uncheck(self):
+    def uncheck(self, state):
+        # if no difficulty is checked -> check normal
+        if (not self.easy.isChecked()) == \
+           (not self.normal.isChecked()) == \
+           (not self.hard.isChecked()):
+            self.easy.setChecked(True)
+            self.normal.setChecked(True)
+            self.hard.setChecked(True)
+
         # if easy is selected
         if self.sender() == self.easy:
 
