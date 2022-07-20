@@ -32,6 +32,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.wasCollisionWithPowerup = False
         self.collectedPowerup = False
+        self.testTime = 0
 
         self.arena.loadMap("Example_2Player")
 
@@ -149,10 +150,11 @@ class RoboArena(QtWidgets.QMainWindow):
 
 
     def spawnNewPowerup(self):
-        self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
-        self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH, self.randomTile.y * TILE_WIDTH, 5, False)
-        self.powerupList.append(self.newPowerup)
-        self.scene.addItem(self.newPowerup)
+        if self.testTime + 2 < self.getTimeInSec():
+            self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
+            self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH, self.randomTile.y * TILE_WIDTH, 5, False)
+            self.powerupList.append(self.newPowerup)
+            self.scene.addItem(self.newPowerup)
 
         # Takes 2 numbers, spawns all powerups after a
         # random time between these 2 numbers
