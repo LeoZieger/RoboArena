@@ -2,9 +2,15 @@
 
 from PyQt5.QtWidgets import QGraphicsRectItem
 from BaseRobot import BaseRobot
+
+import time
+
 from PyQt5.QtCore import Qt
 from Tile import Tile
 from BasePowerup import BasePowerup
+
+MAX_SPEED = 5
+MIN_SPEED = 3
 
 
 class HumanControlledRobot(BaseRobot):
@@ -14,6 +20,7 @@ class HumanControlledRobot(BaseRobot):
 
         self.moveForward = False
         self.moveBackward = False
+        self.shooting = False
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -31,8 +38,34 @@ class HumanControlledRobot(BaseRobot):
         if Qt.Key_D in keys_pressed:
             self.alpha -= 2
 
-    def isCollisionWithRobot(self, scene):
-        for o in scene.collidingItems(self):
+        # Bullet
+        if Qt.Key_Space in keys_pressed:
+            if time.time() - self.canShootAgainAt > 0:
+                self.shooting = True
+                self.canShootAgainAt = time.time() + self.cooldown
+            else:
+                self.shooting = False
+        else:
+            self.shooting = False
+
+    def reactToUserInput2(self, keys_pressed):
+        if Qt.Key_Up in keys_pressed:
+            self.moveForward = True
+        else:
+            self.moveForward = False
+
+        if Qt.Key_Down in keys_pressed:
+            self.moveBackward = True
+        else:
+            self.moveBackward = False
+
+        if Qt.Key_Left in keys_pressed:
+            self.alpha += 2
+        if Qt.Key_Right in keys_pressed:
+            self.alpha -= 2
+
+    def isCollisionWithRobot(self):
+        for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):
                 return True
         return False
@@ -44,7 +77,7 @@ class HumanControlledRobot(BaseRobot):
                     return True
         return False
 
-    def move(self, scene):
+    def move(self):
         if self.moveForward:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -58,11 +91,15 @@ class HumanControlledRobot(BaseRobot):
                 self.x += v_unit[0]
                 self.y += v_unit[1]
 
+                self.setRect(self.boundingRect())
+
                 # If collision takes place we step back
-                while self.collisionWithTile(scene) and not \
-                        self.isCollisionWithRobot(scene):
+                while self.isCollidingWithTile():
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
+
+                    self.setRect(self.boundingRect())
+
                     collision = True
 
                 if collision:
@@ -81,10 +118,15 @@ class HumanControlledRobot(BaseRobot):
                 self.x -= v_unit[0]
                 self.y -= v_unit[1]
 
+                self.setRect(self.boundingRect())
+
                 # If collision takes place we step back
-                while self.collisionWithTile(scene):
+                while self.isCollidingWithTile():
                     self.x += v_unit[0]
                     self.y += v_unit[1]
+
+                    self.setRect(self.boundingRect())
+
                     collision = True
 
                 if collision:
