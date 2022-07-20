@@ -155,7 +155,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_accumulator += delta_time
 
         while self.t_accumulator > UPDATE_TIME:
-
             self.robot.reactToUserInput(self.keys_pressed)
 
             if self.robot.shooting:
