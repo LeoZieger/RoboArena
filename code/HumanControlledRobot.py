@@ -5,6 +5,7 @@ from Tile import *
 from BaseRobot import BaseRobot
 from BasePowerup import *
 from RoboArena import *
+from SoundFX import SoundFX
 
 
 
@@ -108,6 +109,7 @@ class HumanControlledRobot(BaseRobot):
     # to MAX_SPEED@BsaseRobot.py if True
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0:
+            SoundFX.initPwrUpSound(self)
             for o in scene.collidingItems(self):
                 if issubclass(type(o), BasePowerup):
                     o.isCollected = True

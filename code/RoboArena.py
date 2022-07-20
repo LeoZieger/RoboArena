@@ -14,12 +14,13 @@ import NameInput
 import SpeedPowerup
 import random
 from Tile import TILE_WIDTH
+from SoundFX import SoundFX
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 UPDATE_TIME = 16
 # This is the number of Powerups getting spwnd
-POWERUP_COUNT = 10
+POWERUP_COUNT = 5
 
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
@@ -94,7 +95,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.scene.addItem(self.mapborder_right)
 
         self.initUI()
-        self.initSoundrack()
+        SoundFX.initSoundrack(self)
 
         # Timer for ticks
 
@@ -138,14 +139,11 @@ class RoboArena(QtWidgets.QMainWindow):
         outerRect.moveCenter(centerOfScreen)
         self.move(outerRect.topLeft())
 
-    def initSoundrack(self):
-        # This is the part where we can setup the soundtrack
-        soundtrack = 'RoboArena_Soundtrack_Demo.wav'
-        self.sound = QtMultimedia.QSoundEffect()
-        self.sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
-        self.sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
-        self.sound.setVolume(0.3)    # Choose a value between 0 and 1
-        self.sound.play()
+
+
+
+
+
 
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
@@ -195,12 +193,12 @@ class RoboArena(QtWidgets.QMainWindow):
         self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
 
         if self.robot.collisionWithPowerup(self.scene):
+
             self.timeWhenPowerupIsCollected = self.getTimeInSec()
             self.collectedPowerup = True
 
         if self.collectedPowerup:
             if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
-                print(2)
                 self.robot.resetSpeed()
                 self.collectedPowerup = False
 
