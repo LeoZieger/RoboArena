@@ -40,10 +40,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
         self.powerupList = []
         for p in range(POWERUP_COUNT):
-            self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
-            self.powerup = SpeedPowerup.SpeedPowerup\
-                (self.randomTile.x*TILE_WIDTH,
-                 self.randomTile.y*TILE_WIDTH, 5, False)
+            self.randomTile = self.listOfNotCollidableTiles[
+                random.randint(0, len(self.listOfNotCollidableTiles))
+                ]
+            self.powerup = SpeedPowerup.SpeedPowerup(self.randomTile.x*TILE_WIDTH,
+                                                     self.randomTile.y*TILE_WIDTH,
+                                                     5,
+                                                     False)
             self.powerupList.append(self.powerup)
 
         # ThreadPool where each AI starts their Threads in
@@ -54,17 +57,17 @@ class RoboArena(QtWidgets.QMainWindow):
         if not self.multiplayer:
 
             self.robotAI1 = AIControlledRobot(500, 500, 50,
-                                            0, 2, copy.copy(self.arena),
-                                            self.threadpool,
-                                            n=1)
+                                              0, 2, copy.copy(self.arena),
+                                              self.threadpool,
+                                              n=1)
             self.robotAI2 = AIControlledRobot(800, 850, 50,
-                                            0, 2, copy.copy(self.arena),
-                                            self.threadpool,
-                                            n=2)
+                                              0, 2, copy.copy(self.arena),
+                                              self.threadpool,
+                                              n=2)
             self.robotAI3 = AIControlledRobot(100, 850, 50,
-                                            0, 2, copy.copy(self.arena),
-                                            self.threadpool,
-                                            n=3)
+                                              0, 2, copy.copy(self.arena),
+                                              self.threadpool,
+                                              n=3)
 
             self.AI_robots = []
             self.AI_robots.append(self.robotAI1)
@@ -155,8 +158,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def spawnNewPowerup(self):
-        self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
-        self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH, self.randomTile.y * TILE_WIDTH, 5, False)
+        self.randomTile = self.listOfNotCollidableTiles[
+            random.randint(0, len(self.listOfNotCollidableTiles))
+            ]
+        self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH,
+                                                    self.randomTile.y * TILE_WIDTH,
+                                                    5,
+                                                    False)
         self.powerupList.append(self.newPowerup)
         self.scene.addItem(self.newPowerup)
 
@@ -196,7 +204,6 @@ class RoboArena(QtWidgets.QMainWindow):
             else:
                 self.robot2.move(self.scene)
                 self.robot2.reactToUserInputPlayer2(self.keys_pressed)
-
 
             self.t_accumulator -= UPDATE_TIME
 

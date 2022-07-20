@@ -172,6 +172,7 @@ class MainMenu(QMainWindow):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainMenu()
