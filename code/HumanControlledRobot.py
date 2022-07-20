@@ -48,6 +48,22 @@ class HumanControlledRobot(BaseRobot):
         else:
             self.shooting = False
 
+    def reactToUserInput2(self, keys_pressed):
+        if Qt.Key_Up in keys_pressed:
+            self.moveForward = True
+        else:
+            self.moveForward = False
+
+        if Qt.Key_Down in keys_pressed:
+            self.moveBackward = True
+        else:
+            self.moveBackward = False
+
+        if Qt.Key_Left in keys_pressed:
+            self.alpha += 2
+        if Qt.Key_Right in keys_pressed:
+            self.alpha -= 2
+
     def isCollisionWithRobot(self):
         for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):

@@ -226,12 +226,12 @@ class RoboArena(QtWidgets.QMainWindow):
 
             if not self.multiplayer:
                 for ai_r in self.AI_robots:
-                    ai_r.move(self.scene)
+                    ai_r.move()
                     ai_r.followPoints()
                     ai_r.inform_brain(self.robot, ai_r)
             else:
-                self.robot2.move(self.scene)
-                self.robot2.reactToUserInputPlayer2(self.keys_pressed)
+                self.robot2.move()
+                self.robot2.reactToUserInput2(self.keys_pressed)
 
             if self.robot.collisionWithPowerup(self.scene):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
@@ -313,6 +313,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.loadMap(name)
 
     def closeEvent(self, event):
-        print("Alle Threads werden auf stop gesetzt!")
-        for ai_r in self.AI_robots:
-            ai_r.stopAllThreads()
+        if not self.multiplayer:
+            for ai_r in self.AI_robots:
+                ai_r.stopAllThreads()
