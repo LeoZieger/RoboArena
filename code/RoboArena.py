@@ -24,8 +24,9 @@ POWERUP_COUNT = 3
 
 
 class RoboArena(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, multiplayer):
         super().__init__()
+        self.multiplayer = multiplayer
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
@@ -50,23 +51,29 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
-        self.robotAI1 = AIControlledRobot(500, 500, 50,
-                                          0, 2, copy.copy(self.arena),
-                                          self.threadpool,
-                                          n=1)
-        self.robotAI2 = AIControlledRobot(800, 850, 50,
-                                          0, 2, copy.copy(self.arena),
-                                          self.threadpool,
-                                          n=2)
-        self.robotAI3 = AIControlledRobot(100, 850, 50,
-                                          0, 2, copy.copy(self.arena),
-                                          self.threadpool,
-                                          n=3)
+        if not self.multiplayer:
 
-        self.AI_robots = []
-        self.AI_robots.append(self.robotAI1)
-        self.AI_robots.append(self.robotAI2)
-        self.AI_robots.append(self.robotAI3)
+            self.robotAI1 = AIControlledRobot(500, 500, 50,
+                                            0, 2, copy.copy(self.arena),
+                                            self.threadpool,
+                                            n=1)
+            self.robotAI2 = AIControlledRobot(800, 850, 50,
+                                            0, 2, copy.copy(self.arena),
+                                            self.threadpool,
+                                            n=2)
+            self.robotAI3 = AIControlledRobot(100, 850, 50,
+                                            0, 2, copy.copy(self.arena),
+                                            self.threadpool,
+                                            n=3)
+
+            self.AI_robots = []
+            self.AI_robots.append(self.robotAI1)
+            self.AI_robots.append(self.robotAI2)
+            self.AI_robots.append(self.robotAI3)
+
+        else:
+
+            self.robot2 = HumanControlledRobot(800, 850, 50, 0, 3)
 
         self.mapborder_top = QGraphicsRectItem(0, 0,
                                                Arena.ARENA_HEIGHT, 5)
@@ -85,8 +92,11 @@ class RoboArena(QtWidgets.QMainWindow):
         self.scene = self.arena.add_tiles_to_scene(self.scene)
         self.scene.addItem(self.robot)
 
-        for ai_r in self.AI_robots:
-            self.scene.addItem(ai_r)
+        if not self.multiplayer:
+            for ai_r in self.AI_robots:
+                self.scene.addItem(ai_r)
+        else:
+            self.scene.addItem(self.robot2)
 
         self.scene.addItem(self.mapborder_top)
         self.scene.addItem(self.mapborder_left)
@@ -178,10 +188,15 @@ class RoboArena(QtWidgets.QMainWindow):
             self.robot.move(self.scene)
             self.robot.reactToUserInput(self.keys_pressed)
 
-            for ai_r in self.AI_robots:
-                ai_r.move(self.scene)
-                ai_r.followPoints()
-                ai_r.inform_brain(self.robot, ai_r)
+            if not self.multiplayer:
+                for ai_r in self.AI_robots:
+                    ai_r.move(self.scene)
+                    ai_r.followPoints()
+                    ai_r.inform_brain(self.robot, ai_r)
+            else:
+                self.robot2.move(self.scene)
+                self.robot2.reactToUserInputPlayer2(self.keys_pressed)
+
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -206,9 +221,15 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.painter.end()
 
-        for ai_r in self.AI_robots:
+        if not self.multiplayer:
+            for ai_r in self.AI_robots:
+                self.painter.begin(self.label.pixmap())
+                ai_r.render(self.painter)
+                self.painter.end()
+
+        else:
             self.painter.begin(self.label.pixmap())
-            ai_r.render(self.painter)
+            self.robot2.render(self.painter)
             self.painter.end()
 
         # ---------------------------------------------------------------
