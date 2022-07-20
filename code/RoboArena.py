@@ -101,6 +101,9 @@ class RoboArena(QtWidgets.QMainWindow):
         else:
             self.scene.addItem(self.robot2)
 
+        for i in self.powerupList:
+            self.scene.addItem(i)
+
         self.scene.addItem(self.mapborder_top)
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
@@ -176,7 +179,6 @@ class RoboArena(QtWidgets.QMainWindow):
             self.leftIntBorder = 0
             self.rightIntBorder = 0
             for powerUpIndex in self.powerupList:
-                self.scene.addItem(powerUpIndex)
                 powerUpIndex.render(self.painter)
                 if powerUpIndex.isCollected:
                     self.powerupList.remove(powerUpIndex)
@@ -205,6 +207,15 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.robot2.move(self.scene)
                 self.robot2.reactToUserInputPlayer2(self.keys_pressed)
 
+            if self.robot.collisionWithPowerup(self.scene):
+                self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                self.collectedPowerup = True
+
+            if self.collectedPowerup:
+                if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                    self.robot.resetSpeed()
+                    self.collectedPowerup = False
+
             self.t_accumulator -= UPDATE_TIME
 
             self.update()
@@ -215,16 +226,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.robot.render(self.painter)
         self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
-
-        if self.robot.collisionWithPowerup(self.scene):
-
-            self.timeWhenPowerupIsCollected = self.getTimeInSec()
-            self.collectedPowerup = True
-
-        if self.collectedPowerup:
-            if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
-                self.robot.resetSpeed()
-                self.collectedPowerup = False
 
         self.painter.end()
 
