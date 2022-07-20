@@ -56,21 +56,31 @@ class MainMenu(QMainWindow):
         settings_btn.resize(500, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        #SubWindow Settings
-        def add_menu(self, menu, sub, name):
-            submenu = sub
-            submenu = QAction(name, self)
-            menu.addAction(submenu)
-
+        #Settings Submenu
         settings_menu = QMenu()
         settings_btn.setMenu(settings_menu)
+
+        #2 Player Option
+        self.multiplayer = self.add_menu(settings_menu, "2 Player", True)
+        self.multiplayer.triggered.connect(lambda: print(multiplayer.isChecked()))
+
+        #Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
-        #easy = QAction("Easy", self)
-        #difficulty.addAction(easy)
-        add_menu(self, difficulty, "easy", "Easy")
-        #easy.trigger.connect(QApplication.instance().quit)
-        normal = QAction("Normal", self)
-        difficulty.addAction(normal)
+
+        #Easy
+        self.easy = self.add_menu(difficulty, "Easy", True)
+
+        #Normal
+        self.normal = self.add_menu(difficulty, "Normal", True)
+        self.normal.toggle()
+
+        #Hard
+        self.hard = self.add_menu(difficulty, "Hard", True)
+
+        #Uncheck other difficulties if one is checked
+        self.easy.triggered.connect(self.uncheck)
+        self.normal.triggered.connect(self.uncheck)
+        self.hard.triggered.connect(self.uncheck)
 
         # Map Editor
         editMap_btn = QPushButton('Map Editor', self)
@@ -107,6 +117,35 @@ class MainMenu(QMainWindow):
         settings_menu.setStyleSheet(buttonstyle)
 
         self.show()
+
+    def uncheck(self):
+        # if easy is selected
+        if self.sender() == self.easy:
+
+            # uncheck other difficulties
+            self.normal.setChecked(False)
+            self.hard.setChecked(False)
+
+        # if normal is selected
+        elif self.sender() == self.normal:
+
+            # uncheck other difficulties
+            self.easy.setChecked(False)
+            self.hard.setChecked(False)
+
+        # if hard is selected
+        elif self.sender() == self.hard:
+
+            # uncheck other difficulties
+            self.easy.setChecked(False)
+            self.normal.setChecked(False)
+
+    def add_menu(self, menu, name, checkable):
+        submenu = QAction(name, self)
+        menu.addAction(submenu)
+        submenu.setCheckable(checkable)
+
+        return submenu
 
     def centerWindowOnScreen(self):
         outerRect = self.frameGeometry()
