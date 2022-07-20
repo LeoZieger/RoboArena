@@ -28,8 +28,6 @@ class Bullet(QGraphicsRectItem):
         painter.setPen(QPen(Qt.black, 5, Qt.DashLine))
         painter.drawEllipse(int(self.x), int(self.y),
                             int(self.width), int(self.width))
-        painter.setPen(QPen(Qt.red, 5, Qt.DashLine))
-        painter.drawRect(self.boundingRect())
 
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.width, self.width)
