@@ -121,6 +121,7 @@ class Arena():
 
     def listOfNotCollidableTiles(self):
         notCollidableTiles = []
+
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 if not self.matrix[x][y].collision:

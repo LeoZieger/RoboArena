@@ -13,11 +13,13 @@ from AIControlledRobot import AIControlledRobot
 import NameInput
 import SpeedPowerup
 import random
+from Tile import TILE_WIDTH
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 UPDATE_TIME = 16
-
+# This is the number of Powerups getting spwnd
+POWERUP_COUNT = 10
 
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
@@ -32,19 +34,13 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.loadMap("Example_2Player")
 
-        # This is where the powerups are initialised
+        # This is where the Powerups are initialised
         listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
-        # Creates 3 Powerups which are written into a List
-        self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-        self.powerup1 = SpeedPowerup.SpeedPowerup(self.randomTile.x, self.randomTile.y, 5, False)
-        self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-        self.powerup2 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5, False)
-        self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-        self.powerup3 = SpeedPowerup.SpeedPowerup(random.randint(100, 900), random.randint(100, 900), 5, False)
         self.powerupList = []
-        self.powerupList.append(self.powerup1)
-        self.powerupList.append(self.powerup2)
-        self.powerupList.append(self.powerup3)
+        for p in range(POWERUP_COUNT):
+            self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
+            self.powerup = SpeedPowerup.SpeedPowerup(self.randomTile.x*TILE_WIDTH, self.randomTile.y*TILE_WIDTH, 5, False)
+            self.powerupList.append(self.powerup)
 
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
