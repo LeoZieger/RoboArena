@@ -1,11 +1,9 @@
-# Author: Lasse Niederkrome
+# Author: Lasse Niederkrome, Leonard Zieger, Lukas Reutemann
 
-from PyQt5.QtCore import Qt
-
+from Tile import *
 from BaseRobot import BaseRobot
-
-MAX_SPEED = 5
-MIN_SPEED = 3
+from BasePowerup import *
+from RoboArena import *
 
 
 class HumanControlledRobot(BaseRobot):
@@ -54,6 +52,13 @@ class HumanControlledRobot(BaseRobot):
                 return True
         return False
 
+    def collisionWithTile(self, scene):
+        if len(scene.collidingItems(self)) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
+                    return True
+        return False
+
     def move(self, scene):
         if self.moveForward:
             v_unit = self.getUnitVector(self.x,
@@ -69,8 +74,8 @@ class HumanControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while (len(scene.collidingItems(self)) > 0 and not
-                       self.isCollisionWithRobot(scene)):
+                while self.collisionWithTile(scene) and not \
+                        self.isCollisionWithRobot(scene):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
@@ -92,10 +97,39 @@ class HumanControlledRobot(BaseRobot):
                 self.y -= v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while self.collisionWithTile(scene):
                     self.x += v_unit[0]
                     self.y += v_unit[1]
                     collision = True
 
                 if collision:
                     break
+
+    # Checks, if there is a collision with a Tile or an QGraphicsRectItem.
+    # A Tile is a one of:
+    # -WaterTile
+    # -LavaTile
+    #
+    # a QGraphicsRectItem is one of:
+    # -Wall around the map
+    #
+    # Returns Boolean
+
+    # Checks, if there is a collision with a powerup. Increasing speed
+    # to MAX_SPEED@BsaseRobot.py if True
+    def collisionWithPowerup(self, scene):
+        if (len(scene.collidingItems(self))) > 0:
+
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), BasePowerup):
+                    o.isCollected = True
+            if BaseRobot.debug:
+                print("collision with powerup!")
+
+            if self.speed < self.MAX_SPEED:
+                self.speed += 2
+            return True
+
+    # Void: This function resets the speed of a HumanControlledRobot
+    def resetSpeed(self):
+        self.speed -= 2

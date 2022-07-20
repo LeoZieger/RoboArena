@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
+from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
 from PyQt5.QtGui import QPen, QFont
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
@@ -11,10 +11,16 @@ import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
 import NameInput
+import SpeedPowerup
+import random
+from Tile import TILE_WIDTH
+from SoundFX import SoundFX
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 UPDATE_TIME = 16
+# This is the number of Powerups getting spwnd
+POWERUP_COUNT = 3
 
 
 class RoboArena(QtWidgets.QMainWindow):
@@ -24,7 +30,21 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # Arena und all robots that are kept track
         self.arena = Arena.Arena()
+
+        self.wasCollisionWithPowerup = False
+        self.collectedPowerup = False
+
         self.arena.loadMap("Example_2Player")
+
+        # This is where the Powerups are initialised
+        self.listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
+        self.powerupList = []
+        for p in range(POWERUP_COUNT):
+            self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
+            self.powerup = SpeedPowerup.SpeedPowerup\
+                (self.randomTile.x*TILE_WIDTH,
+                 self.randomTile.y*TILE_WIDTH, 5, False)
+            self.powerupList.append(self.powerup)
 
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
@@ -84,7 +104,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.scene.addItem(self.mapborder_right)
 
         self.initUI()
-        self.initSoundrack()
+        SoundFX.initSoundrack(self)
 
         # Timer for ticks
 
@@ -99,6 +119,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_last = time.time_ns() // 1_000_000
         self.t_start = time.time_ns() // 1_000_000
         self.timer.start(1)
+
+        # Variables for renderRandomPowerUp
+        self.leftIntBorder = 5
+        self.rightIntBorder = 15
 
     def getTimeInSec(self):
 
@@ -124,20 +148,33 @@ class RoboArena(QtWidgets.QMainWindow):
         outerRect.moveCenter(centerOfScreen)
         self.move(outerRect.topLeft())
 
-    def initSoundrack(self):
-        # This is the part where we can setup the soundtrack
-        soundtrack = 'RoboArena_Soundtrack_Demo.wav'
-        self.sound = QtMultimedia.QSoundEffect()
-        self.sound.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
-        self.sound.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
-        self.sound.setVolume(0.3)    # Choose a value between 0 and 1
-        self.sound.play()
-
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
 
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
+
+    def spawnNewPowerup(self):
+        self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
+        self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH, self.randomTile.y * TILE_WIDTH, 5, False)
+        self.powerupList.append(self.newPowerup)
+        self.scene.addItem(self.newPowerup)
+
+        # Takes 2 numbers, spawns all powerups after a
+        # random time between these 2 numbers
+    def renderRandomTimePowerup(self, leftIntBorder, rightIntBorder):
+        if self.getTimeInSec() > random.randint(leftIntBorder, rightIntBorder):
+            # this prevents the powerup from respawning over and over again
+            self.leftIntBorder = 0
+            self.rightIntBorder = 0
+            for powerUpIndex in self.powerupList:
+                self.scene.addItem(powerUpIndex)
+                powerUpIndex.render(self.painter)
+                if powerUpIndex.isCollected:
+                    self.powerupList.remove(powerUpIndex)
+                    self.spawnNewPowerup()
+                    SoundFX.initPwrUpSound(self)
+                    QGraphicsScene.removeItem(self.scene, powerUpIndex)
 
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
@@ -170,6 +207,18 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.robot.render(self.painter)
+        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
+
+        if self.robot.collisionWithPowerup(self.scene):
+
+            self.timeWhenPowerupIsCollected = self.getTimeInSec()
+            self.collectedPowerup = True
+
+        if self.collectedPowerup:
+            if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                self.robot.resetSpeed()
+                self.collectedPowerup = False
+
         self.painter.end()
 
         if not self.multiplayer:
