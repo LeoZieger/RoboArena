@@ -168,6 +168,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 powerUpIndex.render(self.painter)
                 if powerUpIndex.isCollected:
                     self.powerupList.remove(powerUpIndex)
+                    QGraphicsScene.removeItem(self.scene, powerUpIndex)
 
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
