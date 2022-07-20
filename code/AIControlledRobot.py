@@ -1,9 +1,11 @@
 import numpy as np
 
-from BaseRobot import BaseRobot, MIN_SPEED
+from Tile import Tile
+from BaseRobot import BaseRobot
 import Brain
 from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtWidgets import QGraphicsRectItem
 
 
 class AIControlledRobot(BaseRobot):
@@ -35,7 +37,7 @@ class AIControlledRobot(BaseRobot):
 
     def followPoints(self):
         if len(self.point_queue) > 0:
-            self.speed = MIN_SPEED
+            self.speed = self.MIN_SPEED
 
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)
@@ -95,6 +97,7 @@ class AIControlledRobot(BaseRobot):
                 self.setRect(self.boundingRect())
 
                 # If collision takes place we step back
+
                 while self.isCollidingWithTile():
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
@@ -130,3 +133,11 @@ class AIControlledRobot(BaseRobot):
 
             for p in self.point_queue:
                 painter.drawPoint(p)
+
+    # Allows AI-Robos to go through PowerUps without collision
+    def aiCollisionWithTile(self, scene):
+        if len(scene.collidingItems(self)) > 0:
+            for o in scene.collidingItems(self):
+                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
+                    return True
+        return False

@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
-                            QMainWindow, QLabel, QDesktopWidget
+                            QMainWindow, QLabel, QDesktopWidget, \
+                            QMenu, QAction
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
@@ -7,7 +8,7 @@ import PyQt5.QtCore
 import sys
 import RoboArena
 import MapCreator
-
+from SoundFX import SoundFX
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -31,6 +32,7 @@ class MainMenu(QMainWindow):
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+        SoundFX.initMenuSoundtrack(self, True)
 
         # Header
         name_label = QLabel("ROBO ARENA", self)
@@ -52,23 +54,38 @@ class MainMenu(QMainWindow):
 
         # Settings
         settings_btn = QPushButton('Settings', self)
-        settings_btn.resize(247, BUTTON_HEIGHT)
+        settings_btn.resize(500, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        # Difficulty
-        difficulty_btn = QPushButton('Difficulty', self)
-        difficulty_btn.resize(247, BUTTON_HEIGHT)
-        difficulty_btn.move(503, 460)
+        # Settings Submenu
+        settings_menu = QMenu()
+        settings_btn.setMenu(settings_menu)
 
-        # Edit Robot
-        editRob_btn = QPushButton('Edit Robot', self)
-        editRob_btn.resize(247, BUTTON_HEIGHT)
-        editRob_btn.move(250, 550)
+        # 2 Player Option
+        self.multiplayer = self.add_menu(settings_menu, "Multiplayer", True)
+
+        # Difficulty Menu
+        difficulty = settings_menu.addMenu("Difficulty")
+
+        # Easy
+        self.easy = self.add_menu(difficulty, "Easy", True)
+
+        # Normal
+        self.normal = self.add_menu(difficulty, "Normal", True)
+        self.normal.toggle()
+
+        # Hard
+        self.hard = self.add_menu(difficulty, "Hard", True)
+
+        # Uncheck other difficulties if one is checked
+        self.easy.triggered.connect(self.uncheck)
+        self.normal.triggered.connect(self.uncheck)
+        self.hard.triggered.connect(self.uncheck)
 
         # Map Editor
         editMap_btn = QPushButton('Map Editor', self)
-        editMap_btn.resize(247, BUTTON_HEIGHT)
-        editMap_btn.move(503, 550)
+        editMap_btn.resize(500, BUTTON_HEIGHT)
+        editMap_btn.move(250, 550)
         editMap_btn.clicked.connect(self.start_map_creator)
 
         # Quit
@@ -80,30 +97,64 @@ class MainMenu(QMainWindow):
         # Stylesheet for Buttons
         buttonstyle = """
                     QWidget{
-                        border-style: outset;
-                        border: 5px solid #0a0a0a;
-                        border-radius: 20px;
+                        border: 3px solid #0a0a0a;
                         background-color: #c7bfbf;
                         font:20px;
                     }
                     QPushButton:hover{
-                        border-style: outset;
-                        border: 5px solid #0a0a0a;
-                        border-radius: 20px;
+                        border: 3px solid #0a0a0a;
                         background-color: #f2eded;
                     }
                     QPushButton:pressed{
                         background-color: #c7bfbf;
                     }
                         """
+
+        # Apply stylesheet to the buttons
         start_btn.setStyleSheet(buttonstyle)
         settings_btn.setStyleSheet(buttonstyle)
-        difficulty_btn.setStyleSheet(buttonstyle)
-        editRob_btn.setStyleSheet(buttonstyle)
         editMap_btn.setStyleSheet(buttonstyle)
         quit_btn.setStyleSheet(buttonstyle)
+        settings_menu.setStyleSheet(buttonstyle)
 
         self.show()
+
+    def uncheck(self):
+        # if no difficulty is checked -> check normal
+        if (not self.easy.isChecked()) == \
+           (not self.normal.isChecked()) == \
+           (not self.hard.isChecked()):
+            self.easy.setChecked(True)
+            self.normal.setChecked(True)
+            self.hard.setChecked(True)
+
+        # if easy is selected
+        if self.sender() == self.easy:
+
+            # uncheck other difficulties
+            self.normal.setChecked(False)
+            self.hard.setChecked(False)
+
+        # if normal is selected
+        elif self.sender() == self.normal:
+
+            # uncheck other difficulties
+            self.easy.setChecked(False)
+            self.hard.setChecked(False)
+
+        # if hard is selected
+        elif self.sender() == self.hard:
+
+            # uncheck other difficulties
+            self.easy.setChecked(False)
+            self.normal.setChecked(False)
+
+    def add_menu(self, menu, name, checkable):
+        submenu = QAction(name, self)
+        menu.addAction(submenu)
+        submenu.setCheckable(checkable)
+
+        return submenu
 
     def centerWindowOnScreen(self):
         outerRect = self.frameGeometry()
@@ -112,8 +163,10 @@ class MainMenu(QMainWindow):
         self.move(outerRect.topLeft())
 
     def start_game(self):
+        SoundFX.transitionSound(self)
         self.hide()
-        self.game_window = RoboArena.RoboArena()
+        self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked())
+        SoundFX.initMenuSoundtrack(self, False)
 
     def start_map_creator(self):
         self.hide()

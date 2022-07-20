@@ -7,11 +7,10 @@ import numpy as np
 from Bullet import Bullet
 from Tile import Tile
 
-MAX_SPEED = 5
-MIN_SPEED = 3
-
 
 class BaseRobot(QGraphicsRectItem):
+    MAX_SPEED = 5
+    MIN_SPEED = 3
 
     debug = False
 
