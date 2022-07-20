@@ -109,6 +109,7 @@ class MainMenu(QMainWindow):
                     }
                         """
 
+        # Apply stylesheet to the buttons
         start_btn.setStyleSheet(buttonstyle)
         settings_btn.setStyleSheet(buttonstyle)
         editMap_btn.setStyleSheet(buttonstyle)
@@ -122,10 +123,12 @@ class MainMenu(QMainWindow):
         if (not self.easy.isChecked()) == \
            (not self.normal.isChecked()) == \
            (not self.hard.isChecked()):
+            self.easy.setChecked(True)
             self.normal.setChecked(True)
+            self.hard.setChecked(True)
 
         # if easy is selected
-        elif self.sender() == self.easy:
+        if self.sender() == self.easy:
 
             # uncheck other difficulties
             self.normal.setChecked(False)
