@@ -135,7 +135,6 @@ class AIControlledRobot(BaseRobot):
                 painter.drawPoint(p)
 
     # Allows AI-Robos to go through PowerUps without collision
-
     def aiCollisionWithTile(self, scene):
         if len(scene.collidingItems(self)) > 0:
             for o in scene.collidingItems(self):
