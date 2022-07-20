@@ -88,9 +88,6 @@ class RoboArena(QtWidgets.QMainWindow):
         for ai_r in self.AI_robots:
             self.scene.addItem(ai_r)
 
-        for powerUpIndex in self.powerupList:
-            self.scene.addItem(powerUpIndex)
-
         self.scene.addItem(self.mapborder_top)
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
@@ -147,7 +144,6 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
-
     def spawnNewPowerup(self):
         self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
         self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH, self.randomTile.y * TILE_WIDTH, 5, False)
@@ -162,6 +158,7 @@ class RoboArena(QtWidgets.QMainWindow):
             self.leftIntBorder = 0
             self.rightIntBorder = 0
             for powerUpIndex in self.powerupList:
+                self.scene.addItem(powerUpIndex)
                 powerUpIndex.render(self.painter)
                 if powerUpIndex.isCollected:
                     self.powerupList.remove(powerUpIndex)
