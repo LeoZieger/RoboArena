@@ -1,11 +1,11 @@
 from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QRectF
-from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsRectItem
 
 
 class Bullet(QGraphicsRectItem):
     def __init__(self, x, y, direction, width, velocity):
-        QGraphicsObject.__init__(self)
+        QGraphicsRectItem.__init__(self)
 
         self.texture = QImage("res/bullet.png")
         self.x = x

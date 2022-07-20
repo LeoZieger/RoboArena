@@ -62,17 +62,9 @@ class RoboArena(QtWidgets.QMainWindow):
 
         # All objects where we want to enforce detection need to be in the scene
         self.scene = QGraphicsScene()
+        self.scene.setBspTreeDepth(0)
 
-        self.scene = self.arena.add_tiles_to_scene(self.scene)
-        self.scene.addItem(self.robot)
-
-        for ai_r in self.AI_robots:
-            self.scene.addItem(ai_r)
-
-        self.scene.addItem(self.mapborder_top)
-        self.scene.addItem(self.mapborder_left)
-        self.scene.addItem(self.mapborder_bottom)
-        self.scene.addItem(self.mapborder_right)
+        self.buildScene()
 
         self.initUI()
         self.initSoundrack()
@@ -88,6 +80,28 @@ class RoboArena(QtWidgets.QMainWindow):
         self.timer.timeout.connect(self.tick)
         self.t_last = time.time_ns() // 1_000_000
         self.timer.start(1)
+
+    def buildScene(self):
+        # removing all 'old' items in the scene (with wrong idx)
+        for it in self.scene.items():
+            self.scene.removeItem(it)
+
+        self.scene.setBspTreeDepth(0)
+
+        self.arena.add_tiles_to_scene(self.scene)
+
+        self.scene.addItem(self.robot)
+
+        for ai_r in self.AI_robots:
+            self.scene.addItem(ai_r)
+
+        for b in self.bullets:
+            self.scene.addItem(b)
+
+        self.scene.addItem(self.mapborder_top)
+        self.scene.addItem(self.mapborder_left)
+        self.scene.addItem(self.mapborder_bottom)
+        self.scene.addItem(self.mapborder_right)
 
     def getTimeInSec(self):
 
@@ -156,17 +170,14 @@ class RoboArena(QtWidgets.QMainWindow):
                 ai_r.followPoints()
                 ai_r.inform_brain(self.robot, ai_r)
 
-            bulletsToRemove = []
+            hit = False
             for b in self.bullets:
                 b.trajectory()
                 hit, o = b.isHittingObject(self.scene)
                 if hit:
-                    bulletsToRemove.append(b)
-                    self.scene.removeItem(b)
-                    del b
-
-            for b in bulletsToRemove:
-                self.bullets.remove(b)
+                    self.bullets.remove(b)
+                    # TODO: Impelemt Damage or something
+                    self.buildScene()
 
             self.t_accumulator -= UPDATE_TIME
 

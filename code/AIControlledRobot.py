@@ -92,10 +92,15 @@ class AIControlledRobot(BaseRobot):
                 self.x += v_unit[0]
                 self.y += v_unit[1]
 
+                self.setRect(self.boundingRect())
+
                 # If collision takes place we step back
                 while self.isCollidingWithTile(scene):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
+
+                    self.setRect(self.boundingRect())
+
                     collision = True
 
                 if collision:
