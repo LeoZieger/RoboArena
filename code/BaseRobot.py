@@ -88,13 +88,18 @@ class BaseRobot(QGraphicsRectItem):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 
     def createBullet(self):
-        x_pos = (self.x + 0.5 * self.r) + self.getVector()[0] * self.r * 1.5
-        y_pos = (self.y + 0.5 * self.r) + self.getVector()[1] * self.r + 1.5
+        radius_around_rect = np.sqrt(
+                                np.power(self.r, 2) + np.power(self.r, 2))
+        x_pos = ((self.x + 0.5 * self.r)
+                 + self.getVector()[0] * radius_around_rect)
+        y_pos = ((self.y + 0.5 * self.r)
+                 + self.getVector()[1] * radius_around_rect)
 
         return Bullet(x_pos,
                       y_pos,
                       self.getVector(),
-                      15, 10)
+                      5,
+                      15)
 
     def isCollidingWithTile(self):
         for o in self.scene().collidingItems(self):
