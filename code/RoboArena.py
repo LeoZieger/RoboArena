@@ -96,7 +96,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.scene.setBspTreeDepth(0)
 
         self.buildScene()
-        
+
         # Variables for renderRandomPowerUp
         self.leftIntBorder = 5
         self.rightIntBorder = 15
@@ -137,7 +137,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         for b in self.bullets:
             self.scene.addItem(b)
-            
+
         for i in self.powerupList:
             self.scene.addItem(i)
 
@@ -145,10 +145,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.scene.addItem(self.mapborder_left)
         self.scene.addItem(self.mapborder_bottom)
         self.scene.addItem(self.mapborder_right)
-
-    def getTimeInSec(self):
-
-        return self.clock_time / 1000
 
     def getTimeInSec(self):
 
@@ -215,7 +211,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_accumulator += delta_time
 
         while self.t_accumulator > UPDATE_TIME:
-        
             self.robot.reactToUserInput(self.keys_pressed)
             self.robot.move()
 
@@ -223,7 +218,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 bullet = self.robot.createBullet()
                 self.scene.addItem(bullet)
                 self.bullets.append(bullet)
-                
+
             if self.multiplayer and self.robot2.shooting:
                 bullet = self.robot.createBullet()
                 self.scene.addItem(bullet)
