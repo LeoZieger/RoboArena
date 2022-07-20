@@ -100,7 +100,8 @@ class AIControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while self.aiCollisionWithTile(scene) and not self.isCollisionWithRobot(scene):
+                while self.aiCollisionWithTile(scene) and \
+                        not self.isCollisionWithRobot(scene):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
@@ -133,8 +134,8 @@ class AIControlledRobot(BaseRobot):
             for p in self.point_queue:
                 painter.drawPoint(p)
 
-
     # Allows AI-Robos to go through PowerUps without collision
+
     def aiCollisionWithTile(self, scene):
         if len(scene.collidingItems(self)) > 0:
             for o in scene.collidingItems(self):

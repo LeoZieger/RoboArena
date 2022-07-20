@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QGraphicsObject
 import numpy as np
 
 
-
-
 class BaseRobot(QGraphicsObject):
     MAX_SPEED = 5
     MIN_SPEED = 3

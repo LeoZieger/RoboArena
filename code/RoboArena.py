@@ -1,4 +1,4 @@
-from PyQt5 import QtGui, QtWidgets, QtCore, QtMultimedia
+from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
 from PyQt5.QtGui import QPen, QFont
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
@@ -22,6 +22,7 @@ UPDATE_TIME = 16
 # This is the number of Powerups getting spwnd
 POWERUP_COUNT = 5
 
+
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
@@ -32,7 +33,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.wasCollisionWithPowerup = False
         self.collectedPowerup = False
 
-
         self.arena.loadMap("Example_2Player")
 
         # This is where the Powerups are initialised
@@ -40,7 +40,9 @@ class RoboArena(QtWidgets.QMainWindow):
         self.powerupList = []
         for p in range(POWERUP_COUNT):
             self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
-            self.powerup = SpeedPowerup.SpeedPowerup(self.randomTile.x*TILE_WIDTH, self.randomTile.y*TILE_WIDTH, 5, False)
+            self.powerup = SpeedPowerup.SpeedPowerup\
+                (self.randomTile.x*TILE_WIDTH,
+                 self.randomTile.y*TILE_WIDTH, 5, False)
             self.powerupList.append(self.powerup)
 
         # ThreadPool where each AI starts their Threads in
@@ -139,20 +141,14 @@ class RoboArena(QtWidgets.QMainWindow):
         outerRect.moveCenter(centerOfScreen)
         self.move(outerRect.topLeft())
 
-
-
-
-
-
-
     def keyPressEvent(self, event):
         self.keys_pressed.add(event.key())
 
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
-        # Takes 2 numbers, spawns all powerups after a random time between these 2 numbers
-
+        # Takes 2 numbers, spawns all powerups after a
+        # random time between these 2 numbers
     def renderRandomTimePowerup(self, leftIntBorder, rightIntBorder):
         if self.getTimeInSec() > random.randint(leftIntBorder, rightIntBorder):
             # this prevents the powerup from respawning over and over again
@@ -162,6 +158,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 powerUpIndex.render(self.painter)
                 if powerUpIndex.isCollected:
                     self.powerupList.remove(powerUpIndex)
+                    SoundFX.initPwrUpSound(self)
                     QGraphicsScene.removeItem(self.scene, powerUpIndex)
 
     def tick(self):
@@ -201,7 +198,6 @@ class RoboArena(QtWidgets.QMainWindow):
             if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
                 self.robot.resetSpeed()
                 self.collectedPowerup = False
-
 
         self.painter.end()
 
@@ -246,7 +242,3 @@ class RoboArena(QtWidgets.QMainWindow):
         print("Alle Threads werden auf stop gesetzt!")
         for ai_r in self.AI_robots:
             ai_r.stopAllThreads()
-
-
-
-

@@ -1,12 +1,9 @@
-# Author: Lasse Niederkrome
-
+# Author: Lasse Niederkrome, Leonard Zieger, Lukas Reutemann
 
 from Tile import *
 from BaseRobot import BaseRobot
 from BasePowerup import *
 from RoboArena import *
-from SoundFX import SoundFX
-
 
 
 class HumanControlledRobot(BaseRobot):
@@ -46,7 +43,6 @@ class HumanControlledRobot(BaseRobot):
                     return True
         return False
 
-
     def move(self, scene):
         if self.moveForward:
             v_unit = self.getUnitVector(self.x,
@@ -62,7 +58,8 @@ class HumanControlledRobot(BaseRobot):
                 self.y += v_unit[1]
 
                 # If collision takes place we step back
-                while self.collisionWithTile(scene) and not self.isCollisionWithRobot(scene):
+                while self.collisionWithTile(scene) and not \
+                        self.isCollisionWithRobot(scene):
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
                     collision = True
@@ -102,14 +99,11 @@ class HumanControlledRobot(BaseRobot):
     #
     # Returns Boolean
 
-
-
-
     # Checks, if there is a collision with a powerup. Increasing speed
     # to MAX_SPEED@BsaseRobot.py if True
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0:
-            SoundFX.initPwrUpSound(self)
+
             for o in scene.collidingItems(self):
                 if issubclass(type(o), BasePowerup):
                     o.isCollected = True
@@ -118,8 +112,6 @@ class HumanControlledRobot(BaseRobot):
 
             if self.speed < self.MAX_SPEED:
                 self.speed += 2
-
-
             return True
 
     # Void: This function resets the speed of a HumanControlledRobot

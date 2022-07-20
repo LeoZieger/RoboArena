@@ -3,9 +3,7 @@ from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QRectF
 
 
-
 class BasePowerup(QGraphicsObject):
-
     def __init__(self, x, y, duration, isCollected):
         QGraphicsObject.__init__(self)
         self.x = x
