@@ -56,6 +56,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.mapborder_right = QGraphicsRectItem(Arena.ARENA_WIDTH, 0,
                                                  5, Arena.ARENA_HEIGHT)
 
+        self.bullets = []
+
         self.keys_pressed = set()
 
         # All objects where we want to enforce detection need to be in the scene
@@ -139,13 +141,32 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_accumulator += delta_time
 
         while self.t_accumulator > UPDATE_TIME:
-            self.robot.move(self.scene)
+
             self.robot.reactToUserInput(self.keys_pressed)
+
+            if self.robot.shooting:
+                bullet = self.robot.createBullet()
+                self.scene.addItem(bullet)
+                self.bullets.append(bullet)
+
+            self.robot.move(self.scene)
 
             for ai_r in self.AI_robots:
                 ai_r.move(self.scene)
                 ai_r.followPoints()
                 ai_r.inform_brain(self.robot, ai_r)
+
+            bulletsToRemove = []
+            for b in self.bullets:
+                b.trajectory()
+                hit, o = b.isHittingObject(self.scene)
+                if hit:
+                    bulletsToRemove.append(b)
+                    self.scene.removeItem(b)
+                    del b
+
+            for b in bulletsToRemove:
+                self.bullets.remove(b)
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -162,6 +183,11 @@ class RoboArena(QtWidgets.QMainWindow):
             self.painter.begin(self.label.pixmap())
             ai_r.render(self.painter)
             self.painter.end()
+
+        self.painter.begin(self.label.pixmap())
+        for b in self.bullets:
+            b.render(self.painter)
+        self.painter.end()
 
         # ---------------------------------------------------------------
 

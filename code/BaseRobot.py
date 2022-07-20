@@ -2,9 +2,10 @@
 
 from PyQt5.QtGui import QPen, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
-from PyQt5.QtWidgets import QGraphicsObject
+from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
 import numpy as np
-import Bullet
+from Bullet import Bullet
+from Tile import Tile
 
 MAX_SPEED = 5
 MIN_SPEED = 3
@@ -25,7 +26,9 @@ class BaseRobot(QGraphicsObject):
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
         self.texture = QImage("res/blue_tank.png")              # texture
-        self.bullets = []                   # Bullets
+
+        self.canShootAgainAt = 0
+        self.cooldown = 1
 
     def getVector(self):
         return [np.cos(np.deg2rad(self.alpha)), -1 * np.sin(np.deg2rad(self.alpha))]
@@ -70,11 +73,6 @@ class BaseRobot(QGraphicsObject):
 
         painter.resetTransform()
 
-        # Bullet
-        for bullet in self.bullets:
-            bullet.render(painter)
-            bullet.trajectory()
-
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
@@ -85,7 +83,6 @@ class BaseRobot(QGraphicsObject):
                                     int(self.y + (self.getVector()[1] * 40))))
 
     def move(self, scene):
-
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -112,4 +109,17 @@ class BaseRobot(QGraphicsObject):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 
     def createBullet(self):
-        self.bullets.append(Bullet.Bullet(self, 5, 10))
+        x_pos = (self.x + 0.5 * self.r) + self.getVector()[0] * self.r * 1.5
+        y_pos = (self.y + 0.5 * self.r) + self.getVector()[1] * self.r + 1.5
+
+        return Bullet(x_pos,
+                      y_pos,
+                      self.getVector(),
+                      15, 10)
+
+    def isCollidingWithTile(self, scene):
+        for o in scene.collidingItems(self):
+            if (issubclass(type(o), Tile) or
+               type(o) == QGraphicsRectItem):
+                return True
+        return False

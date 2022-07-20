@@ -1,40 +1,40 @@
 from PyQt5.QtGui import QImage, QPen
-from PyQt5.QtCore import Qt
-import numpy as np
-import math
+from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
 
 
-class Bullet():
-    def __init__(self, tank, width, velocity):
-        self.texture = QImage("res/bullet.png")  # bullet
-        self.x = tank.x + tank.r/2               # x-position of the tank
-        self.y = tank.y + tank.r/2               # y-position of the tank
-        self.width = width                       # width of the bullet
-        self.alpha = tank.alpha                  # direction/angle
-        self.velocity = velocity                 # speed of the bullet
-        rad_alpha = -np.deg2rad(tank.alpha)
-        offset = tank.r/2, 0
-        offset = self.rotate_x_y(offset, rad_alpha)
-        self.x += offset[0]
-        self.y += offset[1]
-        # Später damage hinzufügen!
+class Bullet(QGraphicsRectItem):
+    def __init__(self, x, y, direction, width, velocity):
+        QGraphicsObject.__init__(self)
 
-    # Rotates x and y
-    def rotate_x_y(self, vec, rad_alpha):
-        x = vec[0] * math.cos(rad_alpha) - vec[1] * math.sin(rad_alpha)
-        y = vec[0] * math.sin(rad_alpha) + vec[1] * math.cos(rad_alpha)
+        self.texture = QImage("res/bullet.png")
+        self.x = x
+        self.y = y
+        self.direction = direction  # direction of bullet as vector
+        self.width = width
+        self.velocity = velocity  # speed of the bullet
 
-        return x, y
+        self.setRect(self.boundingRect())
 
     # Calculates how the bullet has to travel
     def trajectory(self):
-        rad_alpha = -np.deg2rad(self.alpha)
-        speed = self.velocity, 0
-        rotated = self.rotate_x_y(speed, rad_alpha)
-        self.x += rotated[0]
-        self.y += rotated[1]
+        self.x = self.x + self.direction[0] * self.velocity
+        self.y = self.y + self.direction[1] * self.velocity
+
+        self.setRect(self.boundingRect())
 
     # Renders the bullet on the canvas
     def render(self, painter):
         painter.setPen(QPen(Qt.black, 5, Qt.DashLine))
-        painter.drawEllipse(int(self.x), int(self.y), int(self.width), int(self.width))
+        painter.drawEllipse(int(self.x), int(self.y),
+                            int(self.width), int(self.width))
+        painter.setPen(QPen(Qt.red, 5, Qt.DashLine))
+        painter.drawRect(self.boundingRect())
+
+    def boundingRect(self):
+        return QRectF(int(self.x), int(self.y), self.width, self.width)
+
+    def isHittingObject(self, scene):
+        if len(scene.collidingItems(self)) > 0:
+            return True, scene.collidingItems(self)[0]
+        return False, None

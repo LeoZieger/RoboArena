@@ -4,6 +4,8 @@ from PyQt5.QtCore import Qt
 
 from BaseRobot import BaseRobot
 
+import time
+
 MAX_SPEED = 5
 MIN_SPEED = 3
 
@@ -35,9 +37,11 @@ class HumanControlledRobot(BaseRobot):
 
         # Bullet
         if Qt.Key_Space in keys_pressed:
-            if not self.shooting:
-                self.createBullet()
-            self.shooting = True
+            if time.time() - self.canShootAgainAt > 0:
+                self.shooting = True
+                self.canShootAgainAt = time.time() + self.cooldown
+            else:
+                self.shooting = False
         else:
             self.shooting = False
 
@@ -85,7 +89,7 @@ class HumanControlledRobot(BaseRobot):
                 self.y -= v_unit[1]
 
                 # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
+                while self.isCollidingWithTile(scene):
                     self.x += v_unit[0]
                     self.y += v_unit[1]
                     collision = True
