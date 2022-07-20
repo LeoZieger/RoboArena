@@ -56,28 +56,27 @@ class MainMenu(QMainWindow):
         settings_btn.resize(500, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        #Settings Submenu
+        # Settings Submenu
         settings_menu = QMenu()
         settings_btn.setMenu(settings_menu)
 
-        #2 Player Option
-        self.multiplayer = self.add_menu(settings_menu, "2 Player", True)
-        self.multiplayer.triggered.connect(lambda: print(multiplayer.isChecked()))
+        # 2 Player Option
+        self.multiplayer = self.add_menu(settings_menu, "Multiplayer", True)
 
-        #Difficulty Menu
+        # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
 
-        #Easy
+        # Easy
         self.easy = self.add_menu(difficulty, "Easy", True)
 
-        #Normal
+        # Normal
         self.normal = self.add_menu(difficulty, "Normal", True)
         self.normal.toggle()
 
-        #Hard
+        # Hard
         self.hard = self.add_menu(difficulty, "Hard", True)
 
-        #Uncheck other difficulties if one is checked
+        # Uncheck other difficulties if one is checked
         self.easy.triggered.connect(self.uncheck)
         self.normal.triggered.connect(self.uncheck)
         self.hard.triggered.connect(self.uncheck)
@@ -160,6 +159,7 @@ class MainMenu(QMainWindow):
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
