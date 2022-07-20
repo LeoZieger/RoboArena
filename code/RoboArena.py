@@ -20,7 +20,7 @@ WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
 UPDATE_TIME = 16
 # This is the number of Powerups getting spwnd
-POWERUP_COUNT = 5
+POWERUP_COUNT = 3
 
 
 class RoboArena(QtWidgets.QMainWindow):
@@ -36,10 +36,10 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.loadMap("Example_2Player")
 
         # This is where the Powerups are initialised
-        listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
+        self.listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
         self.powerupList = []
         for p in range(POWERUP_COUNT):
-            self.randomTile = listOfNotCollidableTiles[random.randint(0, len(listOfNotCollidableTiles))]
+            self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
             self.powerup = SpeedPowerup.SpeedPowerup\
                 (self.randomTile.x*TILE_WIDTH,
                  self.randomTile.y*TILE_WIDTH, 5, False)
@@ -147,6 +147,13 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
+
+    def spawnNewPowerup(self):
+        self.randomTile = self.listOfNotCollidableTiles[random.randint(0, len(self.listOfNotCollidableTiles))]
+        self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH, self.randomTile.y * TILE_WIDTH, 5, False)
+        self.powerupList.append(self.newPowerup)
+        self.scene.addItem(self.newPowerup)
+
         # Takes 2 numbers, spawns all powerups after a
         # random time between these 2 numbers
     def renderRandomTimePowerup(self, leftIntBorder, rightIntBorder):
@@ -158,6 +165,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 powerUpIndex.render(self.painter)
                 if powerUpIndex.isCollected:
                     self.powerupList.remove(powerUpIndex)
+                    self.spawnNewPowerup()
                     SoundFX.initPwrUpSound(self)
                     QGraphicsScene.removeItem(self.scene, powerUpIndex)
 
