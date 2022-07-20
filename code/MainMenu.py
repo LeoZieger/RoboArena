@@ -7,7 +7,7 @@ import PyQt5.QtCore
 import sys
 import RoboArena
 import MapCreator
-
+from SoundFX import SoundFX
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -31,6 +31,7 @@ class MainMenu(QMainWindow):
         palette = QPalette()
         palette.setBrush(QPalette.Window, QBrush(sImage))
         self.setPalette(palette)
+        SoundFX.initMenuSoundtrack(self, True)
 
         # Header
         name_label = QLabel("ROBO ARENA", self)
@@ -112,12 +113,15 @@ class MainMenu(QMainWindow):
         self.move(outerRect.topLeft())
 
     def start_game(self):
+        SoundFX.transitionSound(self)
         self.hide()
+        SoundFX.initMenuSoundtrack(self, False)
         self.game_window = RoboArena.RoboArena()
 
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
+
 
 
 if __name__ == '__main__':
