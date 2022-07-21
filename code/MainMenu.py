@@ -72,7 +72,7 @@ class MainMenu(QMainWindow):
         # Change map
         self.get_maps()
         self.map_objects = []
-        self.selectedMap = "Example_2Player"
+        self.selectedMap = self.all_maps[0]
         map_menu = settings_menu.addMenu("Maps")
         map_group = QActionGroup(self)
 
