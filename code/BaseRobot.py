@@ -106,6 +106,10 @@ class BaseRobot(QGraphicsRectItem):
             int((self.current_HP / self.max_HP) * self.r),
             2)
 
+    def takeDamage(self):
+        if self.current_HP > 0:
+            self.current_HP -= 1
+
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 

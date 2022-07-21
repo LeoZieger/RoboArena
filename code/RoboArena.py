@@ -10,10 +10,11 @@ import copy
 import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
+from BaseRobot import BaseRobot
 import NameInput
 import SpeedPowerup
 import random
-from Tile import TILE_WIDTH
+from Tile import TILE_WIDTH, Tile
 from SoundFX import SoundFX
 
 WINDOW_WIDTH = 1000
@@ -78,7 +79,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.robot2 = HumanControlledRobot(800, 850, 50, 0, 3)
 
-        BORDER_WIDTH = 30
+        BORDER_WIDTH = 10
         self.mapborder_top = QGraphicsRectItem(0, -BORDER_WIDTH,
                                                Arena.ARENA_WIDTH, BORDER_WIDTH)
         self.mapborder_left = QGraphicsRectItem(-BORDER_WIDTH, 0,
@@ -243,15 +244,7 @@ class RoboArena(QtWidgets.QMainWindow):
                     self.robot.resetSpeed()
                     self.collectedPowerup = False
 
-            hit = False
-            for b in self.bullets:
-                b.trajectory()
-                hit, o = b.isHittingObject()
-                if hit:
-                    self.bullets.remove(b)
-                    # TODO: Impelemt Damage or something
-                    self.buildScene()
-            self.removeBulletsOutOfBorder()
+            self.checkForBullets()
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -295,8 +288,31 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
         self.painter.end()
 
+    def checkForBullets(self):
+        hit = False
+        for b in self.bullets:
+            b.trajectory()
+            hit, o = b.isHittingObject()
+            if hit:
+                if isinstance(o, BaseRobot):
+                    o.takeDamage()
+                    self.bullets.remove(b)
+
+                    # Rebuild Scene after Bullet is deleted
+                    self.buildScene()
+                elif isinstance(o, Tile) or isinstance(o, QGraphicsRectItem):
+                    if not b.reflectedOnce:
+                        b.reflect(o)
+                    else:
+                        self.bullets.remove(b)
+
+                        # Rebuild Scene after Bullet is deleted
+                        self.buildScene()
+
+        self.removeBulletsOutOfBorder()
+
     def removeBulletsOutOfBorder(self):
-        offset = 50  # Error how much it is allowed to be out of border
+        offset = 100  # Error how much it is allowed to be out of border
         for b in self.bullets:
             if (not (0 - offset <= b.x <= self.arena.arena_width + offset) or
                not (0 - offset <= b.y <= self.arena.arena_height + offset)):
