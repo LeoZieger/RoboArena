@@ -156,7 +156,6 @@ class MainMenu(QMainWindow):
         menu.addAction(submenu)
         submenu.setCheckable(checkable)
         group.addAction(submenu)
-
         return submenu
 
     def centerWindowOnScreen(self):
