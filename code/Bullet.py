@@ -3,6 +3,7 @@ from PyQt5.QtCore import Qt, QRectF
 from PyQt5.QtWidgets import QGraphicsRectItem
 
 from SpeedPowerup import SpeedPowerup
+from Tile import Tile
 
 import numpy as np
 
@@ -42,7 +43,10 @@ class Bullet(QGraphicsRectItem):
     def shouldStopMove(self):
         for o in self.scene().collidingItems(self):
             if not isinstance(o, SpeedPowerup):
-                return True
+                if isinstance(o, Tile) and o.flyThrough:
+                    continue
+                else:
+                    return True
         return False
 
     def getUnitVector(self, old_x, old_y, new_x, new_y):

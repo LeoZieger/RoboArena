@@ -301,6 +301,9 @@ class RoboArena(QtWidgets.QMainWindow):
                     # Rebuild Scene after Bullet is deleted
                     self.buildScene()
                 elif isinstance(o, Tile) or isinstance(o, QGraphicsRectItem):
+                    if isinstance(o, Tile) and o.flyThrough:
+                        continue
+
                     if not b.reflectedOnce:
                         b.reflect(o)
                     else:
