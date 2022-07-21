@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QImage, QPen
+from PyQt5.QtGui import QImage, QBrush
 from PyQt5.QtCore import Qt, QRectF
 from PyQt5.QtWidgets import QGraphicsRectItem
 
@@ -66,7 +66,7 @@ class Bullet(QGraphicsRectItem):
 
     # Renders the bullet on the canvas
     def render(self, painter):
-        painter.setPen(QPen(Qt.black, 5, Qt.DashLine))
+        painter.setBrush(QBrush(Qt.black, Qt.SolidPattern))
         painter.drawEllipse(int(self.x), int(self.y),
                             int(self.width), int(self.width))
 
