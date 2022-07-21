@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
-                            QMenu, QAction
+                            QMenu, QAction, QActionGroup
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
@@ -9,6 +9,7 @@ import sys
 import RoboArena
 import MapCreator
 from SoundFX import SoundFX
+from os import walk
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -61,26 +62,42 @@ class MainMenu(QMainWindow):
         settings_menu = QMenu()
         settings_btn.setMenu(settings_menu)
 
-        # 2 Player Option
-        self.multiplayer = self.add_menu(settings_menu, "Multiplayer", True)
+        # Mode Option
+        mode = settings_menu.addMenu("Mode")
+        mode_group = QActionGroup(self)
+        self.singleplayer = self.add_group(mode, mode_group, "Singleplayer", True)
+        self.singleplayer.toggle()
+        self.multiplayer = self.add_group(mode, mode_group, "Multiplayer", True)
+
+        # Change map
+        self.get_maps()
+        self.map_objects = []
+        self.map_list = None
+        map_menu = settings_menu.addMenu("Maps")
+        map_group = QActionGroup(self)
+
+        # Create button for all maps
+        for x in self.all_maps:
+            self.x = self.add_group(map_menu, map_group, x, True)
+            self.x.triggered.connect(self.actionClicked)
+            self.map_objects.append(self.x)
+            print(self.map_objects)
+
+        self.map_objects[0].toggle()
 
         # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
+        difficulty_group = QActionGroup(self)
 
         # Easy
-        self.easy = self.add_menu(difficulty, "Easy", True)
+        self.easy = self.add_group(difficulty, difficulty_group, "Easy", True)
 
         # Normal
-        self.normal = self.add_menu(difficulty, "Normal", True)
+        self.normal = self.add_group(difficulty, difficulty_group, "Normal", True)
         self.normal.toggle()
 
         # Hard
-        self.hard = self.add_menu(difficulty, "Hard", True)
-
-        # Uncheck other difficulties if one is checked
-        self.easy.triggered.connect(self.uncheck)
-        self.normal.triggered.connect(self.uncheck)
-        self.hard.triggered.connect(self.uncheck)
+        self.hard = self.add_group(difficulty, difficulty_group, "Hard", True)
 
         # Map Editor
         editMap_btn = QPushButton('Map Editor', self)
@@ -119,40 +136,27 @@ class MainMenu(QMainWindow):
 
         self.show()
 
-    def uncheck(self):
-        # if no difficulty is checked -> check normal
-        if (not self.easy.isChecked()) == \
-           (not self.normal.isChecked()) == \
-           (not self.hard.isChecked()):
-            self.easy.setChecked(True)
-            self.normal.setChecked(True)
-            self.hard.setChecked(True)
+    def actionClicked(self, action):
+        print(action.text())
 
-        # if easy is selected
-        if self.sender() == self.easy:
+    def choose_map(self):
+        for x in range(len(self.map_list)):
+            if self.map_list[x].isChecked():
+                return self.map_list[x].sende
 
-            # uncheck other difficulties
-            self.normal.setChecked(False)
-            self.hard.setChecked(False)
+    def get_maps(self):
+        self.all_maps = next(walk('maps'), (None, None, []))[2]
+        for x in range(len(self.all_maps)):
+            self.all_maps[x] = self.all_maps[x][:-5]
 
-        # if normal is selected
-        elif self.sender() == self.normal:
+    def change_map(self, map):
+        self.map = map
 
-            # uncheck other difficulties
-            self.easy.setChecked(False)
-            self.hard.setChecked(False)
-
-        # if hard is selected
-        elif self.sender() == self.hard:
-
-            # uncheck other difficulties
-            self.easy.setChecked(False)
-            self.normal.setChecked(False)
-
-    def add_menu(self, menu, name, checkable):
+    def add_group(self, menu, group, name, checkable):
         submenu = QAction(name, self)
         menu.addAction(submenu)
         submenu.setCheckable(checkable)
+        group.addAction(submenu)
 
         return submenu
 
@@ -165,7 +169,7 @@ class MainMenu(QMainWindow):
     def start_game(self):
         SoundFX.transitionSound(self)
         self.hide()
-        self.game_window = RoboArena.RoboArena(False)
+        self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked())
         SoundFX.initMenuSoundtrack(self, False)
 
     def start_map_creator(self):
