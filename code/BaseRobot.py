@@ -124,7 +124,7 @@ class BaseRobot(QGraphicsRectItem):
         return Bullet(x_pos,
                       y_pos,
                       self.getVector(),
-                      5,
+                      10,
                       15)
 
     def isCollidingWithTile(self):
