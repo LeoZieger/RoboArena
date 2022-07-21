@@ -72,17 +72,17 @@ class MainMenu(QMainWindow):
         # Change map
         self.get_maps()
         self.map_objects = []
-        self.map_list = None
+        self.selectedMap = "Example_2Player"
         map_menu = settings_menu.addMenu("Maps")
         map_group = QActionGroup(self)
 
         # Create button for all maps
         for x in self.all_maps:
             self.x = self.add_group(map_menu, map_group, x, True)
-            self.x.triggered.connect(self.actionClicked)
             self.map_objects.append(self.x)
             print(self.map_objects)
 
+        map_menu.triggered.connect(self.mapClicked)
         self.map_objects[0].toggle()
 
         # Difficulty Menu
@@ -136,8 +136,9 @@ class MainMenu(QMainWindow):
 
         self.show()
 
-    def actionClicked(self, action):
-        print(action.text())
+    def mapClicked(self, action):
+        self.selectedMap = action.text()
+        print(self.selectedMap)
 
     def choose_map(self):
         for x in range(len(self.map_list)):
