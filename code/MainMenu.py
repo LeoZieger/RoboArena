@@ -80,7 +80,6 @@ class MainMenu(QMainWindow):
         for x in self.all_maps:
             self.x = self.add_group(map_menu, map_group, x, True)
             self.map_objects.append(self.x)
-            print(self.map_objects)
 
         map_menu.triggered.connect(self.mapClicked)
         self.map_objects[0].toggle()
@@ -140,11 +139,9 @@ class MainMenu(QMainWindow):
 
     def mapClicked(self, action):
         self.selectedMap = action.text()
-        print(self.selectedMap)
 
     def difficultyClicked(self, action):
         self.selectedDifficulty = action.text()
-        print(self.selectedDifficulty)
 
     def get_maps(self):
         self.all_maps = next(walk('maps'), (None, None, []))[2]
