@@ -24,7 +24,7 @@ POWERUP_COUNT = 3
 
 
 class RoboArena(QtWidgets.QMainWindow):
-    def __init__(self, multiplayer):
+    def __init__(self, multiplayer, map_name):
         super().__init__()
         self.multiplayer = multiplayer
 
@@ -34,7 +34,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.wasCollisionWithPowerup = False
         self.collectedPowerup = False
 
-        self.arena.loadMap("Example_2Player")
+        self.arena.loadMap(map_name)
 
         # This is where the Powerups are initialised
         self.listOfNotCollidableTiles = self.arena.listOfNotCollidableTiles()
