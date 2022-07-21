@@ -24,7 +24,7 @@ POWERUP_COUNT = 3
 
 
 class RoboArena(QtWidgets.QMainWindow):
-    def __init__(self, multiplayer, map_name):
+    def __init__(self, multiplayer, map_name, difficulty):
         super().__init__()
         self.multiplayer = multiplayer
 
