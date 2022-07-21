@@ -41,7 +41,8 @@ class RoboArena(QtWidgets.QMainWindow):
         self.powerupList = []
         for p in range(POWERUP_COUNT):
             self.randomTile = self.listOfNotCollidableTiles[
-                random.randint(0, len(self.listOfNotCollidableTiles))]
+                random.randint(0, len(self.listOfNotCollidableTiles))
+                ]
             self.powerup = SpeedPowerup.SpeedPowerup(self.randomTile.x*TILE_WIDTH,
                                                      self.randomTile.y*TILE_WIDTH,
                                                      5,
@@ -77,33 +78,29 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.robot2 = HumanControlledRobot(800, 850, 50, 0, 3)
 
-        self.mapborder_top = QGraphicsRectItem(0, 0,
-                                               Arena.ARENA_HEIGHT, 5)
-        self.mapborder_left = QGraphicsRectItem(-5, 0,
-                                                5, Arena.ARENA_HEIGHT)
+        BORDER_WIDTH = 30
+        self.mapborder_top = QGraphicsRectItem(0, -BORDER_WIDTH,
+                                               Arena.ARENA_WIDTH, BORDER_WIDTH)
+        self.mapborder_left = QGraphicsRectItem(-BORDER_WIDTH, 0,
+                                                BORDER_WIDTH, Arena.ARENA_HEIGHT)
         self.mapborder_bottom = QGraphicsRectItem(0, Arena.ARENA_HEIGHT,
-                                                  Arena.ARENA_WIDTH, 5)
+                                                  Arena.ARENA_WIDTH, BORDER_WIDTH)
         self.mapborder_right = QGraphicsRectItem(Arena.ARENA_WIDTH, 0,
-                                                 5, Arena.ARENA_HEIGHT)
+                                                 BORDER_WIDTH, Arena.ARENA_HEIGHT)
+
+        self.bullets = []
 
         self.keys_pressed = set()
 
         # All objects where we want to enforce detection need to be in the scene
         self.scene = QGraphicsScene()
+        self.scene.setBspTreeDepth(0)
 
-        self.scene = self.arena.add_tiles_to_scene(self.scene)
-        self.scene.addItem(self.robot)
+        self.buildScene()
 
-        if not self.multiplayer:
-            for ai_r in self.AI_robots:
-                self.scene.addItem(ai_r)
-        else:
-            self.scene.addItem(self.robot2)
-
-        self.scene.addItem(self.mapborder_top)
-        self.scene.addItem(self.mapborder_left)
-        self.scene.addItem(self.mapborder_bottom)
-        self.scene.addItem(self.mapborder_right)
+        # Variables for renderRandomPowerUp
+        self.leftIntBorder = 5
+        self.rightIntBorder = 15
 
         self.initUI()
         SoundFX.initSoundrack(self)
@@ -122,9 +119,33 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_start = time.time_ns() // 1_000_000
         self.timer.start(1)
 
-        # Variables for renderRandomPowerUp
-        self.leftIntBorder = 5
-        self.rightIntBorder = 15
+    def buildScene(self):
+        # removing all 'old' items in the scene (with wrong idx)
+        for it in self.scene.items():
+            self.scene.removeItem(it)
+
+        self.scene.setBspTreeDepth(0)
+
+        self.arena.add_tiles_to_scene(self.scene)
+
+        self.scene.addItem(self.robot)
+
+        if not self.multiplayer:
+            for ai_r in self.AI_robots:
+                self.scene.addItem(ai_r)
+        else:
+            self.scene.addItem(self.robot2)
+
+        for b in self.bullets:
+            self.scene.addItem(b)
+
+        for i in self.powerupList:
+            self.scene.addItem(i)
+
+        self.scene.addItem(self.mapborder_top)
+        self.scene.addItem(self.mapborder_left)
+        self.scene.addItem(self.mapborder_bottom)
+        self.scene.addItem(self.mapborder_right)
 
     def getTimeInSec(self):
 
@@ -158,7 +179,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
     def spawnNewPowerup(self):
         self.randomTile = self.listOfNotCollidableTiles[
-            random.randint(0, len(self.listOfNotCollidableTiles))]
+            random.randint(0, len(self.listOfNotCollidableTiles))
+            ]
         self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH,
                                                     self.randomTile.y * TILE_WIDTH,
                                                     5,
@@ -174,7 +196,6 @@ class RoboArena(QtWidgets.QMainWindow):
             self.leftIntBorder = 0
             self.rightIntBorder = 0
             for powerUpIndex in self.powerupList:
-                self.scene.addItem(powerUpIndex)
                 powerUpIndex.render(self.painter)
                 if powerUpIndex.isCollected:
                     self.powerupList.remove(powerUpIndex)
@@ -191,17 +212,46 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_accumulator += delta_time
 
         while self.t_accumulator > UPDATE_TIME:
-            self.robot.move(self.scene)
             self.robot.reactToUserInput(self.keys_pressed)
+            self.robot.move()
+
+            if self.robot.shooting:
+                bullet = self.robot.createBullet()
+                self.scene.addItem(bullet)
+                self.bullets.append(bullet)
+
+            if self.multiplayer and self.robot2.shooting:
+                bullet = self.robot2.createBullet()
+                self.scene.addItem(bullet)
+                self.bullets.append(bullet)
 
             if not self.multiplayer:
                 for ai_r in self.AI_robots:
-                    ai_r.move(self.scene)
+                    ai_r.move()
                     ai_r.followPoints()
                     ai_r.inform_brain(self.robot, ai_r)
             else:
-                self.robot2.move(self.scene)
-                self.robot2.reactToUserInputPlayer2(self.keys_pressed)
+                self.robot2.move()
+                self.robot2.reactToUserInput2(self.keys_pressed)
+
+            if self.robot.collisionWithPowerup(self.scene):
+                self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                self.collectedPowerup = True
+
+            if self.collectedPowerup:
+                if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                    self.robot.resetSpeed()
+                    self.collectedPowerup = False
+
+            hit = False
+            for b in self.bullets:
+                b.trajectory()
+                hit, o = b.isHittingObject()
+                if hit:
+                    self.bullets.remove(b)
+                    # TODO: Impelemt Damage or something
+                    self.buildScene()
+            self.removeBulletsOutOfBorder()
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -213,16 +263,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.render(self.painter)
         self.robot.render(self.painter)
         self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
-
-        if self.robot.collisionWithPowerup(self.scene):
-
-            self.timeWhenPowerupIsCollected = self.getTimeInSec()
-            self.collectedPowerup = True
-
-        if self.collectedPowerup:
-            if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
-                self.robot.resetSpeed()
-                self.collectedPowerup = False
 
         self.painter.end()
 
@@ -237,6 +277,11 @@ class RoboArena(QtWidgets.QMainWindow):
             self.robot2.render(self.painter)
             self.painter.end()
 
+        self.painter.begin(self.label.pixmap())
+        for b in self.bullets:
+            b.render(self.painter)
+        self.painter.end()
+
         # ---------------------------------------------------------------
 
         if self.clock_time > 1000:
@@ -249,6 +294,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.setFont(QFont("Verdana", 12))
         self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
         self.painter.end()
+
+    def removeBulletsOutOfBorder(self):
+        offset = 50  # Error how much it is allowed to be out of border
+        for b in self.bullets:
+            if (not (0 - offset <= b.x <= self.arena.arena_width + offset) or
+               not (0 - offset <= b.y <= self.arena.arena_height + offset)):
+                self.bullets.remove(b)
 
     def loadMapByPrompt(self):
         popup = NameInput.NameInput()
@@ -270,6 +322,6 @@ class RoboArena(QtWidgets.QMainWindow):
         self.arena.loadMap(name)
 
     def closeEvent(self, event):
-        print("Alle Threads werden auf stop gesetzt!")
-        for ai_r in self.AI_robots:
-            ai_r.stopAllThreads()
+        if not self.multiplayer:
+            for ai_r in self.AI_robots:
+                ai_r.stopAllThreads()

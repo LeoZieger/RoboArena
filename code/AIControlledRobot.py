@@ -1,10 +1,11 @@
 import numpy as np
 
-from Tile import *
+from Tile import Tile
 from BaseRobot import BaseRobot
 import Brain
 from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QPoint
+from PyQt5.QtWidgets import QGraphicsRectItem
 
 
 class AIControlledRobot(BaseRobot):
@@ -80,13 +81,7 @@ class AIControlledRobot(BaseRobot):
     def stopAllThreads(self):
         self.brain.stop = True
 
-    def isCollisionWithRobot(self, scene):
-        for o in scene.collidingItems(self):
-            if issubclass(type(o), BaseRobot):
-                return True
-        return False
-
-    def move(self, scene):
+    def move(self):
         if self.speed != 0:
             v_unit = self.getUnitVector(self.x,
                                         self.y,
@@ -99,11 +94,16 @@ class AIControlledRobot(BaseRobot):
                 self.x += v_unit[0]
                 self.y += v_unit[1]
 
+                self.setRect(self.boundingRect())
+
                 # If collision takes place we step back
-                while self.aiCollisionWithTile(scene) and \
-                        not self.isCollisionWithRobot(scene):
+
+                while self.isCollidingWithTile():
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
+
+                    self.setRect(self.boundingRect())
+
                     collision = True
 
                 if collision:

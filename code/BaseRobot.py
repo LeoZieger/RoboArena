@@ -2,13 +2,16 @@
 
 from PyQt5.QtGui import QPen, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
-from PyQt5.QtWidgets import QGraphicsObject
+from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
 import numpy as np
+from Bullet import Bullet
+from Tile import Tile
 
 
-class BaseRobot(QGraphicsObject):
+class BaseRobot(QGraphicsRectItem):
     MAX_SPEED = 5
     MIN_SPEED = 3
+
     debug = False
 
     # Basic-Robot constructor
@@ -22,6 +25,11 @@ class BaseRobot(QGraphicsObject):
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
         self.texture = QImage("res/blue_tank.png")              # texture
+
+        self.canShootAgainAt = 0
+        self.cooldown = 1
+
+        self.setRect(self.boundingRect())
 
     def getVector(self):
         return [np.cos(np.deg2rad(self.alpha)), -1 * np.sin(np.deg2rad(self.alpha))]
@@ -75,28 +83,26 @@ class BaseRobot(QGraphicsObject):
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
                                     int(self.y + (self.getVector()[1] * 40))))
 
-    def move(self, scene):
-        if self.speed != 0:
-            v_unit = self.getUnitVector(self.x,
-                                        self.y,
-                                        self.x + (self.getVector()[0] * self.speed),
-                                        self.y + (self.getVector()[1] * self.speed))
-
-            # Checking UV for UV, if collision takes place
-            for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
-                collision = False
-
-                self.x += v_unit[0]
-                self.y += v_unit[1]
-
-                # If collision takes place we step back
-                while len(scene.collidingItems(self)) > 0:
-                    self.x -= v_unit[0]
-                    self.y -= v_unit[1]
-                    collision = True
-
-                if collision:
-                    break
-
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
+
+    def createBullet(self):
+        radius_around_rect = np.sqrt(
+                                np.power(self.r, 2) + np.power(self.r, 2))
+        x_pos = ((self.x + 0.5 * self.r)
+                 + self.getVector()[0] * radius_around_rect)
+        y_pos = ((self.y + 0.5 * self.r)
+                 + self.getVector()[1] * radius_around_rect)
+
+        return Bullet(x_pos,
+                      y_pos,
+                      self.getVector(),
+                      5,
+                      15)
+
+    def isCollidingWithTile(self):
+        for o in self.scene().collidingItems(self):
+            if (issubclass(type(o), Tile) or
+               type(o) == QGraphicsRectItem):
+                return True
+        return False

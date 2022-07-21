@@ -1,5 +1,4 @@
-
-from BasePowerup import *
+from BasePowerup import BasePowerup
 
 
 class SpeedPowerup(BasePowerup):
