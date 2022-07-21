@@ -220,7 +220,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.bullets.append(bullet)
 
             if self.multiplayer and self.robot2.shooting:
-                bullet = self.robot.createBullet()
+                bullet = self.robot2.createBullet()
                 self.scene.addItem(bullet)
                 self.bullets.append(bullet)
 
