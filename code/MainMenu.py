@@ -151,9 +151,6 @@ class MainMenu(QMainWindow):
         for x in range(len(self.all_maps)):
             self.all_maps[x] = self.all_maps[x][:-5]
 
-    def change_map(self, map):
-        self.map = map
-
     def add_group(self, menu, group, name, checkable):
         submenu = QAction(name, self)
         menu.addAction(submenu)
