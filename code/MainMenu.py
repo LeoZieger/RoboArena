@@ -88,6 +88,8 @@ class MainMenu(QMainWindow):
         # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
         difficulty_group = QActionGroup(self)
+        self.selectedDifficulty = "normal"
+        difficulty.triggered.connect(self.difficultyClicked)
 
         # Easy
         self.easy = self.add_group(difficulty, difficulty_group, "Easy", True)
@@ -140,10 +142,9 @@ class MainMenu(QMainWindow):
         self.selectedMap = action.text()
         print(self.selectedMap)
 
-    def choose_map(self):
-        for x in range(len(self.map_list)):
-            if self.map_list[x].isChecked():
-                return self.map_list[x].sende
+    def difficultyClicked(self, action):
+        self.selectedDifficulty = action.text()
+        print(self.selectedDifficulty)
 
     def get_maps(self):
         self.all_maps = next(walk('maps'), (None, None, []))[2]
@@ -170,13 +171,14 @@ class MainMenu(QMainWindow):
     def start_game(self):
         SoundFX.transitionSound(self)
         self.hide()
-        self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked())
+        self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked(),
+                                               map_name=self.selectedMap,
+                                               diff=self.selectedDifficulty)
         SoundFX.initMenuSoundtrack(self, False)
 
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator()
-
 
 
 if __name__ == '__main__':
