@@ -64,6 +64,16 @@ class HumanControlledRobot(BaseRobot):
         if Qt.Key_Right in keys_pressed:
             self.alpha -= 2
 
+        # Bullet
+        if Qt.Key_Enter in keys_pressed:
+            if time.time() - self.canShootAgainAt > 0:
+                self.shooting = True
+                self.canShootAgainAt = time.time() + self.cooldown
+            else:
+                self.shooting = False
+        else:
+            self.shooting = False
+
     def isCollisionWithRobot(self):
         for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):

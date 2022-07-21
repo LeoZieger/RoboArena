@@ -78,14 +78,15 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.robot2 = HumanControlledRobot(800, 850, 50, 0, 3)
 
-        self.mapborder_top = QGraphicsRectItem(0, 0,
-                                               Arena.ARENA_HEIGHT, 5)
-        self.mapborder_left = QGraphicsRectItem(-5, 0,
-                                                5, Arena.ARENA_HEIGHT)
+        BORDER_WIDTH = 30
+        self.mapborder_top = QGraphicsRectItem(0, -BORDER_WIDTH,
+                                               Arena.ARENA_WIDTH, BORDER_WIDTH)
+        self.mapborder_left = QGraphicsRectItem(-BORDER_WIDTH, 0,
+                                                BORDER_WIDTH, Arena.ARENA_HEIGHT)
         self.mapborder_bottom = QGraphicsRectItem(0, Arena.ARENA_HEIGHT,
-                                                  Arena.ARENA_WIDTH, 5)
+                                                  Arena.ARENA_WIDTH, BORDER_WIDTH)
         self.mapborder_right = QGraphicsRectItem(Arena.ARENA_WIDTH, 0,
-                                                 5, Arena.ARENA_HEIGHT)
+                                                 BORDER_WIDTH, Arena.ARENA_HEIGHT)
 
         self.bullets = []
 
@@ -220,7 +221,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.bullets.append(bullet)
 
             if self.multiplayer and self.robot2.shooting:
-                bullet = self.robot.createBullet()
+                bullet = self.robot2.createBullet()
                 self.scene.addItem(bullet)
                 self.bullets.append(bullet)
 
@@ -250,6 +251,7 @@ class RoboArena(QtWidgets.QMainWindow):
                     self.bullets.remove(b)
                     # TODO: Impelemt Damage or something
                     self.buildScene()
+            self.removeBulletsOutOfBorder()
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -292,6 +294,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.setFont(QFont("Verdana", 12))
         self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
         self.painter.end()
+
+    def removeBulletsOutOfBorder(self):
+        offset = 50  # Error how much it is allowed to be out of border
+        for b in self.bullets:
+            if (not (0 - offset <= b.x <= self.arena.arena_width + offset) or
+               not (0 - offset <= b.y <= self.arena.arena_height + offset)):
+                self.bullets.remove(b)
 
     def loadMapByPrompt(self):
         popup = NameInput.NameInput()
