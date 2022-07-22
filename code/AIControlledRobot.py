@@ -122,6 +122,8 @@ class AIControlledRobot(BaseRobot):
 
         painter.resetTransform()
 
+        self.renderHealthBar(painter)
+
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
