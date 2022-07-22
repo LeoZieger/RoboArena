@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsObject
 from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QRectF
+from PathUtil import getPath
 
 
 class BasePowerup(QGraphicsObject):
@@ -10,7 +11,7 @@ class BasePowerup(QGraphicsObject):
         self.y = y
         self.duration = duration
         self.isCollected = isCollected
-        self.texture = QImage("res/pixil-frame-0.png")
+        self.texture = QImage(getPath("res", "pixil-frame-0.png"))
 
     def info(self):
         print(self.x)

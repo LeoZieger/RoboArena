@@ -2,7 +2,6 @@ from PyQt5.QtCore import QRunnable, pyqtSignal, QObject, QPoint
 import time
 from numpy import sqrt, floor
 from igraph import Graph, plot
-
 import BaseRobot
 
 

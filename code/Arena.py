@@ -1,6 +1,7 @@
 import numpy as np
 import json
 import Tile
+from PathUtil import getPath
 
 ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
@@ -59,7 +60,7 @@ class Arena():
                                       self.matrix[x][y].texture)
 
     def loadMap(self, map_name):
-        with open("maps/" + map_name + ".json") as f:
+        with open(getPath("maps", (map_name + ".json"))) as f:
             data = json.load(f)
             for t in data:
                 x = t["x"]
@@ -82,7 +83,7 @@ class Arena():
                     self.matrix[x][y] = Tile.Tile(x, y)
 
     def saveMap(self, map_name):
-        map_file = open("maps/" + map_name + ".json", "w")
+        map_file = open(getPath("maps", (map_name + ".json")), "w")
         map_file.write("[\n")
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):

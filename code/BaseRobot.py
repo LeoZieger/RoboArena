@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
 import numpy as np
 from Bullet import Bullet
 from Tile import Tile
+from PathUtil import getPath
 
 
 class BaseRobot(QGraphicsRectItem):
@@ -24,7 +25,7 @@ class BaseRobot(QGraphicsRectItem):
         self.r = r                          # width
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
-        self.texture = QImage("res/blue_tank.png")              # texture
+        self.texture = QImage(getPath("res", "blue_tank.png"))        # texture
 
         self.canShootAgainAt = 0
         self.cooldown = 1

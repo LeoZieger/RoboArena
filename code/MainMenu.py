@@ -4,12 +4,12 @@ from PyQt5.QtWidgets import QPushButton, QApplication, \
 from PyQt5.QtGui import QMovie, QPainter
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
-
 import sys
 import RoboArena
 import MapCreator
 from SoundFX import SoundFX
 from os import walk
+from PathUtil import getDir, getPath
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -26,10 +26,11 @@ class MainMenu(QMainWindow):
         self.centerWindowOnScreen()
 
         # Background
-        self.background_gif = QMovie("res/BackgroundGif.gif")
+        self.background_gif = QMovie(getPath("res", "BackgroundGif.gif"))
         self.background_gif.setScaledSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT))
         self.background_gif.frameChanged.connect(self.repaint)
         self.background_gif.start()
+
         SoundFX.initMenuSoundtrack(self, True)
 
         # Header
@@ -149,7 +150,7 @@ class MainMenu(QMainWindow):
         self.selectedDifficulty = action.text()
 
     def get_maps(self):
-        self.all_maps = next(walk('maps'), (None, None, []))[2]
+        self.all_maps = next(walk(getDir("maps")), (None, None, []))[2]
         for x in range(len(self.all_maps)):
             self.all_maps[x] = self.all_maps[x][:-5]
 

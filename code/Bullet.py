@@ -1,13 +1,14 @@
 from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QRectF
 from PyQt5.QtWidgets import QGraphicsRectItem
+from PathUtil import getPath
 
 
 class Bullet(QGraphicsRectItem):
     def __init__(self, x, y, direction, width, velocity):
         QGraphicsRectItem.__init__(self)
 
-        self.texture = QImage("res/bullet.png")
+        self.texture = QImage(getPath("res", "bullet.png"))
         self.x = x
         self.y = y
         self.direction = direction  # direction of bullet as vector
