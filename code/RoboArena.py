@@ -331,13 +331,17 @@ class RoboArena(QtWidgets.QMainWindow):
         if self.multiplayer:
             if self.robot.isDestroyed():
                 print("Player 2 Wins!")
+                self.close()
             else:
                 print("Player 1 Wins!")
+                self.close()
         else:
             if len(self.AI_robots) == 0:
                 print("You win!")
+                self.close()
             elif self.robot.isDestroyed():
                 print("You lose!")
+                self.close()
 
     def removeBulletsOutOfBorder(self):
         offset = 100  # Error how much it is allowed to be out of border
