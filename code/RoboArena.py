@@ -242,6 +242,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.checkForDestroyedRobots()
 
+            self.checkForWinCondition()
+
             self.t_accumulator -= UPDATE_TIME
 
             self.update()
@@ -323,6 +325,19 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.scene.removeItem(ai_r)
                 self.buildScene()
                 ai_r.stopAllThreads()
+
+    def checkForWinCondition(self):
+        # TODO: Add screen and exit Window
+        if self.multiplayer:
+            if self.robot.isDestroyed():
+                print("Player 2 Wins!")
+            else:
+                print("Player 1 Wins!")
+        else:
+            if len(self.AI_robots) == 0:
+                print("You win!")
+            elif self.robot.isDestroyed():
+                print("You lose!")
 
     def removeBulletsOutOfBorder(self):
         offset = 100  # Error how much it is allowed to be out of border
