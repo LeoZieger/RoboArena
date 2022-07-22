@@ -55,7 +55,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
         self.hum_robots = []
-        self.AI_robots = [] 
+        self.AI_robots = []
 
         self.hum_robots.append(self.robot)
 
@@ -240,6 +240,8 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.checkForBullets()
 
+            self.checkForDestroyedRobots()
+
             self.t_accumulator -= UPDATE_TIME
 
             self.update()
@@ -314,7 +316,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.hum_robots.remove(hum_r)
                 self.scene.removeItem(hum_r)
                 self.buildScene()
-        
+
         for ai_r in self.AI_robots:
             if ai_r.isDestroyed():
                 self.AI_robots.remove(ai_r)
