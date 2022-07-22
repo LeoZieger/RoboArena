@@ -100,7 +100,7 @@ class MapCreator(QtWidgets.QMainWindow):
 
         offset = (self.current_draw_size - 1)
 
-        if offset == 0:
+        if offset == 0 and tile_pos_x < 40 and tile_pos_y < 40:
             self.arena.set_tile(tile_pos_x,
                                 tile_pos_y,
                                 self.current_draw_tile)
