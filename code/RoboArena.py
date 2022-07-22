@@ -54,6 +54,11 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
+        self.hum_robots = []
+        self.AI_robots = [] 
+
+        self.hum_robots.append(self.robot)
+
         if not self.multiplayer:
 
             self.robotAI1 = AIControlledRobot(500, 500, 50,
@@ -69,14 +74,12 @@ class RoboArena(QtWidgets.QMainWindow):
                                               self.threadpool,
                                               n=3)
 
-            self.AI_robots = []
             self.AI_robots.append(self.robotAI1)
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
-
         else:
-
             self.robot2 = HumanControlledRobot(850, 850, 50, 0, 3)
+            self.hum_robots.append(self.robot2)
 
         BORDER_WIDTH = 10
         self.mapborder_top = QGraphicsRectItem(0, -BORDER_WIDTH,
@@ -128,13 +131,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.add_tiles_to_scene(self.scene)
 
-        self.scene.addItem(self.robot)
-
-        if not self.multiplayer:
-            for ai_r in self.AI_robots:
-                self.scene.addItem(ai_r)
-        else:
-            self.scene.addItem(self.robot2)
+        for ai_r in self.AI_robots:
+            self.scene.addItem(ai_r)
+        for hum_r in self.hum_robots:
+            self.scene.addItem(hum_r)
 
         for b in self.bullets:
             self.scene.addItem(b)
@@ -213,26 +213,21 @@ class RoboArena(QtWidgets.QMainWindow):
 
         while self.t_accumulator > UPDATE_TIME:
             self.robot.reactToUserInput(self.keys_pressed)
-            self.robot.move()
-
-            if self.robot.shooting:
-                bullet = self.robot.createBullet()
-                self.scene.addItem(bullet)
-                self.bullets.append(bullet)
-
-            if self.multiplayer and self.robot2.shooting:
-                bullet = self.robot2.createBullet()
-                self.scene.addItem(bullet)
-                self.bullets.append(bullet)
-
-            if not self.multiplayer:
-                for ai_r in self.AI_robots:
-                    ai_r.move()
-                    ai_r.followPoints()
-                    ai_r.inform_brain(self.robot, ai_r)
-            else:
-                self.robot2.move()
+            if self.multiplayer:
                 self.robot2.reactToUserInput2(self.keys_pressed)
+
+            for hum_r in self.hum_robots:
+                hum_r.move()
+
+                if hum_r.shooting:
+                    bullet = hum_r.createBullet()
+                    self.scene.addItem(bullet)
+                    self.bullets.append(bullet)
+
+            for ai_r in self.AI_robots:
+                ai_r.move()
+                ai_r.followPoints()
+                ai_r.inform_brain(self.robot, ai_r)
 
             if self.robot.collisionWithPowerup(self.scene):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
@@ -253,20 +248,20 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
-        self.robot.render(self.painter)
-        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
-
         self.painter.end()
 
-        if not self.multiplayer:
-            for ai_r in self.AI_robots:
-                self.painter.begin(self.label.pixmap())
-                ai_r.render(self.painter)
-                self.painter.end()
+        self.painter.begin(self.label.pixmap())
+        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
+        self.painter.end()
 
-        else:
+        for hum_r in self.hum_robots:
             self.painter.begin(self.label.pixmap())
-            self.robot2.render(self.painter)
+            hum_r.render(self.painter)
+            self.painter.end()
+
+        for ai_r in self.AI_robots:
+            self.painter.begin(self.label.pixmap())
+            ai_r.render(self.painter)
             self.painter.end()
 
         self.painter.begin(self.label.pixmap())
@@ -312,6 +307,20 @@ class RoboArena(QtWidgets.QMainWindow):
                         self.buildScene()
 
         self.removeBulletsOutOfBorder()
+
+    def checkForDestroyedRobots(self):
+        for hum_r in self.hum_robots:
+            if hum_r.isDestroyed():
+                self.hum_robots.remove(hum_r)
+                self.scene.removeItem(hum_r)
+                self.buildScene()
+        
+        for ai_r in self.AI_robots:
+            if ai_r.isDestroyed():
+                self.AI_robots.remove(ai_r)
+                self.scene.removeItem(ai_r)
+                self.buildScene()
+                ai_r.stopAllThreads()
 
     def removeBulletsOutOfBorder(self):
         offset = 100  # Error how much it is allowed to be out of border
