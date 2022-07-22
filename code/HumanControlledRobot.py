@@ -2,9 +2,7 @@
 
 from PyQt5.QtWidgets import QGraphicsRectItem
 from BaseRobot import BaseRobot
-
 import time
-
 from PyQt5.QtCore import Qt
 from Tile import Tile
 from BasePowerup import BasePowerup

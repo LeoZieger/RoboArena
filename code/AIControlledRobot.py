@@ -1,5 +1,5 @@
 import numpy as np
-
+from PathUtil import getPath
 from Tile import Tile
 from BaseRobot import BaseRobot
 import Brain
@@ -25,7 +25,7 @@ class AIControlledRobot(BaseRobot):
         self.brain.setAutoDelete(False)
         self.threadpool.start(self.brain)
 
-        self.texture = QImage("res/red_tank.png")
+        self.texture = QImage(getPath("res", "red_tank.png"))
 
         self.point_queue = []
 

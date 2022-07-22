@@ -1,12 +1,13 @@
 from PyQt5.QtGui import QImage
 from PyQt5.QtWidgets import QGraphicsRectItem
+from PathUtil import getPath
 
 TILE_WIDTH = 25
 TILE_HEIGHT = 25
 
 
 class Tile(QGraphicsRectItem):
-    texture = QImage("res/no_texture.png")
+    texture = QImage(getPath("res", "no_texture.png"))
     tile_type = "None"
     collision = False
 
@@ -32,31 +33,31 @@ class Tile(QGraphicsRectItem):
 
 class Dirt(Tile):
     tile_type = "Dirt"
-    texture = QImage("res/dirt_texture.png")
+    texture = QImage(getPath("res", "dirt_texture.png"))
 
 
 class Grass(Tile):
     tile_type = "Grass"
-    texture = QImage("res/grass_texture.png")
+    texture = QImage(getPath("res", "grass_texture.png"))
 
 
 class Lava(Tile):
     tile_type = "Lava"
-    texture = QImage("res/lava_texture.png")
+    texture = QImage(getPath("res", "lava_texture.png"))
 
 
 class Stone(Tile):
     tile_type = "Stone"
-    texture = QImage("res/stone_texture.png")
+    texture = QImage(getPath("res", "stone_texture.png"))
 
 
 class Wall(Tile):
     tile_type = "Wall"
-    texture = QImage("res/wall_texture.png")
+    texture = QImage(getPath("res", "wall_texture.png"))
     collision = True
 
 
 class Water(Tile):
     tile_type = "Water"
-    texture = QImage("res/water_texture.png")
+    texture = QImage(getPath("res", "water_texture.png"))
     collision = True

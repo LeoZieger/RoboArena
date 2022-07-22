@@ -2,11 +2,9 @@ from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
 from PyQt5.QtGui import QPen, QFont
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
-
 import time
 from os.path import exists
 import copy
-
 import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
@@ -15,6 +13,7 @@ import SpeedPowerup
 import random
 from Tile import TILE_WIDTH
 from SoundFX import SoundFX
+from PathUtil import getPath
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -76,7 +75,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         else:
 
-            self.robot2 = HumanControlledRobot(800, 850, 50, 0, 3)
+            self.robot2 = HumanControlledRobot(850, 850, 50, 0, 3)
 
         BORDER_WIDTH = 30
         self.mapborder_top = QGraphicsRectItem(0, -BORDER_WIDTH,
@@ -309,7 +308,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         while ok and (name == ""
                       or len(name.split(" ")) > 1
-                      or not exists("maps/" + name + ".json")
+                      or not exists(getPath("maps", (name + ".json")))
                       ):
             popup.close()
             ok = popup.exec_()
