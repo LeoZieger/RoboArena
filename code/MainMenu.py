@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
                             QMenu, QAction, QActionGroup
-from PyQt5.QtGui import QImage, QPalette, QBrush
+from PyQt5.QtGui import QMovie, QPainter
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
 
@@ -26,14 +26,10 @@ class MainMenu(QMainWindow):
         self.centerWindowOnScreen()
 
         # Background
-        background_image = QImage("background.jpg")
-
-        # resize Image to widgets size
-        sImage = background_image.scaled(QSize(WINDOW_WIDTH, WINDOW_WIDTH))
-        palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(sImage))
-        self.setPalette(palette)
-        SoundFX.initMenuSoundtrack(self, True)
+        self.background_gif = QMovie("res/BackgroundGif.gif")
+        self.background_gif.setScaledSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.background_gif.frameChanged.connect(self.repaint)
+        self.background_gif.start()
 
         # Header
         name_label = QLabel("ROBO ARENA", self)
@@ -72,7 +68,7 @@ class MainMenu(QMainWindow):
         # Change map
         self.get_maps()
         self.map_objects = []
-        self.selectedMap = "Example_2Player"
+        self.selectedMap = self.all_maps[0]
         map_menu = settings_menu.addMenu("Maps")
         map_group = QActionGroup(self)
 
@@ -136,6 +132,14 @@ class MainMenu(QMainWindow):
         settings_menu.setStyleSheet(buttonstyle)
 
         self.show()
+
+    def paintEvent(self, event):
+        currentFrame = self.background_gif.currentPixmap()
+        frameRect = currentFrame.rect()
+        frameRect.moveCenter(self.rect().center())
+        if frameRect.intersects(event.rect()):
+            painter = QPainter(self)
+            painter.drawPixmap(frameRect.left(), frameRect.top(), currentFrame)
 
     def mapClicked(self, action):
         self.selectedMap = action.text()
