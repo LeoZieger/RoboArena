@@ -289,8 +289,8 @@ class RoboArena(QtWidgets.QMainWindow):
             self.clock = 0
 
         self.painter.begin(self.label.pixmap())
-        self.painter.setPen(QPen(Qt.white, 10, Qt.SolidLine))
-        self.painter.setFont(QFont("Verdana", 12))
+        self.painter.setPen(QPen(Qt.white, 20, Qt.SolidLine))
+        self.painter.setFont(QFont("Tahoma", 12))
         self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
         self.painter.end()
 

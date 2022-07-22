@@ -1,5 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtCore import QTimer, Qt
+from PyQt5.QtCore import QTimer, Qt, QPoint
+from PyQt5.QtGui import QPen, QFont
 import Arena
 import NameInput
 
@@ -17,6 +18,8 @@ class MapCreator(QtWidgets.QMainWindow):
 
         self.current_draw_tile = "Grass"
         self.current_draw_size = 1
+
+        self.sidebar = True
 
         self.left_mouseButton_pressed = False
         self.mouse_pos = QtCore.QPoint()
@@ -42,6 +45,21 @@ class MapCreator(QtWidgets.QMainWindow):
     def tick(self):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
+
+        if self.sidebar:
+            self.painter.setPen(QPen(Qt.white, 10, Qt.SolidLine))
+            self.painter.setFont(QFont("Tahoma", 18))
+            self.painter.drawText(QPoint(30, 60), "1: Dirt")
+            self.painter.drawText(QPoint(30, 90), "2: Grass")
+            self.painter.drawText(QPoint(30, 120), "3: Lava")
+            self.painter.drawText(QPoint(30, 150), "4: Stone")
+            self.painter.drawText(QPoint(30, 180), "5: Wall")
+            self.painter.drawText(QPoint(30, 210), "6: Water")
+            self.painter.drawText(QPoint(30, 240), "↑: Icrease Size")
+            self.painter.drawText(QPoint(30, 270), "↓: Decrease Size")
+            self.painter.drawText(QPoint(30, 300), "S: Save Map")
+            self.painter.drawText(QPoint(30, 330), "⌴: Hide Menu")
+        
         self.painter.end()
 
         self.check_for_paint()
@@ -93,6 +111,8 @@ class MapCreator(QtWidgets.QMainWindow):
             self.arena.saveMap(name)
             self.close()
             exit()
+        elif e.key() == Qt.Key_Space:
+            self.sidebar = not self.sidebar
 
     def draw_current_tile(self):
         tile_pos_x = int(self.mouse_pos.x() / self.arena.tile_width)
