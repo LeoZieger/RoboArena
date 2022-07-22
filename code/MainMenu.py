@@ -30,6 +30,7 @@ class MainMenu(QMainWindow):
         self.background_gif.setScaledSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT))
         self.background_gif.frameChanged.connect(self.repaint)
         self.background_gif.start()
+        SoundFX.initMenuSoundtrack(self, True)
 
         # Header
         name_label = QLabel("ROBO ARENA", self)
