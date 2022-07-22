@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
                             QMenu, QAction, QActionGroup
-from PyQt5.QtGui import QImage, QPalette, QBrush
+from PyQt5.QtGui import QMovie, QPainter
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
 import sys
@@ -26,13 +26,11 @@ class MainMenu(QMainWindow):
         self.centerWindowOnScreen()
 
         # Background
-        background_image = QImage(getPath("res", "background.jpg"))
+        self.background_gif = QMovie(getPath("res", "BackgroundGif.gif"))
+        self.background_gif.setScaledSize(QSize(WINDOW_WIDTH, WINDOW_HEIGHT))
+        self.background_gif.frameChanged.connect(self.repaint)
+        self.background_gif.start()
 
-        # resize Image to widgets size
-        sImage = background_image.scaled(QSize(WINDOW_WIDTH, WINDOW_WIDTH))
-        palette = QPalette()
-        palette.setBrush(QPalette.Window, QBrush(sImage))
-        self.setPalette(palette)
         SoundFX.initMenuSoundtrack(self, True)
 
         # Header
@@ -136,6 +134,14 @@ class MainMenu(QMainWindow):
         settings_menu.setStyleSheet(buttonstyle)
 
         self.show()
+
+    def paintEvent(self, event):
+        currentFrame = self.background_gif.currentPixmap()
+        frameRect = currentFrame.rect()
+        frameRect.moveCenter(self.rect().center())
+        if frameRect.intersects(event.rect()):
+            painter = QPainter(self)
+            painter.drawPixmap(frameRect.left(), frameRect.top(), currentFrame)
 
     def mapClicked(self, action):
         self.selectedMap = action.text()
