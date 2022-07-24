@@ -82,6 +82,23 @@ class MainMenu(QMainWindow):
         map_menu.triggered.connect(self.mapClicked)
         self.map_objects[0].toggle()
 
+        # Edit Map
+        self.get_maps()
+        self.map_editor_objects = []
+        self.selectedEditorMap = "New Map"
+        map_editor_menu = settings_menu.addMenu("Edit Map")
+        map_editor_group = QActionGroup(self)
+
+        # Create button for all maps
+        self.map_editor_objects.append(self.add_group(map_editor_menu, map_editor_group, "New Map", True))
+
+        for x in self.all_maps:
+            self.x = self.add_group(map_editor_menu, map_editor_group, x, True)
+            self.map_editor_objects.append(self.x)
+
+        map_editor_menu.triggered.connect(self.mapClickedEditor)
+        self.map_editor_objects[0].toggle()
+
         # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
         difficulty_group = QActionGroup(self)
@@ -146,6 +163,9 @@ class MainMenu(QMainWindow):
     def mapClicked(self, action):
         self.selectedMap = action.text()
 
+    def mapClickedEditor(self, action):
+        self.selectedEditorMap = action.text()
+
     def difficultyClicked(self, action):
         self.selectedDifficulty = action.text()
 
@@ -177,7 +197,7 @@ class MainMenu(QMainWindow):
 
     def start_map_creator(self):
         self.hide()
-        self.map_creator = MapCreator.MapCreator()
+        self.map_creator = MapCreator.MapCreator(self.selectedEditorMap)
 
 
 if __name__ == '__main__':

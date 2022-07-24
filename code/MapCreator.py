@@ -1,3 +1,4 @@
+from select import select
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt, QPoint
 from PyQt5.QtGui import QPen, QFont
@@ -9,12 +10,17 @@ WINDOW_HEIGHT = 1000
 
 
 class MapCreator(QtWidgets.QMainWindow):
-    def __init__(self):
+    def __init__(self, selected_map):
         super().__init__()
+        self.selected_map = selected_map
 
-        # Arena und all robots that are kept track
-        self.arena = Arena.Arena()
-        self.arena.init_matrix_with_texture("Grass")
+        # Arena and all robots that are kept track
+        if self.selected_map == "New Map":
+            self.arena = Arena.Arena()
+            self.arena.init_matrix_with_texture("Grass")
+        else:
+            self.arena = Arena.Arena()
+            self.arena.loadMap(selected_map)
 
         self.current_draw_tile = "Grass"
         self.current_draw_size = 1
