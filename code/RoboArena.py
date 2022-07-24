@@ -15,6 +15,7 @@ import random
 from Tile import TILE_WIDTH, Tile
 from SoundFX import SoundFX
 from PathUtil import getPath
+import GameOverScreen
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -78,7 +79,7 @@ class RoboArena(QtWidgets.QMainWindow):
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
         else:
-            self.robot2 = HumanControlledRobot(850, 850, 50, 0, 3)
+            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3)
             self.hum_robots.append(self.robot2)
 
         BORDER_WIDTH = 10
@@ -106,7 +107,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.rightIntBorder = 15
 
         self.initUI()
-        SoundFX.initSoundrack(self)
+        SoundFX.initSoundrack(self, True)
 
         # Timer for ticks
 
@@ -330,18 +331,37 @@ class RoboArena(QtWidgets.QMainWindow):
         # TODO: Add screen and exit Window
         if self.multiplayer:
             if self.robot.isDestroyed():
-                print("Player 2 Wins!")
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("PLAYER 2 WINS!",
+                                                               "yellow")
                 self.close()
-            else:
-                print("Player 1 Wins!")
+                SoundFX.initSoundrack(self, False)
+
+            elif self.robot2.isDestroyed():
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("PLAYER 1 WINS!",
+                                                               "yellow")
                 self.close()
+                SoundFX.initSoundrack(self, False)
+
         else:
             if len(self.AI_robots) == 0:
-                print("You win!")
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("YOU WIN!",
+                                                               "lime")
                 self.close()
+                SoundFX.initSoundrack(self, False)
+
             elif self.robot.isDestroyed():
-                print("You lose!")
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("YOU LOSE!",
+                                                               "orangered")
                 self.close()
+                SoundFX.initSoundrack(self, False)
 
     def removeBulletsOutOfBorder(self):
         offset = 100  # Error how much it is allowed to be out of border
