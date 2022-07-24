@@ -10,6 +10,7 @@ class Tile(QGraphicsRectItem):
     texture = QImage(getPath("res", "no_texture.png"))
     tile_type = "None"
     collision = False
+    flyThrough = True
 
     def __init__(self, pos_x, pos_y):
         super().__init__()
@@ -55,6 +56,7 @@ class Wall(Tile):
     tile_type = "Wall"
     texture = QImage(getPath("res", "wall_texture.png"))
     collision = True
+    flyThrough = False
 
 
 class Water(Tile):

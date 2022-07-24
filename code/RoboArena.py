@@ -8,12 +8,14 @@ import copy
 import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
+from BaseRobot import BaseRobot
 import NameInput
 import SpeedPowerup
 import random
-from Tile import TILE_WIDTH
+from Tile import TILE_WIDTH, Tile
 from SoundFX import SoundFX
 from PathUtil import getPath
+import GameOverScreen
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -53,6 +55,11 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
 
+        self.hum_robots = []
+        self.AI_robots = []
+
+        self.hum_robots.append(self.robot)
+
         if not self.multiplayer:
 
             self.robotAI1 = AIControlledRobot(500, 500, 50,
@@ -68,16 +75,14 @@ class RoboArena(QtWidgets.QMainWindow):
                                               self.threadpool,
                                               n=3)
 
-            self.AI_robots = []
             self.AI_robots.append(self.robotAI1)
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
-
         else:
+            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3)
+            self.hum_robots.append(self.robot2)
 
-            self.robot2 = HumanControlledRobot(850, 850, 50, 0, 3)
-
-        BORDER_WIDTH = 30
+        BORDER_WIDTH = 10
         self.mapborder_top = QGraphicsRectItem(0, -BORDER_WIDTH,
                                                Arena.ARENA_WIDTH, BORDER_WIDTH)
         self.mapborder_left = QGraphicsRectItem(-BORDER_WIDTH, 0,
@@ -102,7 +107,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.rightIntBorder = 15
 
         self.initUI()
-        SoundFX.initSoundrack(self)
+        SoundFX.initSoundrack(self, True)
 
         # Timer for ticks
 
@@ -127,13 +132,10 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.arena.add_tiles_to_scene(self.scene)
 
-        self.scene.addItem(self.robot)
-
-        if not self.multiplayer:
-            for ai_r in self.AI_robots:
-                self.scene.addItem(ai_r)
-        else:
-            self.scene.addItem(self.robot2)
+        for ai_r in self.AI_robots:
+            self.scene.addItem(ai_r)
+        for hum_r in self.hum_robots:
+            self.scene.addItem(hum_r)
 
         for b in self.bullets:
             self.scene.addItem(b)
@@ -212,26 +214,21 @@ class RoboArena(QtWidgets.QMainWindow):
 
         while self.t_accumulator > UPDATE_TIME:
             self.robot.reactToUserInput(self.keys_pressed)
-            self.robot.move()
-
-            if self.robot.shooting:
-                bullet = self.robot.createBullet()
-                self.scene.addItem(bullet)
-                self.bullets.append(bullet)
-
-            if self.multiplayer and self.robot2.shooting:
-                bullet = self.robot2.createBullet()
-                self.scene.addItem(bullet)
-                self.bullets.append(bullet)
-
-            if not self.multiplayer:
-                for ai_r in self.AI_robots:
-                    ai_r.move()
-                    ai_r.followPoints()
-                    ai_r.inform_brain(self.robot, ai_r)
-            else:
-                self.robot2.move()
+            if self.multiplayer:
                 self.robot2.reactToUserInput2(self.keys_pressed)
+
+            for hum_r in self.hum_robots:
+                hum_r.move()
+
+                if hum_r.shooting:
+                    bullet = hum_r.createBullet()
+                    self.scene.addItem(bullet)
+                    self.bullets.append(bullet)
+
+            for ai_r in self.AI_robots:
+                ai_r.move()
+                ai_r.followPoints()
+                ai_r.inform_brain(self.robot, ai_r)
 
             if self.robot.collisionWithPowerup(self.scene):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
@@ -242,15 +239,11 @@ class RoboArena(QtWidgets.QMainWindow):
                     self.robot.resetSpeed()
                     self.collectedPowerup = False
 
-            hit = False
-            for b in self.bullets:
-                b.trajectory()
-                hit, o = b.isHittingObject()
-                if hit:
-                    self.bullets.remove(b)
-                    # TODO: Impelemt Damage or something
-                    self.buildScene()
-            self.removeBulletsOutOfBorder()
+            self.checkForBullets()
+
+            self.checkForDestroyedRobots()
+
+            self.checkForWinCondition()
 
             self.t_accumulator -= UPDATE_TIME
 
@@ -260,20 +253,20 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
-        self.robot.render(self.painter)
-        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
-
         self.painter.end()
 
-        if not self.multiplayer:
-            for ai_r in self.AI_robots:
-                self.painter.begin(self.label.pixmap())
-                ai_r.render(self.painter)
-                self.painter.end()
+        self.painter.begin(self.label.pixmap())
+        self.renderRandomTimePowerup(self.leftIntBorder, self.rightIntBorder)
+        self.painter.end()
 
-        else:
+        for hum_r in self.hum_robots:
             self.painter.begin(self.label.pixmap())
-            self.robot2.render(self.painter)
+            hum_r.render(self.painter)
+            self.painter.end()
+
+        for ai_r in self.AI_robots:
+            self.painter.begin(self.label.pixmap())
+            ai_r.render(self.painter)
             self.painter.end()
 
         self.painter.begin(self.label.pixmap())
@@ -294,8 +287,84 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
         self.painter.end()
 
+    def checkForBullets(self):
+        hit = False
+        for b in self.bullets:
+            b.trajectory()
+            hit, o = b.isHittingObject()
+            if hit:
+                if isinstance(o, BaseRobot):
+                    o.takeDamage()
+                    self.bullets.remove(b)
+
+                    # Rebuild Scene after Bullet is deleted
+                    self.buildScene()
+                elif isinstance(o, Tile) or isinstance(o, QGraphicsRectItem):
+                    if isinstance(o, Tile) and o.flyThrough:
+                        continue
+
+                    if not b.reflectedOnce:
+                        b.reflect(o)
+                    else:
+                        self.bullets.remove(b)
+
+                        # Rebuild Scene after Bullet is deleted
+                        self.buildScene()
+
+        self.removeBulletsOutOfBorder()
+
+    def checkForDestroyedRobots(self):
+        for hum_r in self.hum_robots:
+            if hum_r.isDestroyed():
+                self.hum_robots.remove(hum_r)
+                self.scene.removeItem(hum_r)
+                self.buildScene()
+
+        for ai_r in self.AI_robots:
+            if ai_r.isDestroyed():
+                self.AI_robots.remove(ai_r)
+                self.scene.removeItem(ai_r)
+                self.buildScene()
+                ai_r.stopAllThreads()
+
+    def checkForWinCondition(self):
+        # TODO: Add screen and exit Window
+        if self.multiplayer:
+            if self.robot.isDestroyed():
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("PLAYER 2 WINS!",
+                                                               "yellow")
+                self.close()
+                SoundFX.initSoundrack(self, False)
+
+            elif self.robot2.isDestroyed():
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("PLAYER 1 WINS!",
+                                                               "yellow")
+                self.close()
+                SoundFX.initSoundrack(self, False)
+
+        else:
+            if len(self.AI_robots) == 0:
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("YOU WIN!",
+                                                               "lime")
+                self.close()
+                SoundFX.initSoundrack(self, False)
+
+            elif self.robot.isDestroyed():
+                SoundFX.transitionSound(self)
+                self.timer.stop()
+                self.game_over = GameOverScreen.GameOverScreen("YOU LOSE!",
+                                                               "orangered")
+                self.close()
+                SoundFX.initSoundrack(self, False)
+
     def removeBulletsOutOfBorder(self):
-        offset = 50  # Error how much it is allowed to be out of border
+        offset = 100  # Error how much it is allowed to be out of border
         for b in self.bullets:
             if (not (0 - offset <= b.x <= self.arena.arena_width + offset) or
                not (0 - offset <= b.y <= self.arena.arena_height + offset)):

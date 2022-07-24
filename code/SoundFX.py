@@ -10,17 +10,20 @@ class SoundFX:
         self.powerupsound.setVolume(0.3)  # Choose a value between 0 and 1
         self.powerupsound.play()
 
-    def initSoundrack(self):
+    def initSoundrack(self, bool):
         # This is the part where we can setup the soundtrack
-        soundtrack = getPath("res", "RoboArena_Soundtrack_Demo.wav")
-        self.soundtrack = QtMultimedia.QSoundEffect()
-        self.soundtrack.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
-        self.soundtrack.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
-        self.soundtrack.setVolume(0.3)    # Choose a value between 0 and 1
-        self.soundtrack.play()
+        if bool:
+            soundtrack = getPath("res", "RoboArena_Soundtrack_Demo.wav")
+            self.soundtrack = QtMultimedia.QSoundEffect()
+            self.soundtrack.setSource(QtCore.QUrl.fromLocalFile(soundtrack))
+            self.soundtrack.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
+            self.soundtrack.setVolume(0.3)    # Choose a value between 0 and 1
+            self.soundtrack.play()
+        else:
+            self.soundtrack.stop()
 
-    def initMenuSoundtrack(self, Bool):
-        if Bool:
+    def initMenuSoundtrack(self, bool):
+        if bool:
             menutrack = getPath("res", "RoboArena_Menu_Soundtrack.wav")
             self.menutrack = QtMultimedia.QSoundEffect()
             self.menutrack.setSource(QtCore.QUrl.fromLocalFile(menutrack))

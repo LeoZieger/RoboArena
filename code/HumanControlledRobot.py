@@ -63,7 +63,7 @@ class HumanControlledRobot(BaseRobot):
             self.alpha -= 2
 
         # Bullet
-        if Qt.Key_Enter in keys_pressed:
+        if Qt.Key_Return in keys_pressed:
             if time.time() - self.canShootAgainAt > 0:
                 self.shooting = True
                 self.canShootAgainAt = time.time() + self.cooldown

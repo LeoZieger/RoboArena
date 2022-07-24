@@ -1,6 +1,6 @@
 # Author: Lasse Niederkrome
 
-from PyQt5.QtGui import QPen, QImage
+from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
 from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
 import numpy as np
@@ -29,6 +29,9 @@ class BaseRobot(QGraphicsRectItem):
 
         self.canShootAgainAt = 0
         self.cooldown = 1
+
+        self.max_HP = 3
+        self.current_HP = 3
 
         self.setRect(self.boundingRect())
 
@@ -75,6 +78,8 @@ class BaseRobot(QGraphicsRectItem):
 
         painter.resetTransform()
 
+        self.renderHealthBar(painter)
+
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
@@ -83,6 +88,32 @@ class BaseRobot(QGraphicsRectItem):
             painter.drawLine(QPoint(int(self.x), int(self.y)),
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
                                     int(self.y + (self.getVector()[1] * 40))))
+
+    def renderHealthBar(self, painter):
+        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+        # outer rect
+        painter.drawRect(
+            self.x,
+            self.y - 20,
+            self.r,
+            2
+        )
+
+        # inner red 'filling'
+        painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
+        painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
+        painter.drawRect(
+            self.x,
+            self.y - 20,
+            int((self.current_HP / self.max_HP) * self.r),
+            2)
+
+    def takeDamage(self):
+        if self.current_HP != 0:
+            self.current_HP -= 1
+
+    def isDestroyed(self):
+        return self.current_HP == 0
 
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
@@ -98,7 +129,7 @@ class BaseRobot(QGraphicsRectItem):
         return Bullet(x_pos,
                       y_pos,
                       self.getVector(),
-                      5,
+                      10,
                       15)
 
     def isCollidingWithTile(self):

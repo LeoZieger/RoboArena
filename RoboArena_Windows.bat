@@ -1,1 +1,1 @@
-python code\MainMenu.py
+python code/MainMenu.py
