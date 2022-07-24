@@ -90,7 +90,10 @@ class MainMenu(QMainWindow):
         map_editor_group = QActionGroup(self)
 
         # Create button for all maps
-        self.map_editor_objects.append(self.add_group(map_editor_menu, map_editor_group, "New Map", True))
+        self.map_editor_objects.append(self.add_group(map_editor_menu,
+                                                      map_editor_group,
+                                                      "New Map",
+                                                      True))
 
         for x in self.all_maps:
             self.x = self.add_group(map_editor_menu, map_editor_group, x, True)

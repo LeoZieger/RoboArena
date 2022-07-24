@@ -1,4 +1,3 @@
-from select import select
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt, QPoint
 from PyQt5.QtGui import QPen, QFont
@@ -65,7 +64,7 @@ class MapCreator(QtWidgets.QMainWindow):
             self.painter.drawText(QPoint(30, 270), "↓: Decrease Size")
             self.painter.drawText(QPoint(30, 300), "S: Save Map")
             self.painter.drawText(QPoint(30, 330), "⌴: Hide Menu")
-        
+
         self.painter.end()
 
         self.check_for_paint()
