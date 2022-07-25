@@ -54,10 +54,16 @@ class GameOverScreen(QMainWindow):
             "font-weight: 1000;"
         )
 
+        # Return Menu
+        menu_btn = QPushButton('Return Menu', self)
+        menu_btn.resize(500, BUTTON_HEIGHT)
+        menu_btn.move(250, 450)
+        menu_btn.clicked.connect(lambda: self.hide())
+
         # Quit
         quit_btn = QPushButton('Quit', self)
         quit_btn.resize(500, BUTTON_HEIGHT)
-        quit_btn.move(250, 500)
+        quit_btn.move(250, 550)
         quit_btn.clicked.connect(QApplication.instance().quit)
 
         # Stylesheet for Buttons
@@ -77,6 +83,7 @@ class GameOverScreen(QMainWindow):
                         """
 
         # Apply stylesheet to the buttons
+        menu_btn.setStyleSheet(buttonstyle)
         quit_btn.setStyleSheet(buttonstyle)
 
         self.show()
