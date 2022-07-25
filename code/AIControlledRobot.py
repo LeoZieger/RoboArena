@@ -29,6 +29,8 @@ class AIControlledRobot(BaseRobot):
 
         self.point_queue = []
 
+        self.setRect(self.boundingRect())
+
     def inform_brain(self, human_player, robo_player):
         self.brain.inform_brain(human_player, robo_player)
 

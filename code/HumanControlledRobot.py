@@ -1,15 +1,14 @@
-# Author: Lasse Niederkrome, Leonard Zieger, Lukas Reutemann
-
 from PyQt5.QtWidgets import QGraphicsRectItem
+from PyQt5.QtGui import QPen
 from BaseRobot import BaseRobot
 import time
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QPoint
 from Tile import Tile
 from BasePowerup import BasePowerup
 
 MAX_SPEED = 5
 MIN_SPEED = 3
-
+ROTATION_SPEED = 3
 
 class HumanControlledRobot(BaseRobot):
 
@@ -19,6 +18,32 @@ class HumanControlledRobot(BaseRobot):
         self.moveForward = False
         self.moveBackward = False
         self.shooting = False
+
+        self.setRect(self.boundingRectHuman())
+
+    def render(self, painter):
+        offset = self.r / 2
+
+        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
+
+        painter.translate(self.x + offset, self.y + offset)
+        painter.rotate(-self.alpha)
+        painter.translate(-(self.x + offset), -(self.y + offset))
+
+        painter.drawImage(self.boundingRect(), self.texture)
+
+        painter.resetTransform()
+
+        self.renderHealthBar(painter)
+
+        if self.debug:
+            painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
+
+            painter.drawRect(self.boundingRectHuman())
+
+            painter.drawLine(QPoint(int(self.x), int(self.y)),
+                             QPoint(int(self.x + (self.getVector()[0] * 40)),
+                                    int(self.y + (self.getVector()[1] * 40))))
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -32,9 +57,9 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_A in keys_pressed:
-            self.alpha += 2
+            self.alpha += ROTATION_SPEED
         if Qt.Key_D in keys_pressed:
-            self.alpha -= 2
+            self.alpha -= ROTATION_SPEED
 
         # Bullet
         if Qt.Key_Space in keys_pressed:
@@ -58,9 +83,9 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_Left in keys_pressed:
-            self.alpha += 2
+            self.alpha += ROTATION_SPEED
         if Qt.Key_Right in keys_pressed:
-            self.alpha -= 2
+            self.alpha -= ROTATION_SPEED
 
         # Bullet
         if Qt.Key_Return in keys_pressed:
@@ -99,14 +124,14 @@ class HumanControlledRobot(BaseRobot):
                 self.x += v_unit[0]
                 self.y += v_unit[1]
 
-                self.setRect(self.boundingRect())
+                self.setRect(self.boundingRectHuman())
 
                 # If collision takes place we step back
                 while self.isCollidingWithTile():
                     self.x -= v_unit[0]
                     self.y -= v_unit[1]
 
-                    self.setRect(self.boundingRect())
+                    self.setRect(self.boundingRectHuman())
 
                     collision = True
 
@@ -126,14 +151,14 @@ class HumanControlledRobot(BaseRobot):
                 self.x -= v_unit[0]
                 self.y -= v_unit[1]
 
-                self.setRect(self.boundingRect())
+                self.setRect(self.boundingRectHuman())
 
                 # If collision takes place we step back
                 while self.isCollidingWithTile():
                     self.x += v_unit[0]
                     self.y += v_unit[1]
 
-                    self.setRect(self.boundingRect())
+                    self.setRect(self.boundingRectHuman())
 
                     collision = True
 

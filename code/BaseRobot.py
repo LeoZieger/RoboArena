@@ -1,7 +1,5 @@
-# Author: Lasse Niederkrome
-
 from PyQt5.QtGui import QPen, QBrush, QImage
-from PyQt5.QtCore import Qt, QPoint, QRectF
+from PyQt5.QtCore import Qt, QRectF
 from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
 import numpy as np
 from Bullet import Bullet
@@ -33,8 +31,6 @@ class BaseRobot(QGraphicsRectItem):
         self.max_HP = 3
         self.current_HP = 3
 
-        self.setRect(self.boundingRect())
-
     def getVector(self):
         return [np.cos(np.deg2rad(self.alpha)), -1 * np.sin(np.deg2rad(self.alpha))]
 
@@ -65,30 +61,6 @@ class BaseRobot(QGraphicsRectItem):
         print(self.alpha)
         print(self.speed)
 
-    def render(self, painter):
-        offset = self.r / 2
-
-        painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
-
-        painter.translate(self.x + offset, self.y + offset)
-        painter.rotate(-self.alpha)
-        painter.translate(-(self.x + offset), -(self.y + offset))
-
-        painter.drawImage(self.boundingRect(), self.texture)
-
-        painter.resetTransform()
-
-        self.renderHealthBar(painter)
-
-        if self.debug:
-            painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
-
-            painter.drawRect(self.boundingRect())
-
-            painter.drawLine(QPoint(int(self.x), int(self.y)),
-                             QPoint(int(self.x + (self.getVector()[0] * 40)),
-                                    int(self.y + (self.getVector()[1] * 40))))
-
     def renderHealthBar(self, painter):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         # outer rect
@@ -117,6 +89,9 @@ class BaseRobot(QGraphicsRectItem):
 
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
+
+    def boundingRectHuman(self):
+        return QRectF(int(self.x + self.r * 0.15), int(self.y + self.r * 0.15), self.r * 0.7, self.r * 0.7)
 
     def createBullet(self):
         radius_around_rect = np.sqrt(

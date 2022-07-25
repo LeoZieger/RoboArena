@@ -151,6 +151,7 @@ class BrainLVL1(QRunnable):
 
     def getTileIndexInGraph(self, x, y):
         return int(y) * self.arena.tile_count_x + int(x)
+   
 
     def getTilePositionInArena(self, index):
         x = index % self.arena.tile_count_x * self.arena.tile_width \
@@ -170,28 +171,24 @@ class BrainLVL1(QRunnable):
             if self.informedEnaugh:
                 FROMIndexInGraph = self.getTileIndexInGraph(
                                         floor(
-                                            (self.robo_player.x +
-                                             0.5 * self.robo_player.r) /
+                                            (self.robo_player.rect().center().x() + 7.5) /
                                             self.arena.tile_width),
                                         floor(
-                                            (self.robo_player.y +
-                                             0.5 * self.robo_player.r) /
-                                            self.arena.tile_width))
+                                            (self.robo_player.rect().center().y() + 7.5) /
+                                            self.arena.tile_height))
 
                 TOIndexInGraph = self.getTileIndexInGraph(
                                         floor(
-                                            (self.human_player.x +
-                                             0.5 * self.robo_player.r) /
+                                            (self.human_player.rect().center().x() + 7.5) /
                                             self.arena.tile_width),
                                         floor(
-                                            (self.human_player.y +
-                                             0.5 * self.robo_player.r) /
+                                            (self.human_player.rect().center().y() + 7.5) /
                                             self.arena.tile_height))
 
                 if TOIndexInGraph in self.unreachableTiles:
                     reachableTileFound = False
-                    for offset_x in range(-1, 0, 1):
-                        for offset_y in range(-1, 0, 1):
+                    for offset_x in range(-2, 2):
+                        for offset_y in range(-2, 2):
                             newTOIndexInGraph = TOIndexInGraph + offset_x + \
                                                 offset_y * self.arena.tile_count_x
                             if newTOIndexInGraph not in self.unreachableTiles:
@@ -203,8 +200,8 @@ class BrainLVL1(QRunnable):
 
                 if FROMIndexInGraph in self.unreachableTiles:
                     reachableTileFound = False
-                    for offset_x in range(-1, 0, 1):
-                        for offset_y in range(-1, 0, 1):
+                    for offset_x in range(-2, 2):
+                        for offset_y in range(-2, 2):
                             newFROMIndexInGraph = FROMIndexInGraph + offset_x + \
                                                   offset_y * self.arena.tile_count_x
                             if newFROMIndexInGraph not in self.unreachableTiles:
