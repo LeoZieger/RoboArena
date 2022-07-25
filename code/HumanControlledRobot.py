@@ -10,6 +10,7 @@ MAX_SPEED = 5
 MIN_SPEED = 3
 ROTATION_SPEED = 3
 
+
 class HumanControlledRobot(BaseRobot):
 
     def __init__(self, x, y, r, alpha, speed):

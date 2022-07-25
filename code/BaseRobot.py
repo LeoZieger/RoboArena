@@ -91,7 +91,10 @@ class BaseRobot(QGraphicsRectItem):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 
     def boundingRectHuman(self):
-        return QRectF(int(self.x + self.r * 0.15), int(self.y + self.r * 0.15), self.r * 0.7, self.r * 0.7)
+        return QRectF(int(self.x + self.r * 0.15),
+                      int(self.y + self.r * 0.15),
+                      self.r * 0.7,
+                      self.r * 0.7)
 
     def createBullet(self):
         radius_around_rect = np.sqrt(

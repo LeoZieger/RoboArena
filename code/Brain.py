@@ -152,7 +152,6 @@ class BrainLVL1(QRunnable):
     def getTileIndexInGraph(self, x, y):
         return int(y) * self.arena.tile_count_x + int(x)
    
-
     def getTilePositionInArena(self, index):
         x = index % self.arena.tile_count_x * self.arena.tile_width \
             + int(0.5 * self.arena.tile_height)  # center
