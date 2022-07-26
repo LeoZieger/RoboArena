@@ -93,9 +93,9 @@ class BaseRobot(QGraphicsRectItem):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         # outer rect
         painter.drawRect(
-            self.x,
-            self.y - 20,
-            self.r,
+            int(self.x),
+            int(self.y - 20),
+            int(self.r),
             2
         )
 
@@ -103,8 +103,8 @@ class BaseRobot(QGraphicsRectItem):
         painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
         painter.setBrush(QBrush(Qt.red, Qt.SolidPattern))
         painter.drawRect(
-            self.x,
-            self.y - 20,
+            int(self.x),
+            int(self.y - 20),
             int((self.current_HP / self.max_HP) * self.r),
             2)
 
