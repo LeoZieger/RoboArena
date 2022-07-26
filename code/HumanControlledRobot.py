@@ -153,7 +153,7 @@ class HumanControlledRobot(BaseRobot):
     # Checks, if there is a collision with a powerup. Increasing speed
     # to MAX_SPEED@BsaseRobot.py if True
     def collisionWithPowerup(self, scene):
-        if (len(scene.collidingItems(self))) > 0:
+        if (len(scene.collidingItems(self))) > 0 and not self.isCollisionWithRobot():
 
             for o in scene.collidingItems(self):
                 if issubclass(type(o), BasePowerup):
