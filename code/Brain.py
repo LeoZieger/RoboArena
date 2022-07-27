@@ -3,6 +3,7 @@ import time
 from numpy import sqrt, floor
 from igraph import Graph, plot
 import BaseRobot
+import warnings
 
 
 class Signals(QObject):
@@ -184,6 +185,8 @@ class Brain(QRunnable):
             )
 
     def calculatePath(self):
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+
         if self.arena_graph.vcount() == 0:
             self.createGraph()
             # self.plotGraph()
@@ -241,12 +244,9 @@ class Brain(QRunnable):
                     if reachableTileFound:
                         break
 
-            try:
-                path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
-                                                           TOIndexInGraph,
-                                                           output="vpath")
-            except RuntimeWarning:
-                pass
+            path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
+                                                       TOIndexInGraph,
+                                                       output="vpath")
 
             # Informing AI about Point to move to
             if len(path[0]) > 0:

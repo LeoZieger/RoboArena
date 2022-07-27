@@ -5,11 +5,12 @@ import numpy as np
 from Bullet import Bullet
 from Tile import Tile
 
+MAX_SPEED = 5
+MIN_SPEED = 3
+STANDARD_COOLDOWN = 1
+
 
 class BaseRobot(QGraphicsEllipseItem):
-    MAX_SPEED = 5
-    MIN_SPEED = 3
-
     debug = False
 
     # Basic-Robot constructor
@@ -24,7 +25,7 @@ class BaseRobot(QGraphicsEllipseItem):
         self.speed = speed                  # speed
 
         self.canShootAgainAt = 0
-        self.cooldown = 1
+        self.cooldown = STANDARD_COOLDOWN
 
         self.max_HP = 3
         self.current_HP = 3

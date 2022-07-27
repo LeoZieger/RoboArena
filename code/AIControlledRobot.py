@@ -4,11 +4,8 @@ import Brain
 from PyQt5.QtGui import QPen
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
-from Tile import Tile
-
 from Bullet import Bullet
 from SpeedPowerup import SpeedPowerup
-
 import time
 
 
@@ -68,7 +65,7 @@ class AIControlledRobot(BaseRobot):
 
     def followPoints(self):
         if len(self.point_queue) > 0:
-            self.speed = self.MIN_SPEED
+            self.speed = MIN_SPEED
 
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)
