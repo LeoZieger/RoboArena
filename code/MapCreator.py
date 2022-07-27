@@ -72,7 +72,7 @@ class MapCreator(QtWidgets.QMainWindow):
 
         if self.sidebar:
             self.painter.setBrush(QColor(77, 77, 77, 200))
-            self.painter.drawRect(20, 25, 350, 320)
+            self.painter.drawRect(20, 25, 350, 440)
             self.painter.setPen(QPen(Qt.white, 10, Qt.SolidLine))
             self.painter.setFont(QFont(self.font, 18))
             self.painter.drawText(QPoint(30, 60), "1: Dirt")
