@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
-from PyQt5.QtGui import QPen, QFont, QImage
+from PyQt5.QtGui import QPen, QFont, QIcon, QImage
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 import time
 from os.path import exists
@@ -180,6 +180,8 @@ class RoboArena(QtWidgets.QMainWindow):
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.centerWindowOnScreen()
+        self.setWindowTitle('RoboArena')
+        self.setWindowIcon(QIcon(getPath("res", "blue_tank.png")))
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)

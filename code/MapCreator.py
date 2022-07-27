@@ -1,8 +1,9 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt, QPoint
-from PyQt5.QtGui import QPen, QFont
+from PyQt5.QtGui import QPen, QFont, QIcon
 import Arena
 import NameInput
+from PathUtil import getPath
 
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 1000
@@ -38,6 +39,8 @@ class MapCreator(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
+        self.setWindowTitle('RoboArena')
+        self.setWindowIcon(QIcon(getPath("res", "blue_tank.png")))
 
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
