@@ -9,6 +9,7 @@ from SpeedPowerup import SpeedPowerup
 import time
 
 from Tile import Tile
+from Arena import ARENA_WIDTH, ARENA_HEIGHT
 
 
 class AIControlledRobot(BaseRobot):
@@ -132,7 +133,8 @@ class AIControlledRobot(BaseRobot):
 
         dist = np.sqrt(np.power(d_x, 2) + np.power(d_y, 2))
 
-        while(dist > offset):
+        while(dist > offset and
+              0 <= x <= ARENA_WIDTH and 0 <= y <= ARENA_HEIGHT):
             x += v[0] * step_size
             y += v[1] * step_size
 
