@@ -98,7 +98,10 @@ class RoboArena(QtWidgets.QMainWindow):
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
         else:
-            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3, False)
+            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3,
+                                               QImage(
+                                                getPath("res", "red_tank.png")),
+                                               False)
             self.hum_robots.append(self.robot2)
 
         BORDER_WIDTH = 10
