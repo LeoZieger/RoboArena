@@ -410,10 +410,9 @@ class RoboArena(QtWidgets.QMainWindow):
         ok = popup.exec_()
         name = popup.textValue()
 
-        while ok and (name == ""
-                      or len(name.split(" ")) > 1
-                      or not exists(getPath("maps", (name + ".json")))
-                      ):
+        while ok and (name == "" or
+                      len(name.split(" ")) > 1 or not
+                      exists(getPath("maps", (name + ".json")))):
             popup.close()
             ok = popup.exec_()
             name = popup.textValue()
