@@ -1,15 +1,13 @@
-# Author: Lasse Niederkrome
-
 from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
-from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsObject, QGraphicsEllipseItem, QGraphicsRectItem
 import numpy as np
 from Bullet import Bullet
 from Tile import Tile
 from PathUtil import getPath
 
 
-class BaseRobot(QGraphicsRectItem):
+class BaseRobot(QGraphicsEllipseItem):
     MAX_SPEED = 5
     MIN_SPEED = 3
 
@@ -83,7 +81,7 @@ class BaseRobot(QGraphicsRectItem):
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
-            painter.drawRect(self.boundingRect())
+            painter.drawEllipse(self.boundingRect())
 
             painter.drawLine(QPoint(int(self.x), int(self.y)),
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
