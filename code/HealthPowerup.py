@@ -1,9 +1,9 @@
-
 from PyQt5.QtGui import QImage
 from PathUtil import getPath
 from BasePowerup import BasePowerup
 
 
+# Just a small medipack-powerup
 class HealthPowerup(BasePowerup):
     def __init__(self, x, y, healthAmount, isCollected):
         BasePowerup.__init__(self, x, y)

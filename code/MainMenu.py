@@ -24,6 +24,8 @@ class MainMenu(QMainWindow):
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.centerWindowOnScreen()
+
+        # Windowtitle + Icon
         self.setWindowTitle('RoboArena')
         self.setWindowIcon(QIcon(getPath("res", "blue_tank.png")))
 
@@ -33,6 +35,7 @@ class MainMenu(QMainWindow):
         self.background_gif.frameChanged.connect(self.repaint)
         self.background_gif.start()
 
+        # Soundtrack
         SoundFX.initMenuSoundtrack(self, True)
 
         # Load font
@@ -43,7 +46,7 @@ class MainMenu(QMainWindow):
         # Apply font
         QApplication.setFont(QFont(self.font))
 
-        # Header
+        # Headline
         name_label = QLabel("ROBO ARENA", self)
         name_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         name_label.resize(WINDOW_WIDTH, BUTTON_HEIGHT)
@@ -53,18 +56,18 @@ class MainMenu(QMainWindow):
             "font-size: 100px;"
         )
 
-        # Start Game
+        # Start Game Button
         start_btn = QPushButton('Start Game', self)
         start_btn.resize(500, BUTTON_HEIGHT)
         start_btn.move(250, 370)
         start_btn.clicked.connect(self.start_game)
 
-        # Settings
+        # Settings Button
         settings_btn = QPushButton('Settings', self)
         settings_btn.resize(500, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        # Settings Submenu
+        # Settings Submenu Button
         settings_menu = QMenu()
         settings_btn.setMenu(settings_menu)
 
@@ -123,7 +126,7 @@ class MainMenu(QMainWindow):
                                                       map_editor_group,
                                                       "New Map",
                                                       True))
-
+        # Button for each map
         for x in self.all_maps:
             self.x = self.add_group(edit_menu, map_editor_group, x, True)
             self.map_editor_objects.append(self.x)
@@ -131,7 +134,7 @@ class MainMenu(QMainWindow):
         edit_menu.triggered.connect(self.mapClickedEditor)
         self.map_editor_objects[0].toggle()
 
-        # Quit
+        # Quit Button
         quit_btn = QPushButton('Quit', self)
         quit_btn.resize(500, BUTTON_HEIGHT)
         quit_btn.move(250, 640)
@@ -163,6 +166,7 @@ class MainMenu(QMainWindow):
 
         self.show()
 
+    # paintEvent for animated background
     def paintEvent(self, event):
         currentFrame = self.background_gif.currentPixmap()
         frameRect = currentFrame.rect()
@@ -171,6 +175,7 @@ class MainMenu(QMainWindow):
             painter = QPainter(self)
             painter.drawPixmap(frameRect.left(), frameRect.top(), currentFrame)
 
+    # Set the variable to the button you clicked
     def mapClicked(self, action):
         self.selectedMap = action.text()
 
@@ -181,11 +186,13 @@ class MainMenu(QMainWindow):
     def difficultyClicked(self, action):
         self.selectedDifficulty = action.text()
 
+    # Reads all map files from maps folder
     def get_maps(self):
         self.all_maps = next(walk(getDir("maps")), (None, None, []))[2]
         for x in range(len(self.all_maps)):
             self.all_maps[x] = self.all_maps[x][:-5]
 
+    # Add certain menu to button + Checkbox
     def add_group(self, menu, group, name, checkable):
         submenu = QAction(name, self)
         menu.addAction(submenu)
@@ -193,12 +200,14 @@ class MainMenu(QMainWindow):
         group.addAction(submenu)
         return submenu
 
+    # Centers Window
     def centerWindowOnScreen(self):
         outerRect = self.frameGeometry()
         centerOfScreen = QDesktopWidget().availableGeometry().center()
         outerRect.moveCenter(centerOfScreen)
         self.move(outerRect.topLeft())
 
+    # Starts RoboArena
     def start_game(self):
         SoundFX.transitionSound(self)
         self.hide()
@@ -207,6 +216,7 @@ class MainMenu(QMainWindow):
                                                difficulty=self.selectedDifficulty)
         SoundFX.initMenuSoundtrack(self, False)
 
+    # Starts Map Editor
     def start_map_creator(self):
         self.hide()
         self.map_creator = MapCreator.MapCreator(self.selectedEditorMap)
