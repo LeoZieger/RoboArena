@@ -218,19 +218,20 @@ class BrainLVL1(QRunnable):
                                                            TOIndexInGraph,
                                                            output="vpath")
 
-                self.signals.informToClearQueue.emit()
+                if len(path[0]) > 0:
+                    self.signals.informToClearQueue.emit()
 
-                path[0].pop(0)
-                for p in path[0]:
-                    x, y = self.getTilePositionInArena(p)
+                    path[0].pop(0)
+                    for p in path[0]:
+                        x, y = self.getTilePositionInArena(p)
+                        if not self.stop:
+                            self.signals.informAboutNextPoint.emit(QPoint(int(x),
+                                                                          int(y)))
+
+                    time.sleep(1)
+
                     if not self.stop:
-                        self.signals.informAboutNextPoint.emit(QPoint(int(x),
-                                                                      int(y)))
-
-                time.sleep(1)
-
-                if not self.stop:
-                    self.signals.finished.emit(self.n)
+                        self.signals.finished.emit(self.n)
             else:
                 if not self.stop:
                     self.signals.finished.emit(self.n)
