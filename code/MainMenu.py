@@ -46,7 +46,7 @@ class MainMenu(QMainWindow):
         # Apply font
         QApplication.setFont(QFont(self.font))
 
-        # Header
+        # Headline
         name_label = QLabel("ROBO ARENA", self)
         name_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         name_label.resize(WINDOW_WIDTH, BUTTON_HEIGHT)
@@ -56,18 +56,18 @@ class MainMenu(QMainWindow):
             "font-size: 100px;"
         )
 
-        # Start Game
+        # Start Game Button
         start_btn = QPushButton('Start Game', self)
         start_btn.resize(500, BUTTON_HEIGHT)
         start_btn.move(250, 370)
         start_btn.clicked.connect(self.start_game)
 
-        # Settings
+        # Settings Button
         settings_btn = QPushButton('Settings', self)
         settings_btn.resize(500, BUTTON_HEIGHT)
         settings_btn.move(250, 460)
 
-        # Settings Submenu
+        # Settings Submenu Button
         settings_menu = QMenu()
         settings_btn.setMenu(settings_menu)
 
@@ -134,7 +134,7 @@ class MainMenu(QMainWindow):
         edit_menu.triggered.connect(self.mapClickedEditor)
         self.map_editor_objects[0].toggle()
 
-        # Quit
+        # Quit Button
         quit_btn = QPushButton('Quit', self)
         quit_btn.resize(500, BUTTON_HEIGHT)
         quit_btn.move(250, 640)
@@ -166,7 +166,7 @@ class MainMenu(QMainWindow):
 
         self.show()
 
-    # paintEvent for GIF
+    # paintEvent for animated background
     def paintEvent(self, event):
         currentFrame = self.background_gif.currentPixmap()
         frameRect = currentFrame.rect()
