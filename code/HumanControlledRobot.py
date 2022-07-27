@@ -20,6 +20,7 @@ class HumanControlledRobot(BaseRobot):
 
         self.texture = texture
 
+    # User input of Player 1
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
             self.moveForward = True
@@ -46,6 +47,7 @@ class HumanControlledRobot(BaseRobot):
         else:
             self.shooting = False
 
+    # User input of Player 2
     def reactToUserInput2(self, keys_pressed):
         if Qt.Key_Up in keys_pressed:
             self.moveForward = True
@@ -133,25 +135,13 @@ class HumanControlledRobot(BaseRobot):
                 if collision:
                     break
 
-    # Checks, if there is a collision with a Tile or an QGraphicsRectItem.
-    # A Tile is a one of:
-    # -WaterTile
-    # -LavaTile
-    #
-    # a QGraphicsRectItem is one of:
-    # -Wall around the map
-    #
-    # Returns Boolean
-
-    # Checks, if there is a collision with a powerup. Increasing speed
-    # to MAX_SPEED@BsaseRobot.py if True
-
+    # Checks, if there is a collision with a Tile or an QGraphicsRectItem
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0 and not self.isCollisionWithRobot():
             for o in scene.collidingItems(self):
                 if BaseRobot.debug:
                     print("collision with powerup!")
-
+                # What kind of powerup was detected
                 if issubclass(type(o), SpeedPowerup):
                     o.isCollected = True
                     if self.speed < MAX_SPEED:
@@ -171,6 +161,7 @@ class HumanControlledRobot(BaseRobot):
     def resetSpeed(self):
         self.speed = MIN_SPEED
 
+    # Resets the cooldown of the shooting speed
     def resetCooldown(self):
         self.cooldown = STANDARD_COOLDOWN
 

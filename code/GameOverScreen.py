@@ -33,7 +33,7 @@ class GameOverScreen(QMainWindow):
 
         SoundFX.initMenuSoundtrack(self, True)
 
-        # Header
+        # Game over text
         name_label = QLabel("GAME OVER", self)
         name_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         name_label.resize(WINDOW_WIDTH, BUTTON_HEIGHT)
@@ -45,6 +45,7 @@ class GameOverScreen(QMainWindow):
             "font-weight: 1000;"
         )
 
+        # Shows who won the game
         name_label = QLabel(self.result, self)
         name_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         name_label.resize(WINDOW_WIDTH, BUTTON_HEIGHT)
