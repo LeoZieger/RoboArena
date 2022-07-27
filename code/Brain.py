@@ -234,10 +234,12 @@ class Brain(QRunnable):
                             break
                     if reachableTileFound:
                         break
-
-            path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
-                                                       TOIndexInGraph,
-                                                       output="vpath")
+            try:
+                path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
+                                                           TOIndexInGraph,
+                                                           output="vpath")
+            except:
+                pass
 
             # Informing AI about Point to move to
             if len(path[0]) > 0:
