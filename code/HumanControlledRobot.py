@@ -18,7 +18,6 @@ class HumanControlledRobot(BaseRobot):
 
         self.moveForward = False
         self.moveBackward = False
-        self.shooting = False
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:

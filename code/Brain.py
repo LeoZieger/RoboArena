@@ -190,11 +190,11 @@ class BrainLVL1(QRunnable):
             TOIndexInGraph = self.getTileIndexInGraph(
                                     floor(
                                         (self.human_player.x +
-                                            0.5 * self.robo_player.r) /
+                                            0.5 * self.human_player.r) /
                                         self.arena.tile_width),
                                     floor(
                                         (self.human_player.y +
-                                            0.5 * self.robo_player.r) /
+                                            0.5 * self.human_player.r) /
                                         self.arena.tile_height))
 
             if TOIndexInGraph in self.unreachableTiles:

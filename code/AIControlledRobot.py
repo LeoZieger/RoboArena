@@ -8,6 +8,7 @@ from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
 
 from Bullet import Bullet
+from SpeedPowerup import SpeedPowerup
 
 import time
 
@@ -86,6 +87,7 @@ class AIControlledRobot(BaseRobot):
             self.alpha = new_alpha
             self.shoot_queue.pop(0)
 
+            # Ai only shoots if there is no obstacle in the way
             if self.hasClearShot(point):
                 return Bullet(x_pos,
                               y_pos,
@@ -110,6 +112,7 @@ class AIControlledRobot(BaseRobot):
         dummy_obj.setRect(x, y, 1, 1)
 
         self.scene().addItem(dummy_obj)
+        dummy_obj.scene = self.scene()
 
         d_x = point.x() - x
         d_y = point.y() - y
@@ -127,13 +130,23 @@ class AIControlledRobot(BaseRobot):
 
             dist = np.sqrt(np.power(d_x, 2) + np.power(d_y, 2))
 
+            # Checking if there is something in the way
             for o in self.scene().collidingItems(dummy_obj):
+                if o == dummy_obj:
+                    continue
                 if isinstance(o, Tile) and not o.flyThrough:
                     self.scene().removeItem(dummy_obj)
                     return False
-                elif isinstance(o, QGraphicsRectItem):
+                elif isinstance(o, SpeedPowerup):
+                    self.scene().removeItem(dummy_obj)
+                    continue
+                elif isinstance(o, Bullet):
+                    self.scene().removeItem(dummy_obj)
+                    continue
+                elif isinstance(o, QGraphicsRectItem) and not isinstance(o, Tile):
                     self.scene().removeItem(dummy_obj)
                     return False
+        self.scene().removeItem(dummy_obj)
         return True
 
     def hasReachedPoint(self, point):
