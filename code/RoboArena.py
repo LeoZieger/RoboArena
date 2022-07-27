@@ -28,7 +28,7 @@ SPEED_RAPID_DURATION = 5
 
 
 class RoboArena(QtWidgets.QMainWindow):
-    def __init__(self, multiplayer, map_name, difficulty):
+    def __init__(self, multiplayer, map_name, difficulty="Normal"):
         super().__init__()
         self.multiplayer = multiplayer
 

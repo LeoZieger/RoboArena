@@ -105,7 +105,7 @@ class MainMenu(QMainWindow):
         # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
         difficulty_group = QActionGroup(self)
-        self.selectedDifficulty = "normal"
+        self.selectedDifficulty = "Normal"
         difficulty.triggered.connect(self.difficultyClicked)
 
         # Easy
