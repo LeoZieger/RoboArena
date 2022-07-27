@@ -9,8 +9,8 @@ TILE_HEIGHT = 25
 class Tile(QGraphicsRectItem):
     texture = QImage(getPath("res", "no_texture.png"))
     tile_type = "None"
-    collision = False
-    flyThrough = True
+    collision = False  # defines if bullets/robots collide with the tile
+    flyThrough = True  # defines if bullets can fly over the tile
 
     def __init__(self, pos_x, pos_y):
         super().__init__()
@@ -24,6 +24,7 @@ class Tile(QGraphicsRectItem):
                      TILE_HEIGHT)
 
     def to_json_string(self):
+        # converts the tile to a specific string that fits in a .json file
         json_str = "{"
         json_str += '"type":"{}", "x":{}, "y":{}'.format(self.tile_type,
                                                          self.x,

@@ -3,6 +3,7 @@ from PyQt5.QtGui import QIcon
 from PathUtil import getPath
 
 
+# Popup where you can insert the name of a map
 class NameInput(QtWidgets.QInputDialog):
     def __init__(self):
         super().__init__()

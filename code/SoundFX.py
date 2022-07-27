@@ -41,7 +41,6 @@ class SoundFX:
         self.transitionSFX.setVolume(0.1)  # Choose a value between 0 and 1
         self.transitionSFX.play()
 
-
     def initWinningScreen(self):
         winningScreenSFX = getPath("res", "RoboArena_WinningScreen.wav")
         self.winningScreenSFX = QtMultimedia.QSoundEffect()
