@@ -53,7 +53,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
-        self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
+        self.robot = HumanControlledRobot(100, 50, 50, 0, 3, False)
 
         self.hum_robots = []
         self.AI_robots = []
@@ -83,7 +83,7 @@ class RoboArena(QtWidgets.QMainWindow):
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
         else:
-            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3)
+            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3, False)
             self.hum_robots.append(self.robot2)
 
         BORDER_WIDTH = 10
@@ -245,10 +245,25 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
                 self.collectedPowerup = True
 
-            if self.collectedPowerup:
-                if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
-                    self.robot.resetSpeed()
-                    self.collectedPowerup = False
+            if not self.multiplayer:
+                if self.robot.collisionWithPowerup(self.scene):
+                    self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                    self.collectedPowerup = True
+
+                if self.collectedPowerup:
+                    if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                        self.robot.resetSpeed()
+                        self.collectedPowerup = False
+            else:
+                for robos in self.hum_robots:
+                    if robos.collisionWithPowerup(self.scene):
+                        self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                        robos.collectedSpeedPowerup = True
+
+                    if robos.collectedSpeedPowerup:
+                        if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                            robos.resetSpeed()
+                            robos.collectedSpeedPowerup = False
 
             self.checkForBullets()
 
