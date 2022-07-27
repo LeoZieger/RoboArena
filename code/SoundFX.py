@@ -40,3 +40,22 @@ class SoundFX:
         self.transitionSFX.setSource(QtCore.QUrl.fromLocalFile(transitionSFX))
         self.transitionSFX.setVolume(0.1)  # Choose a value between 0 and 1
         self.transitionSFX.play()
+
+
+    def initWinningScreen(self):
+        winningScreenSFX = getPath("res", "RoboArena_WinningScreen.wav")
+        self.winningScreenSFX = QtMultimedia.QSoundEffect()
+        self.winningScreenSFX.setSource(QtCore.QUrl.fromLocalFile(winningScreenSFX))
+        self.winningScreenSFX.setLoopCount(QtMultimedia.QSoundEffect.Infinite)
+        self.winningScreenSFX.setVolume(0.1)  # Choose a value between 0 and 1
+        self.winningScreenSFX.play()
+
+    def shootingEnemySound(self):
+        QtMultimedia.QSound.play(enemyShootingFX)
+
+    def shootingSound(self):
+        QtMultimedia.QSound.play(shootingFX)
+
+
+shootingFX = getPath("res", "shooting.wav")
+enemyShootingFX = getPath("res", "shootingEnemy.wav")

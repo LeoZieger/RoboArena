@@ -277,6 +277,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 hum_r.move()
 
                 if hum_r.shooting:
+                    SoundFX.shootingSound(self)
                     bullet = hum_r.createBullet()
                     self.scene.addItem(bullet)
                     self.bullets.append(bullet)
@@ -290,6 +291,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 if ai_r.shooting:
                     bullet = ai_r.createBullet()
                     if bullet is not None:
+                        SoundFX.shootingEnemySound(self)
                         self.scene.addItem(bullet)
                         self.bullets.append(bullet)
                     self.buildScene()
