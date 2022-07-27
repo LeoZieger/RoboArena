@@ -214,6 +214,9 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
+    # Creates 1 of:
+    # - speedpowerup/health/rapidfire
+    # returns the powauP
     def generateRandomPowerup(self):
         self.randomTile = self.listOfNotCollidableTiles[
             random.randint(0, len(self.listOfNotCollidableTiles))
@@ -244,13 +247,13 @@ class RoboArena(QtWidgets.QMainWindow):
                                                     False)
             return self.newPowerup
 
+    # Appends a rnmd powerup into a list and adds a hitbox
     def spawnNewPowerup(self):
         temp = self.generateRandomPowerup()
         self.powerupList.append(temp)
         self.scene.addItem(temp)
 
-        # Takes 2 numbers, spawns all powerups after a
-        # random time between these 2 numbers
+    # Spawns the powerups and despawns them if collected
     def renderRandomTimePowerup(self):
         for powerUpIndex in self.powerupList:
             powerUpIndex.render(self.painter)
@@ -296,15 +299,13 @@ class RoboArena(QtWidgets.QMainWindow):
                         self.bullets.append(bullet)
                     self.buildScene()
 
-            if self.robot.collisionWithPowerup(self.scene):
-                self.timeWhenPowerupIsCollected = self.getTimeInSec()
-                self.collectedPowerup = True
-
             if not self.multiplayer:
-
+                # Saves the time when a powerups is collected for duration
+                # purpose
                 if self.robot.collisionWithPowerup(self.scene):
                     self.timeWhenPowerupIsCollected = self.getTimeInSec()
                     self.collectedPowerup = True
+                # if collected, resets effect after duration
                 if self.collectedPowerup:
                     if self.timeWhenPowerupIsCollected + \
                             SPEED_RAPID_DURATION < self.getTimeInSec():
@@ -313,6 +314,7 @@ class RoboArena(QtWidgets.QMainWindow):
                         self.collectedPowerup = False
 
             else:
+                # this is the same for 2 players
                 for robos in self.hum_robots:
                     if robos.collisionWithPowerup(self.scene):
                         self.timeWhenPowerupIsCollected = self.getTimeInSec()
