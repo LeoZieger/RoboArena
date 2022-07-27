@@ -31,19 +31,21 @@ class AIControlledRobot(BaseRobot):
 
         self.diff_speed = 1
 
+        self.handleDifficulty(difficulty)
+
         self.point_queue = []
         self.shoot_queue = []
 
     def handleDifficulty(self, difficulty):
         if difficulty == "Hard":
-            self.cooldown = 2
+            self.cooldown = 4
             self.diff_speed = 3
         elif difficulty == "Normal":
             self.cooldown = 4
-            self.diff_speed = 2
+            self.diff_speed = 2.5
         elif difficulty == "Easy":
-            self.cooldown = 6
-            self.diff_speed = 1
+            self.cooldown = 5
+            self.diff_speed = 2
 
     def connectBainToSlots(self):
         self.brain.signals.finished.connect(self.setThreadToFinished)
@@ -104,8 +106,8 @@ class AIControlledRobot(BaseRobot):
                 return Bullet(x_pos,
                               y_pos,
                               self.getVector(),
-                              10,
-                              15)
+                              14,
+                              10)
 
     def hasClearShot(self, point):
         # Simulating 'around and shooting a dummy bullet'

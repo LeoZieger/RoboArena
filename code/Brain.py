@@ -42,9 +42,9 @@ class Brain(QRunnable):
         if difficulty == "Hard":
             self.sleepTime = 1
         elif difficulty == "Normal":
-            self.sleepTime = 5
+            self.sleepTime = 2
         elif difficulty == "Easy":
-            self.sleepTime = 7
+            self.sleepTime = 3
 
     def inform_brain(self, human_player, robo_player):
         self.informedEnaugh = True

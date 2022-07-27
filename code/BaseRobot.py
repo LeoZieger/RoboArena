@@ -7,7 +7,7 @@ from Tile import Tile
 
 MAX_SPEED = 5
 MIN_SPEED = 3
-STANDARD_COOLDOWN = 1
+STANDARD_COOLDOWN = 4
 
 
 class BaseRobot(QGraphicsEllipseItem):
@@ -123,8 +123,8 @@ class BaseRobot(QGraphicsEllipseItem):
         return Bullet(x_pos,
                       y_pos,
                       self.getVector(),
-                      10,
-                      15)
+                      14,
+                      10)
 
     def calculateBulletStartPos(self):
         radius_around_rect = np.sqrt(
