@@ -61,10 +61,13 @@ class MapCreator(QtWidgets.QMainWindow):
             self.painter.drawText(QPoint(30, 180), "5: Wall")
             self.painter.drawText(QPoint(30, 210), "6: Water")
             self.painter.drawText(QPoint(30, 240), "7: Sand")
-            self.painter.drawText(QPoint(30, 270), "↑: Increase Size")
-            self.painter.drawText(QPoint(30, 300), "↓: Decrease Size")
-            self.painter.drawText(QPoint(30, 330), "S: Save Map")
-            self.painter.drawText(QPoint(30, 360), "⌴: Hide Menu")
+            self.painter.drawText(QPoint(30, 270), "8: Snow")
+            self.painter.drawText(QPoint(30, 300), "9: Lava-Stone")
+            self.painter.drawText(QPoint(30, 330), "0: Brick")
+            self.painter.drawText(QPoint(30, 360), "↑: Increase Size")
+            self.painter.drawText(QPoint(30, 390), "↓: Decrease Size")
+            self.painter.drawText(QPoint(30, 420), "S: Save Map")
+            self.painter.drawText(QPoint(30, 450), "⌴: Hide Menu")
 
         self.painter.end()
 
@@ -102,6 +105,12 @@ class MapCreator(QtWidgets.QMainWindow):
             self.current_draw_tile = "Water"
         elif e.key() == Qt.Key_7:
             self.current_draw_tile = "Sand"
+        elif e.key() == Qt.Key_8:
+            self.current_draw_tile = "Snow"
+        elif e.key() == Qt.Key_9:
+            self.current_draw_tile = "Lava-Stone"
+        elif e.key() == Qt.Key_0:
+            self.current_draw_tile = "Brick"
         elif e.key() == Qt.Key_Up:
             self.current_draw_size = min(20, self.current_draw_size+1)
         elif e.key() == Qt.Key_Down:

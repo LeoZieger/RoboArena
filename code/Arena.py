@@ -51,6 +51,12 @@ class Arena():
                     self.matrix[x][y] = Tile.Water(x, y)
                 elif tile_type == "Sand":
                     self.matrix[x][y] = Tile.Sand(x, y)
+                elif tile_type == "Snow":
+                    self.matrix[x][y] = Tile.Snow(x, y)
+                elif tile_type == "Lava-Stone":
+                    self.matrix[x][y] = Tile.LavaStone(x, y)
+                elif tile_type == "Brick":
+                    self.matrix[x][y] = Tile.Brick(x, y)
                 else:
                     self.matrix[x][y] = Tile.Tile(x, y)
 
@@ -83,6 +89,12 @@ class Arena():
                     self.matrix[x][y] = Tile.Water(x, y)
                 elif tile_type == "Sand":
                     self.matrix[x][y] = Tile.Sand(x, y)
+                elif tile_type == "Snow":
+                    self.matrix[x][y] = Tile.Snow(x, y)
+                elif tile_type == "Lava-Stone":
+                    self.matrix[x][y] = Tile.LavaStone(x, y)
+                elif tile_type == "Brick":
+                    self.matrix[x][y] = Tile.Brick(x, y)
                 else:
                     self.matrix[x][y] = Tile.Tile(x, y)
 
@@ -114,6 +126,12 @@ class Arena():
             self.matrix[x][y] = Tile.Water(x, y)
         elif tile_type == "Sand":
             self.matrix[x][y] = Tile.Sand(x, y)
+        elif tile_type == "Snow":
+            self.matrix[x][y] = Tile.Snow(x, y)
+        elif tile_type == "Lava-Stone":
+            self.matrix[x][y] = Tile.LavaStone(x, y)
+        elif tile_type == "Brick":
+            self.matrix[x][y] = Tile.Brick(x, y)
         else:
             self.matrix[x][y] = Tile.Tile(x, y)
 

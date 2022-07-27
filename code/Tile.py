@@ -45,6 +45,7 @@ class Grass(Tile):
 class Lava(Tile):
     tile_type = "Lava"
     texture = QImage(getPath("res", "lava_texture.png"))
+    collision = True
 
 
 class Stone(Tile):
@@ -68,4 +69,20 @@ class Water(Tile):
 class Sand(Tile):
     tile_type = "Sand"
     texture = QImage(getPath("res", "sand_texture.png"))
+
+
+class Snow(Tile):
+    tile_type = "Snow"
+    texture = QImage(getPath("res", "snow_texture.png"))
+
+
+class LavaStone(Tile):
+    tile_type = "Lava-Stone"
+    texture = QImage(getPath("res", "lava_stone_texture.png"))
+
+
+class Brick(Tile):
+    tile_type = "Brick"
+    texture = QImage(getPath("res", "brick_texture.png"))
     collision = True
+    flyThrough = False
