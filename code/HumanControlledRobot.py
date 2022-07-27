@@ -74,7 +74,6 @@ class HumanControlledRobot(BaseRobot):
         else:
             self.shooting = False
 
-
     def isCollisionWithRobot(self):
         for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):

@@ -1,6 +1,6 @@
 from PyQt5.QtGui import QPen, QBrush
 from PyQt5.QtCore import Qt, QPoint, QRectF
-from PyQt5.QtWidgets import QGraphicsObject, QGraphicsEllipseItem, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsEllipseItem, QGraphicsRectItem
 import numpy as np
 from Bullet import Bullet
 from Tile import Tile
