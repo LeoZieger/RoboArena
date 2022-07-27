@@ -1,10 +1,10 @@
-from PyQt5.QtGui import QPen, QBrush, QImage
+from PyQt5.QtGui import QPen, QBrush
 from PyQt5.QtCore import Qt, QPoint, QRectF
 from PyQt5.QtWidgets import QGraphicsObject, QGraphicsEllipseItem, QGraphicsRectItem
 import numpy as np
 from Bullet import Bullet
 from Tile import Tile
-from PathUtil import getPath
+
 MAX_SPEED = 5
 MIN_SPEED = 3
 STANDARD_COOLDOWN = 1
@@ -15,7 +15,7 @@ class BaseRobot(QGraphicsEllipseItem):
 
     # Basic-Robot constructor
 
-    def __init__(self, x, y, r, alpha, speed):
+    def __init__(self, x, y, r, alpha, speed, texture):
         QGraphicsObject.__init__(self)
 
         self.x = x                          # x-position
@@ -23,7 +23,6 @@ class BaseRobot(QGraphicsEllipseItem):
         self.r = r                          # width
         self.alpha = alpha                  # direction
         self.speed = speed                  # speed
-        self.texture = QImage(getPath("res", "blue_tank.png"))        # texture
 
         self.canShootAgainAt = 0
         self.cooldown = STANDARD_COOLDOWN
