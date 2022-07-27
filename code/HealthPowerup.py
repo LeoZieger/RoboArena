@@ -5,13 +5,11 @@ from PathUtil import getPath
 from BasePowerup import BasePowerup
 
 
-class SpeedPowerup(BasePowerup):
-
-    def __init__(self, x, y, duration, isCollected):
+class HealthPowerup(BasePowerup):
+    def __init__(self, x, y, HealthAmount, isCollected):
         BasePowerup.__init__(self, x, y)
-        self.duration = duration
+        self.HealthAmount = HealthAmount
         self.isCollected = isCollected
-        self.texture = QImage(getPath("res", "speedPowerup.png"))
-
+        self.texture = QImage(getPath("res", "healPowerup.png"))
 
 
