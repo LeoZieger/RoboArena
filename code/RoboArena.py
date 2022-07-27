@@ -65,7 +65,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
-        self.robot = HumanControlledRobot(100, 50,
+        self.robot = HumanControlledRobot(75, 75,
                                           50, 0, 3,
                                           QImage(getPath("res", "blue_tank.png")),
                                           False)
@@ -84,21 +84,21 @@ class RoboArena(QtWidgets.QMainWindow):
             elif difficulty == "Hard":
                 texture = QImage(getPath("res", "red_tank.png"))
 
-            self.robotAI1 = AIControlledRobot(500, 500, 50,
+            self.robotAI1 = AIControlledRobot(875, 75, 50,
                                               0, 2,
                                               texture,
                                               copy.copy(self.arena),
                                               self.threadpool,
                                               n=1,
                                               difficulty=difficulty,)
-            self.robotAI2 = AIControlledRobot(800, 850, 50,
+            self.robotAI2 = AIControlledRobot(75, 875, 50,
                                               0, 2,
                                               texture,
                                               copy.copy(self.arena),
                                               self.threadpool,
                                               n=2,
                                               difficulty=difficulty)
-            self.robotAI3 = AIControlledRobot(100, 850, 50,
+            self.robotAI3 = AIControlledRobot(875, 875, 50,
                                               0, 2,
                                               texture,
                                               copy.copy(self.arena),
