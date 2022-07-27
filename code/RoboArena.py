@@ -4,13 +4,11 @@ from PyQt5.QtGui import QPen, QFont, QFontDatabase, QIcon, QImage
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget, \
                             QApplication
 import time
-from os.path import exists
 import copy
 import Arena
 from HumanControlledRobot import HumanControlledRobot
 from AIControlledRobot import AIControlledRobot
 from BaseRobot import BaseRobot
-import NameInput
 import SpeedPowerup
 import RapidfirePowerup
 import HealthPowerup
@@ -65,6 +63,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
+        # Robot of Player 1
         self.robot = HumanControlledRobot(75, 75,
                                           50, 0, 3,
                                           QImage(getPath("res", "blue_tank.png")),
@@ -110,6 +109,7 @@ class RoboArena(QtWidgets.QMainWindow):
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
         else:
+            # Robot of Player 2
             self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3,
                                                QImage(
                                                 getPath("res", "red_tank.png")),
@@ -164,6 +164,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.scene.setBspTreeDepth(0)
 
+        # rebuilding scene by scrap
         self.arena.add_tiles_to_scene(self.scene)
 
         for ai_r in self.AI_robots:
@@ -375,12 +376,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.painter.end()
 
     def checkForBullets(self):
+        # checks for collision with bullets
         hit = False
         for b in self.bullets:
             b.trajectory()
             hit, o = b.isHittingObject()
             if hit:
-                if isinstance(o, BaseRobot):
+                if isinstance(o, BaseRobot):  # Collision with Robots
                     o.takeDamage()
                     self.bullets.remove(b)
 
@@ -401,6 +403,7 @@ class RoboArena(QtWidgets.QMainWindow):
         self.removeBulletsOutOfBorder()
 
     def checkForDestroyedRobots(self):
+        # removes already destroyed robots
         for hum_r in self.hum_robots:
             if hum_r.isDestroyed():
                 self.hum_robots.remove(hum_r)
@@ -413,7 +416,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 ai_r.stopAllThreads()
 
     def checkForWinCondition(self):
-        # TODO: Add screen and exit Window
+        # Checks if someone has already won aka. all robots are destroyed
         if self.multiplayer:
             if self.robot.isDestroyed():
                 SoundFX.transitionSound(self)
@@ -449,26 +452,12 @@ class RoboArena(QtWidgets.QMainWindow):
                 SoundFX.initSoundrack(self, False)
 
     def removeBulletsOutOfBorder(self):
+        # Removing Bullets that are out of bounds
         offset = 100  # Error how much it is allowed to be out of border
         for b in self.bullets:
             if (not (0 - offset <= b.x <= self.arena.arena_width + offset) or
                not (0 - offset <= b.y <= self.arena.arena_height + offset)):
                 self.bullets.remove(b)
-
-    def loadMapByPrompt(self):
-        popup = NameInput.NameInput()
-        ok = popup.exec_()
-        name = popup.textValue()
-
-        while ok and (name == "" or
-                      len(name.split(" ")) > 1 or not
-                      exists(getPath("maps", (name + ".json")))):
-            popup.close()
-            ok = popup.exec_()
-            name = popup.textValue()
-        popup.close()
-
-        self.arena.loadMap(name)
 
     def loadMap(self, name):
         self.arena.loadMap(name)
