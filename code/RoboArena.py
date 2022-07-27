@@ -1,7 +1,8 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
-from PyQt5.QtGui import QPen, QFont, QIcon, QImage
-from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
+from PyQt5.QtGui import QPen, QFont, QFontDatabase, QIcon, QImage
+from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget, \
+                            QApplication
 import time
 from os.path import exists
 import copy
@@ -30,6 +31,14 @@ SPEED_RAPID_DURATION = 5
 class RoboArena(QtWidgets.QMainWindow):
     def __init__(self, multiplayer, map_name, difficulty="Normal"):
         super().__init__()
+        # Load font
+        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        families = QFontDatabase.applicationFontFamilies(id)
+        self.font = families[0]
+
+        # Apply font
+        QApplication.setFont(QFont(self.font))
+
         self.multiplayer = multiplayer
 
         # Arena und all robots that are kept track
@@ -357,7 +366,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
         self.painter.begin(self.label.pixmap())
         self.painter.setPen(QPen(Qt.white, 20, Qt.SolidLine))
-        self.painter.setFont(QFont("Tahoma", 12))
+        self.painter.setFont(QFont(self.font))
         self.painter.drawText(QPoint(10, 22), str(self.fps) + " FPS")
         self.painter.end()
 
@@ -447,10 +456,9 @@ class RoboArena(QtWidgets.QMainWindow):
         ok = popup.exec_()
         name = popup.textValue()
 
-        while ok and (name == ""
-                      or len(name.split(" ")) > 1
-                      or not exists(getPath("maps", (name + ".json")))
-                      ):
+        while ok and (name == "" or
+                      len(name.split(" ")) > 1 or not
+                      exists(getPath("maps", (name + ".json")))):
             popup.close()
             ok = popup.exec_()
             name = popup.textValue()

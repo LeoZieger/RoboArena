@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
                             QMenu, QAction, QActionGroup
-from PyQt5.QtGui import QMovie, QPainter, QIcon
+from PyQt5.QtGui import QMovie, QPainter, QFontDatabase, QFont, QIcon
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
 import sys
@@ -35,16 +35,22 @@ class MainMenu(QMainWindow):
 
         SoundFX.initMenuSoundtrack(self, True)
 
+        # Load font
+        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        families = QFontDatabase.applicationFontFamilies(id)
+        self.font = families[0]
+
+        # Apply font
+        QApplication.setFont(QFont(self.font))
+
         # Header
         name_label = QLabel("ROBO ARENA", self)
         name_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
         name_label.resize(WINDOW_WIDTH, BUTTON_HEIGHT)
-        name_label.move(0, 80)
+        name_label.move(0, 150)
         name_label.setStyleSheet(
             "color: white;"
             "font-size: 100px;"
-            "font-style: courier;"
-            "font-weight: 1000;"
         )
 
         # Start Game
@@ -84,26 +90,6 @@ class MainMenu(QMainWindow):
         map_menu.triggered.connect(self.mapClicked)
         self.map_objects[0].toggle()
 
-        # Edit Map
-        self.get_maps()
-        self.map_editor_objects = []
-        self.selectedEditorMap = "New Map"
-        map_editor_menu = settings_menu.addMenu("Edit Map")
-        map_editor_group = QActionGroup(self)
-
-        # Create button for all maps
-        self.map_editor_objects.append(self.add_group(map_editor_menu,
-                                                      map_editor_group,
-                                                      "New Map",
-                                                      True))
-
-        for x in self.all_maps:
-            self.x = self.add_group(map_editor_menu, map_editor_group, x, True)
-            self.map_editor_objects.append(self.x)
-
-        map_editor_menu.triggered.connect(self.mapClickedEditor)
-        self.map_editor_objects[0].toggle()
-
         # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
         difficulty_group = QActionGroup(self)
@@ -121,10 +107,29 @@ class MainMenu(QMainWindow):
         self.hard = self.add_group(difficulty, difficulty_group, "Hard", True)
 
         # Map Editor
-        editMap_btn = QPushButton('Map Editor', self)
-        editMap_btn.resize(500, BUTTON_HEIGHT)
-        editMap_btn.move(250, 550)
-        editMap_btn.clicked.connect(self.start_map_creator)
+        editor_btn = QPushButton('Map Editor', self)
+        editor_btn.resize(500, BUTTON_HEIGHT)
+        editor_btn.move(250, 550)
+
+        self.get_maps()
+        self.map_editor_objects = []
+        self.selectedEditorMap = "New Map"
+        edit_menu = QMenu()
+        editor_btn.setMenu(edit_menu)
+        map_editor_group = QActionGroup(self)
+
+        # Create menu to edit maps
+        self.map_editor_objects.append(self.add_group(edit_menu,
+                                                      map_editor_group,
+                                                      "New Map",
+                                                      True))
+
+        for x in self.all_maps:
+            self.x = self.add_group(edit_menu, map_editor_group, x, True)
+            self.map_editor_objects.append(self.x)
+
+        edit_menu.triggered.connect(self.mapClickedEditor)
+        self.map_editor_objects[0].toggle()
 
         # Quit
         quit_btn = QPushButton('Quit', self)
@@ -151,9 +156,10 @@ class MainMenu(QMainWindow):
         # Apply stylesheet to the buttons
         start_btn.setStyleSheet(buttonstyle)
         settings_btn.setStyleSheet(buttonstyle)
-        editMap_btn.setStyleSheet(buttonstyle)
+        editor_btn.setStyleSheet(buttonstyle)
         quit_btn.setStyleSheet(buttonstyle)
         settings_menu.setStyleSheet(buttonstyle)
+        edit_menu.setStyleSheet(buttonstyle)
 
         self.show()
 
@@ -170,6 +176,7 @@ class MainMenu(QMainWindow):
 
     def mapClickedEditor(self, action):
         self.selectedEditorMap = action.text()
+        self.start_map_creator()
 
     def difficultyClicked(self, action):
         self.selectedDifficulty = action.text()
