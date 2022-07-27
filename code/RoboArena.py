@@ -182,15 +182,15 @@ class RoboArena(QtWidgets.QMainWindow):
         self.keys_pressed.remove(event.key())
 
     def spawnNewPowerup(self):
-        self.randomTile = self.listOfNotCollidableTiles[
+        randomTile = self.listOfNotCollidableTiles[
             random.randint(0, len(self.listOfNotCollidableTiles))
             ]
-        self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH,
-                                                    self.randomTile.y * TILE_WIDTH,
-                                                    5,
-                                                    False)
-        self.powerupList.append(self.newPowerup)
-        self.scene.addItem(self.newPowerup)
+        newPowerup = SpeedPowerup.SpeedPowerup(randomTile.x * TILE_WIDTH,
+                                               randomTile.y * TILE_WIDTH,
+                                               5,
+                                               False)
+        self.powerupList.append(newPowerup)
+        self.scene.addItem(newPowerup)
 
         # Takes 2 numbers, spawns all powerups after a
         # random time between these 2 numbers
@@ -205,7 +205,7 @@ class RoboArena(QtWidgets.QMainWindow):
                     self.powerupList.remove(powerUpIndex)
                     self.spawnNewPowerup()
                     SoundFX.initPwrUpSound(self)
-                    QGraphicsScene.removeItem(self.scene, powerUpIndex)
+                    self.buildScene()
 
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
@@ -239,6 +239,7 @@ class RoboArena(QtWidgets.QMainWindow):
                     if bullet is not None:
                         self.scene.addItem(bullet)
                         self.bullets.append(bullet)
+                    self.buildScene()
 
             if self.robot.collisionWithPowerup(self.scene):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
@@ -342,13 +343,11 @@ class RoboArena(QtWidgets.QMainWindow):
         for hum_r in self.hum_robots:
             if hum_r.isDestroyed():
                 self.hum_robots.remove(hum_r)
-                self.scene.removeItem(hum_r)
                 self.buildScene()
 
         for ai_r in self.AI_robots:
             if ai_r.isDestroyed():
                 self.AI_robots.remove(ai_r)
-                self.scene.removeItem(ai_r)
                 self.buildScene()
                 ai_r.stopAllThreads()
 
