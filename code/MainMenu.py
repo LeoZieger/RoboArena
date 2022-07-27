@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
                             QMenu, QAction, QActionGroup
-from PyQt5.QtGui import QMovie, QPainter
+from PyQt5.QtGui import QMovie, QPainter, QIcon
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
 import sys
@@ -24,6 +24,8 @@ class MainMenu(QMainWindow):
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.centerWindowOnScreen()
+        self.setWindowTitle('RoboArena')
+        self.setWindowIcon(QIcon(getPath("res", "blue_tank.png")))
 
         # Background
         self.background_gif = QMovie(getPath("res", "BackgroundGif.gif"))
