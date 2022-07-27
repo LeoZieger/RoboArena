@@ -1,6 +1,8 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt, QPoint
-from PyQt5.QtGui import QPen, QFont
+from PyQt5.QtGui import QPen, QFontDatabase, QFont, QColor
+from PyQt5.QtWidgets import QDesktopWidget
+from PyQt5.QtWidgets import QApplication
 import Arena
 import NameInput
 
@@ -38,7 +40,7 @@ class MapCreator(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-
+        self.centerWindowOnScreen()
         self.label = QtWidgets.QLabel()
         canvas = QtGui.QPixmap(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.label.setPixmap(canvas)
@@ -47,13 +49,29 @@ class MapCreator(QtWidgets.QMainWindow):
 
         self.show()
 
+    def centerWindowOnScreen(self):
+        outerRect = self.frameGeometry()
+        centerOfScreen = QDesktopWidget().availableGeometry().center()
+        outerRect.moveCenter(centerOfScreen)
+        self.move(outerRect.topLeft())
+
     def tick(self):
+        # Load font
+        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        families = QFontDatabase.applicationFontFamilies(id)
+        self.font = families[0]
+
+        # Apply font
+        QApplication.setFont(QFont(self.font))
+
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
 
         if self.sidebar:
+            self.painter.setBrush(QColor(77, 77, 77, 200))
+            self.painter.drawRect(20, 25, 350, 320)
             self.painter.setPen(QPen(Qt.white, 10, Qt.SolidLine))
-            self.painter.setFont(QFont("Tahoma", 18))
+            self.painter.setFont(QFont(self.font, 18))
             self.painter.drawText(QPoint(30, 60), "1: Dirt")
             self.painter.drawText(QPoint(30, 90), "2: Grass")
             self.painter.drawText(QPoint(30, 120), "3: Lava")
