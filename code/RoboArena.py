@@ -408,12 +408,14 @@ class RoboArena(QtWidgets.QMainWindow):
             if hum_r.isDestroyed():
                 self.hum_robots.remove(hum_r)
                 self.buildScene()
+                SoundFX.explosionSFX(self)
 
         for ai_r in self.AI_robots:
             if ai_r.isDestroyed():
                 self.AI_robots.remove(ai_r)
                 self.buildScene()
                 ai_r.stopAllThreads()
+                SoundFX.explosionSFX(self)
 
     def checkForWinCondition(self):
         # Checks if someone has already won aka. all robots are destroyed

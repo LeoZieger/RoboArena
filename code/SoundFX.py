@@ -57,6 +57,13 @@ class SoundFX:
         self.winningScreenSFX.setVolume(0.1)  # Choose a value between 0 and 1
         self.winningScreenSFX.play()
 
+    def explosionSFX(self):
+        explosionSound = getPath("res", "explosion.wav")
+        self.explosionSound = QtMultimedia.QSoundEffect()
+        self.explosionSound.setSource(QtCore.QUrl.fromLocalFile(explosionSound))
+        self.explosionSound.setVolume(0.7)  # Choose a value between 0 and 1
+        self.explosionSound.play()
+
     # Shooting Sound for enemy&player
     def shootingEnemySound(self):
         QtMultimedia.QSound.play(enemyShootingFX)
@@ -65,7 +72,7 @@ class SoundFX:
         QtMultimedia.QSound.play(shootingFX)
 
 
-# Implemented the shooting-sound, otherwise the latency would
-# be to big
+# Implemented the shooting-sound, otherwise
+# the latency would be to big
 shootingFX = getPath("res", "shooting.wav")
 enemyShootingFX = getPath("res", "shootingEnemy.wav")
