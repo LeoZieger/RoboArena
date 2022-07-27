@@ -49,6 +49,8 @@ class Arena():
                     self.matrix[x][y] = Tile.Wall(x, y)
                 elif tile_type == "Water":
                     self.matrix[x][y] = Tile.Water(x, y)
+                elif tile_type == "Sand":
+                    self.matrix[x][y] = Tile.Sand(x, y)
                 else:
                     self.matrix[x][y] = Tile.Tile(x, y)
 
@@ -79,6 +81,8 @@ class Arena():
                     self.matrix[x][y] = Tile.Wall(x, y)
                 elif tile_type == "Water":
                     self.matrix[x][y] = Tile.Water(x, y)
+                elif tile_type == "Sand":
+                    self.matrix[x][y] = Tile.Sand(x, y)
                 else:
                     self.matrix[x][y] = Tile.Tile(x, y)
 
@@ -108,6 +112,8 @@ class Arena():
             self.matrix[x][y] = Tile.Wall(x, y)
         elif tile_type == "Water":
             self.matrix[x][y] = Tile.Water(x, y)
+        elif tile_type == "Sand":
+            self.matrix[x][y] = Tile.Sand(x, y)
         else:
             self.matrix[x][y] = Tile.Tile(x, y)
 

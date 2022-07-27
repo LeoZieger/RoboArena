@@ -63,3 +63,9 @@ class Water(Tile):
     tile_type = "Water"
     texture = QImage(getPath("res", "water_texture.png"))
     collision = True
+
+
+class Sand(Tile):
+    tile_type = "Sand"
+    texture = QImage(getPath("res", "sand_texture.png"))
+    collision = True
