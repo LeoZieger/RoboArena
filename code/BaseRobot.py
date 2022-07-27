@@ -7,7 +7,7 @@ from Tile import Tile
 
 MAX_SPEED = 5
 MIN_SPEED = 3
-STANDARD_COOLDOWN = 4
+STANDARD_COOLDOWN = 3
 
 
 class BaseRobot(QGraphicsEllipseItem):
