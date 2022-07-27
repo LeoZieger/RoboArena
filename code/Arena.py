@@ -112,13 +112,11 @@ class Arena():
             self.matrix[x][y] = Tile.Tile(x, y)
 
     def add_tiles_to_scene(self, scene):
-        new_scene = scene
-
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 if self.matrix[x][y].collision:
-                    new_scene.addItem(self.matrix[x][y])
-        return new_scene
+                    scene.addItem(self.matrix[x][y])
+        return scene
 
     def listOfNotCollidableTiles(self):
         notCollidableTiles = []

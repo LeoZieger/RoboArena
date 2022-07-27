@@ -123,7 +123,6 @@ class AIControlledRobot(BaseRobot):
         dummy_obj.setRect(x, y, 1, 1)
 
         self.scene().addItem(dummy_obj)
-        dummy_obj.scene = self.scene()
 
         d_x = point.x() - x
         d_y = point.y() - y
@@ -146,18 +145,13 @@ class AIControlledRobot(BaseRobot):
                 if o == dummy_obj:
                     continue
                 if isinstance(o, Tile) and not o.flyThrough:
-                    self.scene().removeItem(dummy_obj)
                     return False
                 elif isinstance(o, SpeedPowerup):
-                    self.scene().removeItem(dummy_obj)
                     continue
                 elif isinstance(o, Bullet):
-                    self.scene().removeItem(dummy_obj)
                     continue
                 elif isinstance(o, QGraphicsRectItem) and not isinstance(o, Tile):
-                    self.scene().removeItem(dummy_obj)
                     return False
-        self.scene().removeItem(dummy_obj)
         return True
 
     def hasReachedPoint(self, point):
