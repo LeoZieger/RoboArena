@@ -194,8 +194,8 @@ class MainMenu(QMainWindow):
         SoundFX.transitionSound(self)
         self.hide()
         self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked(),
-                                               map_name=self.selectedMap)
-        # diff=self.selectedDifficulty)
+                                               map_name=self.selectedMap,
+                                               difficulty=self.selectedDifficulty)
         SoundFX.initMenuSoundtrack(self, False)
 
     def start_map_creator(self):
