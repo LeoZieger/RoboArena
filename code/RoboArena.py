@@ -32,7 +32,7 @@ class RoboArena(QtWidgets.QMainWindow):
     def __init__(self, multiplayer, map_name, difficulty="Normal"):
         super().__init__()
         # Load font
-        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        id = QFontDatabase.addApplicationFont(getPath("res", "PixeloidMono.ttf"))
         families = QFontDatabase.applicationFontFamilies(id)
         self.font = families[0]
 
