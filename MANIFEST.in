@@ -1,0 +1,2 @@
+recursive-include code/maps *
+recursive-include code/res *

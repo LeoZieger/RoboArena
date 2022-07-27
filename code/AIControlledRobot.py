@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import QGraphicsRectItem
 from Bullet import Bullet
 from SpeedPowerup import SpeedPowerup
 import time
-
 from Tile import Tile
 from Arena import ARENA_WIDTH, ARENA_HEIGHT
 

@@ -1,0 +1,11 @@
+numpy
+igraph
+pyqt5
+time
+json
+warnings
+sys
+os
+pathlib
+random
+copy

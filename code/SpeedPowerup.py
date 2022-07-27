@@ -1,4 +1,3 @@
-
 from PyQt5.QtGui import QImage
 from PathUtil import getPath
 from BasePowerup import BasePowerup

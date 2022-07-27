@@ -2,10 +2,8 @@ from PyQt5.QtGui import QImage, QBrush
 from PyQt5.QtCore import Qt, QRectF
 from PyQt5.QtWidgets import QGraphicsRectItem
 from PathUtil import getPath
-
 from SpeedPowerup import SpeedPowerup
 from Tile import Tile
-
 import numpy as np
 
 
