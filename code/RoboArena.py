@@ -191,21 +191,24 @@ class RoboArena(QtWidgets.QMainWindow):
 
         n = random.randint(0, 2)
         if n == 0:
-            self.newPowerup = SpeedPowerup.SpeedPowerup(self.randomTile.x * TILE_WIDTH,
+            self.newPowerup = SpeedPowerup.SpeedPowerup(
+                                                    self.randomTile.x * TILE_WIDTH,
                                                     self.randomTile.y * TILE_WIDTH,
                                                     5,
                                                     False)
             return self.newPowerup
 
         if n == 1:
-            self.newPowerup = HealthPowerup.HealthPowerup(self.randomTile.x * TILE_WIDTH,
+            self.newPowerup = HealthPowerup.HealthPowerup(
+                                                    self.randomTile.x * TILE_WIDTH,
                                                     self.randomTile.y * TILE_WIDTH,
                                                     1,
                                                     False)
             return self.newPowerup
 
         if n == 2:
-            self.newPowerup = RapidfirePowerup.RapidfirePowerup(self.randomTile.x * TILE_WIDTH,
+            self.newPowerup = RapidfirePowerup.RapidfirePowerup(
+                                                    self.randomTile.x * TILE_WIDTH,
                                                     self.randomTile.y * TILE_WIDTH,
                                                     0.5,
                                                     False)
@@ -226,7 +229,6 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.spawnNewPowerup()
                 SoundFX.initPwrUpSound(self)
                 self.buildScene()
-                
 
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
@@ -268,12 +270,12 @@ class RoboArena(QtWidgets.QMainWindow):
 
             if not self.multiplayer:
 
-
                 if self.robot.collisionWithPowerup(self.scene):
                     self.timeWhenPowerupIsCollected = self.getTimeInSec()
                     self.collectedPowerup = True
                 if self.collectedPowerup:
-                    if self.timeWhenPowerupIsCollected + SPEED_RAPID_DURATION < self.getTimeInSec():
+                    if self.timeWhenPowerupIsCollected + \
+                            SPEED_RAPID_DURATION < self.getTimeInSec():
                         self.robot.resetSpeed()
                         self.robot.resetCooldown()
                         self.collectedPowerup = False

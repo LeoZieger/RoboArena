@@ -1,13 +1,9 @@
-
-from PyQt5.QtWidgets import QGraphicsRectItem
 from BaseRobot import BaseRobot, MIN_SPEED, STANDARD_COOLDOWN, MAX_SPEED
 import time
 from PyQt5.QtCore import Qt
-from Tile import Tile
 from SpeedPowerup import SpeedPowerup
 from RapidfirePowerup import RapidfirePowerup
 from HealthPowerup import HealthPowerup
-from BasePowerup import BasePowerup
 
 ROTATION_SPEED = 3
 
@@ -147,7 +143,6 @@ class HumanControlledRobot(BaseRobot):
 
     # Checks, if there is a collision with a powerup. Increasing speed
     # to MAX_SPEED@BsaseRobot.py if True
-
 
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0 and not self.isCollisionWithRobot():

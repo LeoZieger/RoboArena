@@ -10,7 +10,7 @@ MIN_SPEED = 3
 STANDARD_COOLDOWN = 1
 
 
-class BaseRobot(QGraphicsRectItem):
+class BaseRobot(QGraphicsEllipseItem):
     debug = False
 
     # Basic-Robot constructor

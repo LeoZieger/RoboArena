@@ -1,6 +1,5 @@
-from PyQt5.QtWidgets import QGraphicsObject
-from PyQt5.QtGui import QPen, QBrush, QImage
-from PyQt5.QtCore import Qt, QRectF
+
+from PyQt5.QtGui import QImage
 from PathUtil import getPath
 from BasePowerup import BasePowerup
 
@@ -12,6 +11,3 @@ class SpeedPowerup(BasePowerup):
         self.duration = duration
         self.isCollected = isCollected
         self.texture = QImage(getPath("res", "speedPowerup.png"))
-
-
-
