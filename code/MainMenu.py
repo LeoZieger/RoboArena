@@ -39,7 +39,7 @@ class MainMenu(QMainWindow):
         SoundFX.initMenuSoundtrack(self, True)
 
         # Load font
-        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        id = QFontDatabase.addApplicationFont(getPath("res", "PixeloidMono.ttf"))
         families = QFontDatabase.applicationFontFamilies(id)
         self.font = families[0]
 
