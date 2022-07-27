@@ -1,11 +1,11 @@
 import numpy as np
 from PathUtil import getPath
-from Tile import Tile
 from BaseRobot import BaseRobot
 import Brain
 from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
+from Tile import Tile
 
 from Bullet import Bullet
 from SpeedPowerup import SpeedPowerup
@@ -251,11 +251,3 @@ class AIControlledRobot(BaseRobot):
 
             for p in self.point_queue:
                 painter.drawPoint(p)
-
-    # Allows AI-Robos to go through PowerUps without collision
-    def aiCollisionWithTile(self, scene):
-        if len(scene.collidingItems(self)) > 0:
-            for o in scene.collidingItems(self):
-                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
-                    return True
-        return False

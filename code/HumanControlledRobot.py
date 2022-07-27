@@ -1,14 +1,11 @@
-# Author: Lasse Niederkrome, Leonard Zieger, Lukas Reutemann
-
-from PyQt5.QtWidgets import QGraphicsRectItem
 from BaseRobot import BaseRobot
 import time
 from PyQt5.QtCore import Qt
-from Tile import Tile
 from BasePowerup import BasePowerup
 
 MAX_SPEED = 5
 MIN_SPEED = 3
+ROTATION_SPEED = 3
 
 
 class HumanControlledRobot(BaseRobot):
@@ -33,9 +30,9 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_A in keys_pressed:
-            self.alpha += 2
+            self.alpha += ROTATION_SPEED
         if Qt.Key_D in keys_pressed:
-            self.alpha -= 2
+            self.alpha -= ROTATION_SPEED
 
         # Bullet
         if Qt.Key_Space in keys_pressed:
@@ -59,9 +56,9 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_Left in keys_pressed:
-            self.alpha += 2
+            self.alpha += ROTATION_SPEED
         if Qt.Key_Right in keys_pressed:
-            self.alpha -= 2
+            self.alpha -= ROTATION_SPEED
 
         # Bullet
         if Qt.Key_Return in keys_pressed:
@@ -77,13 +74,6 @@ class HumanControlledRobot(BaseRobot):
         for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):
                 return True
-        return False
-
-    def collisionWithTile(self, scene):
-        if len(scene.collidingItems(self)) > 0:
-            for o in scene.collidingItems(self):
-                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
-                    return True
         return False
 
     def move(self):
