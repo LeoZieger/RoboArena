@@ -53,7 +53,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
-        self.robot = HumanControlledRobot(100, 50, 50, 0, 3)
+        self.robot = HumanControlledRobot(100, 50, 50, 0, 3, False)
 
         self.hum_robots = []
         self.AI_robots = []
@@ -65,21 +65,25 @@ class RoboArena(QtWidgets.QMainWindow):
             self.robotAI1 = AIControlledRobot(500, 500, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=1)
+                                              n=1,
+                                              difficulty="Easy")
             self.robotAI2 = AIControlledRobot(800, 850, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=2)
+                                              n=2,
+                                              difficulty="Normal")
             self.robotAI3 = AIControlledRobot(100, 850, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=3)
+                                              n=3,
+                                              difficulty="Hard"
+                                              )
 
             self.AI_robots.append(self.robotAI1)
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
         else:
-            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3)
+            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3, False)
             self.hum_robots.append(self.robot2)
 
         BORDER_WIDTH = 10
@@ -228,16 +232,38 @@ class RoboArena(QtWidgets.QMainWindow):
             for ai_r in self.AI_robots:
                 ai_r.move()
                 ai_r.followPoints()
+                ai_r.shootAtPoints()
                 ai_r.inform_brain(self.robot, ai_r)
+
+                if ai_r.shooting:
+                    bullet = ai_r.createBullet()
+                    if bullet is not None:
+                        self.scene.addItem(bullet)
+                        self.bullets.append(bullet)
 
             if self.robot.collisionWithPowerup(self.scene):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
                 self.collectedPowerup = True
 
-            if self.collectedPowerup:
-                if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
-                    self.robot.resetSpeed()
-                    self.collectedPowerup = False
+            if not self.multiplayer:
+                if self.robot.collisionWithPowerup(self.scene):
+                    self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                    self.collectedPowerup = True
+
+                if self.collectedPowerup:
+                    if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                        self.robot.resetSpeed()
+                        self.collectedPowerup = False
+            else:
+                for robos in self.hum_robots:
+                    if robos.collisionWithPowerup(self.scene):
+                        self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                        robos.collectedSpeedPowerup = True
+
+                    if robos.collectedSpeedPowerup:
+                        if self.timeWhenPowerupIsCollected + 5 < self.getTimeInSec():
+                            robos.resetSpeed()
+                            robos.collectedSpeedPowerup = False
 
             self.checkForBullets()
 

@@ -31,6 +31,8 @@ class BaseRobot(QGraphicsEllipseItem):
         self.max_HP = 3
         self.current_HP = 3
 
+        self.shooting = False
+
         self.setRect(self.boundingRect())
 
     def getVector(self):
@@ -117,6 +119,15 @@ class BaseRobot(QGraphicsEllipseItem):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 
     def createBullet(self):
+        x_pos, y_pos = self.calculateBulletStartPos()
+
+        return Bullet(x_pos,
+                      y_pos,
+                      self.getVector(),
+                      10,
+                      15)
+
+    def calculateBulletStartPos(self):
         radius_around_rect = np.sqrt(
                                 np.power(self.r, 2) + np.power(self.r, 2))
         x_pos = ((self.x + 0.5 * self.r)
@@ -124,11 +135,7 @@ class BaseRobot(QGraphicsEllipseItem):
         y_pos = ((self.y + 0.5 * self.r)
                  + self.getVector()[1] * radius_around_rect)
 
-        return Bullet(x_pos,
-                      y_pos,
-                      self.getVector(),
-                      10,
-                      15)
+        return x_pos, y_pos
 
     def isCollidingWithTile(self):
         for o in self.scene().collidingItems(self):

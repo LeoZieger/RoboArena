@@ -10,12 +10,13 @@ ROTATION_SPEED = 3
 
 class HumanControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed):
+    def __init__(self, x, y, r, alpha, speed, collectedSpeedPowerup):
         BaseRobot.__init__(self, x, y, r, alpha, speed)
 
         self.moveForward = False
         self.moveBackward = False
-        self.shooting = False
+
+        self.collectedSpeedPowerup = collectedSpeedPowerup
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -144,7 +145,6 @@ class HumanControlledRobot(BaseRobot):
     # to MAX_SPEED@BsaseRobot.py if True
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0 and not self.isCollisionWithRobot():
-
             for o in scene.collidingItems(self):
                 if issubclass(type(o), BasePowerup):
                     o.isCollected = True
