@@ -3,6 +3,7 @@ import time
 from numpy import sqrt, floor
 from igraph import Graph, plot
 import BaseRobot
+import warnings
 
 
 class Signals(QObject):
@@ -27,8 +28,8 @@ class Brain(QRunnable):
         self.arena_graph = Graph()
         self.unreachableTiles = []
 
-        self.human_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0)
-        self.robo_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0)
+        self.human_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0, None)
+        self.robo_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0, None)
 
         self.stop = False
         self.informedEnaugh = False
@@ -184,6 +185,8 @@ class Brain(QRunnable):
             )
 
     def calculatePath(self):
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
+
         if self.arena_graph.vcount() == 0:
             self.createGraph()
             # self.plotGraph()
@@ -209,13 +212,17 @@ class Brain(QRunnable):
                                             0.5 * self.human_player.r) /
                                         self.arena.tile_height))
 
+            searchIndex = 50
+
             if TOIndexInGraph in self.unreachableTiles:
                 reachableTileFound = False
-                for offset_x in range(-1, 0, 1):
-                    for offset_y in range(-1, 0, 1):
+                for offset_x in range(-searchIndex, searchIndex, 1):
+                    for offset_y in range(-searchIndex, searchIndex, 1):
                         newTOIndexInGraph = TOIndexInGraph + offset_x + \
                                             offset_y * self.arena.tile_count_x
-                        if newTOIndexInGraph not in self.unreachableTiles:
+                        x, y = self.getTilePositionInArena(newTOIndexInGraph)
+                        if (self.isLegalTileInArena(x, y) and
+                           newTOIndexInGraph not in self.unreachableTiles):
                             TOIndexInGraph = newTOIndexInGraph
                             reachableTileFound = True
                             break
@@ -224,11 +231,13 @@ class Brain(QRunnable):
 
             if FROMIndexInGraph in self.unreachableTiles:
                 reachableTileFound = False
-                for offset_x in range(-1, 0, 1):
-                    for offset_y in range(-1, 0, 1):
+                for offset_x in range(-searchIndex, searchIndex, 1):
+                    for offset_y in range(-searchIndex, searchIndex, 1):
                         newFROMIndexInGraph = FROMIndexInGraph + offset_x + \
-                                                offset_y * self.arena.tile_count_x
-                        if newFROMIndexInGraph not in self.unreachableTiles:
+                                            offset_y * self.arena.tile_count_x
+                        x, y = self.getTilePositionInArena(newFROMIndexInGraph)
+                        if (self.isLegalTileInArena(x, y) and
+                           newFROMIndexInGraph not in self.unreachableTiles):
                             FROMIndexInGraph = newFROMIndexInGraph
                             reachableTileFound = True
                             break

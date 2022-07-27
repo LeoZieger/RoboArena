@@ -1,22 +1,21 @@
 import numpy as np
-from PathUtil import getPath
-from Tile import Tile
 from BaseRobot import BaseRobot
 import Brain
-from PyQt5.QtGui import QImage, QPen
+from PyQt5.QtGui import QPen
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
-
 from Bullet import Bullet
 from SpeedPowerup import SpeedPowerup
-
 import time
+
+from Tile import Tile
 
 
 class AIControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, arena, pool, n=0, difficulty="Normal"):
-        BaseRobot.__init__(self, x, y, r, alpha, speed)
+    def __init__(self, x, y, r, alpha, speed, texture,
+                 arena, pool, n=0, difficulty="Normal"):
+        BaseRobot.__init__(self, x, y, r, alpha, speed, texture)
         self.n = n
 
         self.brain = Brain.Brain(self.n, arena, difficulty=difficulty)
@@ -28,7 +27,9 @@ class AIControlledRobot(BaseRobot):
         self.brain.setAutoDelete(False)
         self.threadpool.start(self.brain)
 
-        self.texture = QImage(getPath("res", "red_tank.png"))
+        self.texture = texture
+
+        self.diff_speed = 1
 
         self.point_queue = []
         self.shoot_queue = []
@@ -36,13 +37,13 @@ class AIControlledRobot(BaseRobot):
     def handleDifficulty(self, difficulty):
         if difficulty == "Hard":
             self.cooldown = 2
-            self.MIN_SPEED = 3
+            self.diff_speed = 3
         elif difficulty == "Normal":
             self.cooldown = 4
-            self.MIN_SPEED = 2
+            self.diff_speed = 2
         elif difficulty == "Easy":
             self.cooldown = 6
-            self.MIN_SPEED = 1
+            self.diff_speed = 1
 
     def connectBainToSlots(self):
         self.brain.signals.finished.connect(self.setThreadToFinished)
@@ -68,7 +69,7 @@ class AIControlledRobot(BaseRobot):
 
     def followPoints(self):
         if len(self.point_queue) > 0:
-            self.speed = self.MIN_SPEED
+            self.speed = self.diff_speed
 
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)
@@ -123,7 +124,6 @@ class AIControlledRobot(BaseRobot):
         dummy_obj.setRect(x, y, 1, 1)
 
         self.scene().addItem(dummy_obj)
-        dummy_obj.scene = self.scene()
 
         d_x = point.x() - x
         d_y = point.y() - y
@@ -146,18 +146,13 @@ class AIControlledRobot(BaseRobot):
                 if o == dummy_obj:
                     continue
                 if isinstance(o, Tile) and not o.flyThrough:
-                    self.scene().removeItem(dummy_obj)
                     return False
                 elif isinstance(o, SpeedPowerup):
-                    self.scene().removeItem(dummy_obj)
                     continue
                 elif isinstance(o, Bullet):
-                    self.scene().removeItem(dummy_obj)
                     continue
                 elif isinstance(o, QGraphicsRectItem) and not isinstance(o, Tile):
-                    self.scene().removeItem(dummy_obj)
                     return False
-        self.scene().removeItem(dummy_obj)
         return True
 
     def hasReachedPoint(self, point):
@@ -243,7 +238,7 @@ class AIControlledRobot(BaseRobot):
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
-            painter.drawRect(self.boundingRect())
+            painter.drawEllipse(self.boundingRect())
 
             painter.drawLine(QPoint(int(self.x), int(self.y)),
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
@@ -251,11 +246,3 @@ class AIControlledRobot(BaseRobot):
 
             for p in self.point_queue:
                 painter.drawPoint(p)
-
-    # Allows AI-Robos to go through PowerUps without collision
-    def aiCollisionWithTile(self, scene):
-        if len(scene.collidingItems(self)) > 0:
-            for o in scene.collidingItems(self):
-                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
-                    return True
-        return False

@@ -24,6 +24,8 @@ class MainMenu(QMainWindow):
     def initUI(self):
         self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.centerWindowOnScreen()
+        self.setWindowTitle('RoboArena')
+        self.setWindowIcon(QIcon(getPath("res", "blue_tank.png")))
 
         # Background
         self.background_gif = QMovie(getPath("res", "BackgroundGif.gif"))
@@ -91,7 +93,7 @@ class MainMenu(QMainWindow):
         # Difficulty Menu
         difficulty = settings_menu.addMenu("Difficulty")
         difficulty_group = QActionGroup(self)
-        self.selectedDifficulty = "normal"
+        self.selectedDifficulty = "Normal"
         difficulty.triggered.connect(self.difficultyClicked)
 
         # Easy
@@ -201,8 +203,8 @@ class MainMenu(QMainWindow):
         SoundFX.transitionSound(self)
         self.hide()
         self.game_window = RoboArena.RoboArena(self.multiplayer.isChecked(),
-                                               map_name=self.selectedMap)
-        # diff=self.selectedDifficulty)
+                                               map_name=self.selectedMap,
+                                               difficulty=self.selectedDifficulty)
         SoundFX.initMenuSoundtrack(self, False)
 
     def start_map_creator(self):
