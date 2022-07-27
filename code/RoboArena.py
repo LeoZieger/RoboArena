@@ -56,7 +56,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
-        self.robot = HumanControlledRobot(100, 50, 50, 0, 3, False)
+        self.robot = HumanControlledRobot(75, 75, 50, 0, 3, False)
 
         self.hum_robots = []
         self.AI_robots = []
@@ -65,17 +65,17 @@ class RoboArena(QtWidgets.QMainWindow):
 
         if not self.multiplayer:
 
-            self.robotAI1 = AIControlledRobot(500, 500, 50,
+            self.robotAI1 = AIControlledRobot(75, 875, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
                                               n=1,
                                               difficulty=difficulty)
-            self.robotAI2 = AIControlledRobot(800, 850, 50,
+            self.robotAI2 = AIControlledRobot(875, 875, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
                                               n=2,
                                               difficulty=difficulty)
-            self.robotAI3 = AIControlledRobot(100, 850, 50,
+            self.robotAI3 = AIControlledRobot(875, 75, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
                                               n=3,
