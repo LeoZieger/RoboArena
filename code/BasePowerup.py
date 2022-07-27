@@ -5,12 +5,12 @@ from PathUtil import getPath
 
 
 class BasePowerup(QGraphicsObject):
-    def __init__(self, x, y, duration, isCollected):
+    def __init__(self, x, y):
         QGraphicsObject.__init__(self)
         self.x = x
         self.y = y
-        self.duration = duration
-        self.isCollected = isCollected
+
+
         self.texture = QImage(getPath("res", "pixil-frame-0.png"))
 
     def info(self):
