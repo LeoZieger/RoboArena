@@ -7,7 +7,7 @@ ARENA_WIDTH = 1000
 ARENA_HEIGHT = 1000
 
 
-class Arena():
+class Arena:
     def __init__(self,
                  _arena_width=ARENA_WIDTH,
                  _arena_height=ARENA_HEIGHT,
