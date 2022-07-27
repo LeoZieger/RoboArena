@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QPushButton, QApplication, \
                             QMainWindow, QLabel, QDesktopWidget, \
                             QMenu, QAction, QActionGroup
-from PyQt5.QtGui import QMovie, QPainter, QFontDatabase, QFont
+from PyQt5.QtGui import QMovie, QPainter, QFontDatabase, QFont, QIcon
 from PyQt5.QtCore import QSize
 import PyQt5.QtCore
 import sys
