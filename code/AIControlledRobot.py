@@ -38,13 +38,13 @@ class AIControlledRobot(BaseRobot):
 
     def handleDifficulty(self, difficulty):
         if difficulty == "Hard":
-            self.cooldown = 4
+            self.cooldown = 3
             self.diff_speed = 3
         elif difficulty == "Normal":
-            self.cooldown = 4
+            self.cooldown = 3
             self.diff_speed = 2.5
         elif difficulty == "Easy":
-            self.cooldown = 5
+            self.cooldown = 4
             self.diff_speed = 2
 
     def connectBainToSlots(self):
