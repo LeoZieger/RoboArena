@@ -1,7 +1,7 @@
 import numpy as np
 from PathUtil import getPath
 from Tile import Tile
-from BaseRobot import BaseRobot
+from BaseRobot import BaseRobot, MIN_SPEED, STANDARD_COOLDOWN
 import Brain
 from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QPoint
@@ -37,7 +37,7 @@ class AIControlledRobot(BaseRobot):
 
     def followPoints(self):
         if len(self.point_queue) > 0:
-            self.speed = self.MIN_SPEED
+            self.speed = MIN_SPEED
 
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)

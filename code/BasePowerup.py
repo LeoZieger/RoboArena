@@ -9,9 +9,7 @@ class BasePowerup(QGraphicsObject):
         QGraphicsObject.__init__(self)
         self.x = x
         self.y = y
-
-
-        self.texture = QImage(getPath("res", "pixil-frame-0.png"))
+        self.texture = QImage(getPath("res", "notexturePowerup.png"))
 
     def info(self):
         print(self.x)

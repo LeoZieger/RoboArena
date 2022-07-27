@@ -7,11 +7,12 @@ import numpy as np
 from Bullet import Bullet
 from Tile import Tile
 from PathUtil import getPath
-
+MAX_SPEED = 5
+MIN_SPEED = 3
+STANDARD_COOLDOWN = 1
 
 class BaseRobot(QGraphicsRectItem):
-    MAX_SPEED = 5
-    MIN_SPEED = 3
+
 
     debug = False
 
@@ -28,7 +29,7 @@ class BaseRobot(QGraphicsRectItem):
         self.texture = QImage(getPath("res", "blue_tank.png"))        # texture
 
         self.canShootAgainAt = 0
-        self.cooldown = 1
+        self.cooldown = STANDARD_COOLDOWN
 
         self.max_HP = 3
         self.current_HP = 3

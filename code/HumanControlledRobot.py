@@ -1,14 +1,14 @@
 # Author: Lasse Niederkrome, Leonard Zieger, Lukas Reutemann
 
 from PyQt5.QtWidgets import QGraphicsRectItem
-from BaseRobot import BaseRobot
+from BaseRobot import BaseRobot, MIN_SPEED, STANDARD_COOLDOWN, MAX_SPEED
 import time
 from PyQt5.QtCore import Qt
 from Tile import Tile
-from BasePowerup import BasePowerup
+from SpeedPowerup import SpeedPowerup
+from RapidfirePowerup import RapidfirePowerup
+from HealthPowerup import HealthPowerup
 
-MAX_SPEED = 5
-MIN_SPEED = 3
 
 
 class HumanControlledRobot(BaseRobot):
@@ -154,18 +154,36 @@ class HumanControlledRobot(BaseRobot):
 
     # Checks, if there is a collision with a powerup. Increasing speed
     # to MAX_SPEED@BsaseRobot.py if True
+
+
     def collisionWithPowerup(self, scene):
         if (len(scene.collidingItems(self))) > 0 and not self.isCollisionWithRobot():
             for o in scene.collidingItems(self):
-                if issubclass(type(o), BasePowerup):
-                    o.isCollected = True
-            if BaseRobot.debug:
-                print("collision with powerup!")
+                if BaseRobot.debug:
+                    print("collision with powerup!")
 
-            if self.speed < self.MAX_SPEED:
-                self.speed += 2
+                if issubclass(type(o), SpeedPowerup):
+                    o.isCollected = True
+                    if self.speed < MAX_SPEED:
+                        self.speed += 2
+
+                if issubclass(type(o), RapidfirePowerup):
+                    o.isCollected = True
+                    self.cooldown = 0.2
+
+                if issubclass(type(o), HealthPowerup):
+                    o.isCollected = True
+                    self.healPlayer()
+
             return True
 
     # Void: This function resets the speed of a HumanControlledRobot
     def resetSpeed(self):
-        self.speed -= 2
+        self.speed = MIN_SPEED
+
+    def resetCooldown(self):
+        self.cooldown = STANDARD_COOLDOWN
+
+    def healPlayer(self):
+        if self.current_HP < 3:
+            self.current_HP += 1
