@@ -49,6 +49,14 @@ class Arena():
                     self.matrix[x][y] = Tile.Wall(x, y)
                 elif tile_type == "Water":
                     self.matrix[x][y] = Tile.Water(x, y)
+                elif tile_type == "Sand":
+                    self.matrix[x][y] = Tile.Sand(x, y)
+                elif tile_type == "Snow":
+                    self.matrix[x][y] = Tile.Snow(x, y)
+                elif tile_type == "Lava-Stone":
+                    self.matrix[x][y] = Tile.LavaStone(x, y)
+                elif tile_type == "Brick":
+                    self.matrix[x][y] = Tile.Brick(x, y)
                 else:
                     self.matrix[x][y] = Tile.Tile(x, y)
 
@@ -79,6 +87,14 @@ class Arena():
                     self.matrix[x][y] = Tile.Wall(x, y)
                 elif tile_type == "Water":
                     self.matrix[x][y] = Tile.Water(x, y)
+                elif tile_type == "Sand":
+                    self.matrix[x][y] = Tile.Sand(x, y)
+                elif tile_type == "Snow":
+                    self.matrix[x][y] = Tile.Snow(x, y)
+                elif tile_type == "Lava-Stone":
+                    self.matrix[x][y] = Tile.LavaStone(x, y)
+                elif tile_type == "Brick":
+                    self.matrix[x][y] = Tile.Brick(x, y)
                 else:
                     self.matrix[x][y] = Tile.Tile(x, y)
 
@@ -108,17 +124,23 @@ class Arena():
             self.matrix[x][y] = Tile.Wall(x, y)
         elif tile_type == "Water":
             self.matrix[x][y] = Tile.Water(x, y)
+        elif tile_type == "Sand":
+            self.matrix[x][y] = Tile.Sand(x, y)
+        elif tile_type == "Snow":
+            self.matrix[x][y] = Tile.Snow(x, y)
+        elif tile_type == "Lava-Stone":
+            self.matrix[x][y] = Tile.LavaStone(x, y)
+        elif tile_type == "Brick":
+            self.matrix[x][y] = Tile.Brick(x, y)
         else:
             self.matrix[x][y] = Tile.Tile(x, y)
 
     def add_tiles_to_scene(self, scene):
-        new_scene = scene
-
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 if self.matrix[x][y].collision:
-                    new_scene.addItem(self.matrix[x][y])
-        return new_scene
+                    scene.addItem(self.matrix[x][y])
+        return scene
 
     def listOfNotCollidableTiles(self):
         notCollidableTiles = []

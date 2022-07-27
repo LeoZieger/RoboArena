@@ -1,4 +1,3 @@
-# Author: Lasse Niederkrome, Leonard Zieger, Lukas Reutemann
 
 from PyQt5.QtWidgets import QGraphicsRectItem
 from BaseRobot import BaseRobot, MIN_SPEED, STANDARD_COOLDOWN, MAX_SPEED
@@ -8,7 +7,9 @@ from Tile import Tile
 from SpeedPowerup import SpeedPowerup
 from RapidfirePowerup import RapidfirePowerup
 from HealthPowerup import HealthPowerup
+from BasePowerup import BasePowerup
 
+ROTATION_SPEED = 3
 
 
 class HumanControlledRobot(BaseRobot):
@@ -18,9 +19,8 @@ class HumanControlledRobot(BaseRobot):
 
         self.moveForward = False
         self.moveBackward = False
-        self.shooting = False
-        self.collectedSpeedPowerup = collectedSpeedPowerup
 
+        self.collectedSpeedPowerup = collectedSpeedPowerup
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
@@ -34,9 +34,9 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_A in keys_pressed:
-            self.alpha += 2
+            self.alpha += ROTATION_SPEED
         if Qt.Key_D in keys_pressed:
-            self.alpha -= 2
+            self.alpha -= ROTATION_SPEED
 
         # Bullet
         if Qt.Key_Space in keys_pressed:
@@ -60,9 +60,9 @@ class HumanControlledRobot(BaseRobot):
             self.moveBackward = False
 
         if Qt.Key_Left in keys_pressed:
-            self.alpha += 2
+            self.alpha += ROTATION_SPEED
         if Qt.Key_Right in keys_pressed:
-            self.alpha -= 2
+            self.alpha -= ROTATION_SPEED
 
         # Bullet
         if Qt.Key_Return in keys_pressed:
@@ -78,13 +78,6 @@ class HumanControlledRobot(BaseRobot):
         for o in self.scene().collidingItems(self):
             if issubclass(type(o), BaseRobot):
                 return True
-        return False
-
-    def collisionWithTile(self, scene):
-        if len(scene.collidingItems(self)) > 0:
-            for o in scene.collidingItems(self):
-                if issubclass(type(o), Tile) or isinstance(o, QGraphicsRectItem):
-                    return True
         return False
 
     def move(self):

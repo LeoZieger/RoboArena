@@ -28,7 +28,7 @@ SPEED_RAPID_DURATION = 5
 
 
 class RoboArena(QtWidgets.QMainWindow):
-    def __init__(self, multiplayer, map_name):
+    def __init__(self, multiplayer, map_name, difficulty):
         super().__init__()
         self.multiplayer = multiplayer
 
@@ -68,15 +68,18 @@ class RoboArena(QtWidgets.QMainWindow):
             self.robotAI1 = AIControlledRobot(500, 500, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=1)
+                                              n=1,
+                                              difficulty=difficulty)
             self.robotAI2 = AIControlledRobot(800, 850, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=2)
+                                              n=2,
+                                              difficulty=difficulty)
             self.robotAI3 = AIControlledRobot(100, 850, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=3)
+                                              n=3,
+                                              difficulty=difficulty)
 
             self.AI_robots.append(self.robotAI1)
             self.AI_robots.append(self.robotAI2)
@@ -222,7 +225,8 @@ class RoboArena(QtWidgets.QMainWindow):
                 self.powerupList.remove(powerUpIndex)
                 self.spawnNewPowerup()
                 SoundFX.initPwrUpSound(self)
-                QGraphicsScene.removeItem(self.scene, powerUpIndex)
+                self.buildScene()
+                
 
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
@@ -248,8 +252,19 @@ class RoboArena(QtWidgets.QMainWindow):
             for ai_r in self.AI_robots:
                 ai_r.move()
                 ai_r.followPoints()
+                ai_r.shootAtPoints()
                 ai_r.inform_brain(self.robot, ai_r)
 
+                if ai_r.shooting:
+                    bullet = ai_r.createBullet()
+                    if bullet is not None:
+                        self.scene.addItem(bullet)
+                        self.bullets.append(bullet)
+                    self.buildScene()
+
+            if self.robot.collisionWithPowerup(self.scene):
+                self.timeWhenPowerupIsCollected = self.getTimeInSec()
+                self.collectedPowerup = True
 
             if not self.multiplayer:
 
@@ -353,13 +368,11 @@ class RoboArena(QtWidgets.QMainWindow):
         for hum_r in self.hum_robots:
             if hum_r.isDestroyed():
                 self.hum_robots.remove(hum_r)
-                self.scene.removeItem(hum_r)
                 self.buildScene()
 
         for ai_r in self.AI_robots:
             if ai_r.isDestroyed():
                 self.AI_robots.remove(ai_r)
-                self.scene.removeItem(ai_r)
                 self.buildScene()
                 ai_r.stopAllThreads()
 

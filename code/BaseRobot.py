@@ -1,8 +1,6 @@
-# Author: Lasse Niederkrome
-
 from PyQt5.QtGui import QPen, QBrush, QImage
 from PyQt5.QtCore import Qt, QPoint, QRectF
-from PyQt5.QtWidgets import QGraphicsObject, QGraphicsRectItem
+from PyQt5.QtWidgets import QGraphicsObject, QGraphicsEllipseItem, QGraphicsRectItem
 import numpy as np
 from Bullet import Bullet
 from Tile import Tile
@@ -11,9 +9,8 @@ MAX_SPEED = 5
 MIN_SPEED = 3
 STANDARD_COOLDOWN = 1
 
+
 class BaseRobot(QGraphicsRectItem):
-
-
     debug = False
 
     # Basic-Robot constructor
@@ -33,6 +30,8 @@ class BaseRobot(QGraphicsRectItem):
 
         self.max_HP = 3
         self.current_HP = 3
+
+        self.shooting = False
 
         self.setRect(self.boundingRect())
 
@@ -84,7 +83,7 @@ class BaseRobot(QGraphicsRectItem):
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
-            painter.drawRect(self.boundingRect())
+            painter.drawEllipse(self.boundingRect())
 
             painter.drawLine(QPoint(int(self.x), int(self.y)),
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
@@ -120,6 +119,15 @@ class BaseRobot(QGraphicsRectItem):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 
     def createBullet(self):
+        x_pos, y_pos = self.calculateBulletStartPos()
+
+        return Bullet(x_pos,
+                      y_pos,
+                      self.getVector(),
+                      10,
+                      15)
+
+    def calculateBulletStartPos(self):
         radius_around_rect = np.sqrt(
                                 np.power(self.r, 2) + np.power(self.r, 2))
         x_pos = ((self.x + 0.5 * self.r)
@@ -127,11 +135,7 @@ class BaseRobot(QGraphicsRectItem):
         y_pos = ((self.y + 0.5 * self.r)
                  + self.getVector()[1] * radius_around_rect)
 
-        return Bullet(x_pos,
-                      y_pos,
-                      self.getVector(),
-                      10,
-                      15)
+        return x_pos, y_pos
 
     def isCollidingWithTile(self):
         for o in self.scene().collidingItems(self):
