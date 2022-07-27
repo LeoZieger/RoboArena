@@ -7,7 +7,7 @@ import warnings
 
 
 class Signals(QObject):
-    finished = pyqtSignal(int)
+    finished = pyqtSignal(int)  # When the thread is finished
 
     informAboutNextPointToMove = pyqtSignal(QPoint)
     informToClearQueueMovement = pyqtSignal()
@@ -20,7 +20,7 @@ class Brain(QRunnable):
 
     def __init__(self, n, arena, difficulty="Medium"):
         QRunnable.__init__(self)
-        self.n = n
+        self.n = n  # Index of Thread/Robot
 
         self.signals = Signals()
 
@@ -34,6 +34,8 @@ class Brain(QRunnable):
         self.stop = False
         self.informedEnaugh = False
 
+        # Time the Thread waits before finishing.
+        # This helps balancing the Brain for Difficulties
         self.sleepTime = 1
 
         self.handleDifficulty(difficulty)
@@ -47,6 +49,7 @@ class Brain(QRunnable):
             self.sleepTime = 3
 
     def inform_brain(self, human_player, robo_player):
+        # Gives the Brain infos about the current gamestate
         self.informedEnaugh = True
         self.human_player = human_player
         self.robo_player = robo_player
@@ -55,6 +58,7 @@ class Brain(QRunnable):
         self.arena_graph.add_vertices(self.arena.tile_count_x *
                                       self.arena.tile_count_y)
 
+        # Tiles that the Ai should not move to (Border, collision, etc.)
         self.unreachableTiles = self.calculateUnreachableTiles()
 
         for x in range(self.arena.tile_count_x):
@@ -135,10 +139,12 @@ class Brain(QRunnable):
         return unreachableTiles
 
     def isLegalTileInArena(self, x, y):
+        # Tiles that are within the screen
         return (0 <= x < self.arena.tile_count_x) and \
                (0 <= y < self.arena.tile_count_y)
 
     def diagonalNgbrCanBeAdded(self, offset, added_offsets):
+        # Ngbr where a diagonal line wouldnt cross water, wall, etc.abs(x)
         upper_right_ok = (1, 0) in added_offsets and (0, -1) in added_offsets
         upper_left_ok = (-1, 0) in added_offsets and (0, -1) in added_offsets
         lower_right_ok = (1, 0) in added_offsets and (0, 1) in added_offsets
@@ -166,14 +172,35 @@ class Brain(QRunnable):
              edge_color=['red'])
 
     def getTileIndexInGraph(self, x, y):
+        # igraph specific index in list of vertex
         return int(y) * self.arena.tile_count_x + int(x)
 
     def getTilePositionInArena(self, index):
+        # Arena specific x, y position in matrix
         x = index % self.arena.tile_count_x * self.arena.tile_width \
             + int(0.5 * self.arena.tile_height)  # center
         y = floor(index / self.arena.tile_count_x) * self.arena.tile_width \
             + int(0.5 * self.arena.tile_width)  # center
         return (x, y)
+
+    def widenSearch(self, IndexInGraph, searchIndex=50):
+        # When the Robot/Human is on a tile that the Robot can not be on,
+        # we calculate a neighbouring Tile that would.
+        if IndexInGraph in self.unreachableTiles:
+            reachableTileFound = False
+            for offset_x in range(-searchIndex, searchIndex, 1):
+                for offset_y in range(-searchIndex, searchIndex, 1):
+                    newIndexInGraph = IndexInGraph + offset_x + \
+                                      offset_y * self.arena.tile_count_x
+                    x, y = self.getTilePositionInArena(newIndexInGraph)
+                    if (self.isLegalTileInArena(x, y) and
+                       newIndexInGraph not in self.unreachableTiles):
+                        IndexInGraph = newIndexInGraph
+                        reachableTileFound = True
+                        break
+                if reachableTileFound:
+                    break
+        return IndexInGraph
 
     def calculateShooting(self):
         if not self.stop:
@@ -212,37 +239,8 @@ class Brain(QRunnable):
                                             0.5 * self.human_player.r) /
                                         self.arena.tile_height))
 
-            searchIndex = 50
-
-            if TOIndexInGraph in self.unreachableTiles:
-                reachableTileFound = False
-                for offset_x in range(-searchIndex, searchIndex, 1):
-                    for offset_y in range(-searchIndex, searchIndex, 1):
-                        newTOIndexInGraph = TOIndexInGraph + offset_x + \
-                                            offset_y * self.arena.tile_count_x
-                        x, y = self.getTilePositionInArena(newTOIndexInGraph)
-                        if (self.isLegalTileInArena(x, y) and
-                           newTOIndexInGraph not in self.unreachableTiles):
-                            TOIndexInGraph = newTOIndexInGraph
-                            reachableTileFound = True
-                            break
-                    if reachableTileFound:
-                        break
-
-            if FROMIndexInGraph in self.unreachableTiles:
-                reachableTileFound = False
-                for offset_x in range(-searchIndex, searchIndex, 1):
-                    for offset_y in range(-searchIndex, searchIndex, 1):
-                        newFROMIndexInGraph = FROMIndexInGraph + offset_x + \
-                                            offset_y * self.arena.tile_count_x
-                        x, y = self.getTilePositionInArena(newFROMIndexInGraph)
-                        if (self.isLegalTileInArena(x, y) and
-                           newFROMIndexInGraph not in self.unreachableTiles):
-                            FROMIndexInGraph = newFROMIndexInGraph
-                            reachableTileFound = True
-                            break
-                    if reachableTileFound:
-                        break
+            FROMIndexInGraph = self.widenSearch(FROMIndexInGraph)
+            TOIndexInGraph = self.widenSearch(TOIndexInGraph)
 
             path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
                                                        TOIndexInGraph,

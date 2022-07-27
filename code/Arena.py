@@ -37,28 +37,7 @@ class Arena():
     def init_matrix_with_texture(self, tile_type):
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
-                if tile_type == "Dirt":
-                    self.matrix[x][y] = Tile.Dirt(x, y)
-                elif tile_type == "Grass":
-                    self.matrix[x][y] = Tile.Grass(x, y)
-                elif tile_type == "Lava":
-                    self.matrix[x][y] = Tile.Lava(x, y)
-                elif tile_type == "Stone":
-                    self.matrix[x][y] = Tile.Stone(x, y)
-                elif tile_type == "Wall":
-                    self.matrix[x][y] = Tile.Wall(x, y)
-                elif tile_type == "Water":
-                    self.matrix[x][y] = Tile.Water(x, y)
-                elif tile_type == "Sand":
-                    self.matrix[x][y] = Tile.Sand(x, y)
-                elif tile_type == "Snow":
-                    self.matrix[x][y] = Tile.Snow(x, y)
-                elif tile_type == "Lava-Stone":
-                    self.matrix[x][y] = Tile.LavaStone(x, y)
-                elif tile_type == "Brick":
-                    self.matrix[x][y] = Tile.Brick(x, y)
-                else:
-                    self.matrix[x][y] = Tile.Tile(x, y)
+                self.set_tile(x, y, tile_type)
 
     def render(self, painter):
         for x in range(self.tile_count_x):
@@ -68,37 +47,19 @@ class Arena():
                                       self.matrix[x][y].texture)
 
     def loadMap(self, map_name):
+        # loading Map from .json file
+
         with open(getPath("maps", (map_name + ".json"))) as f:
             data = json.load(f)
             for t in data:
                 x = t["x"]
                 y = t["y"]
                 tile_type = t["type"]
-
-                if tile_type == "Dirt":
-                    self.matrix[x][y] = Tile.Dirt(x, y)
-                elif tile_type == "Grass":
-                    self.matrix[x][y] = Tile.Grass(x, y)
-                elif tile_type == "Lava":
-                    self.matrix[x][y] = Tile.Lava(x, y)
-                elif tile_type == "Stone":
-                    self.matrix[x][y] = Tile.Stone(x, y)
-                elif tile_type == "Wall":
-                    self.matrix[x][y] = Tile.Wall(x, y)
-                elif tile_type == "Water":
-                    self.matrix[x][y] = Tile.Water(x, y)
-                elif tile_type == "Sand":
-                    self.matrix[x][y] = Tile.Sand(x, y)
-                elif tile_type == "Snow":
-                    self.matrix[x][y] = Tile.Snow(x, y)
-                elif tile_type == "Lava-Stone":
-                    self.matrix[x][y] = Tile.LavaStone(x, y)
-                elif tile_type == "Brick":
-                    self.matrix[x][y] = Tile.Brick(x, y)
-                else:
-                    self.matrix[x][y] = Tile.Tile(x, y)
+                self.set_tile(x, y, tile_type)
 
     def saveMap(self, map_name):
+        # saving Map to .json file
+
         map_file = open(getPath("maps", (map_name + ".json")), "w")
         map_file.write("[\n")
         for x in range(self.tile_count_x):
@@ -136,6 +97,8 @@ class Arena():
             self.matrix[x][y] = Tile.Tile(x, y)
 
     def add_tiles_to_scene(self, scene):
+        # Adding all tiles with collision to the collision scene
+        # so they can be detected by other items
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):
                 if self.matrix[x][y].collision:
@@ -143,6 +106,7 @@ class Arena():
         return scene
 
     def listOfNotCollidableTiles(self):
+        # Items that for example Powerups can spawn on
         notCollidableTiles = []
         for x in range(self.tile_count_x):
             for y in range(self.tile_count_y):

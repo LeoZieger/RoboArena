@@ -25,11 +25,11 @@ class AIControlledRobot(BaseRobot):
         self.threadpool = pool
 
         self.brain.setAutoDelete(False)
-        self.threadpool.start(self.brain)
+        self.threadpool.start(self.brain)  # Brain gets added to gloabl Threadpool
 
         self.texture = texture
 
-        self.diff_speed = 1
+        self.diff_speed = 1  # Difficult specific speed of robots
 
         self.handleDifficulty(difficulty)
 
@@ -158,6 +158,7 @@ class AIControlledRobot(BaseRobot):
         return True
 
     def hasReachedPoint(self, point):
+        # This defines when the robot has reached the given point by an offset
         offset = 2
         dist = np.sqrt(np.power(point.x() - (self.x + 0.5 * self.r), 2)
                        + np.power(point.y() - (self.y + 0.5 * self.r), 2))
@@ -246,5 +247,6 @@ class AIControlledRobot(BaseRobot):
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
                                     int(self.y + (self.getVector()[1] * 40))))
 
+            # Rendering the trace of the path
             for p in self.point_queue:
                 painter.drawPoint(p)
