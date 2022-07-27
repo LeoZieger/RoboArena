@@ -110,7 +110,7 @@ class HumanControlledRobot(BaseRobot):
                                         self.x - (self.getVector()[0] * self.speed),
                                         self.y - (self.getVector()[1] * self.speed))
 
-            # Checking UV for UV, if collision takes place
+            # We move forward in minimal steps to make sure to detect Collision early
             for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
                 collision = False
 

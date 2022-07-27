@@ -6,7 +6,7 @@ import BaseRobot
 
 
 class Signals(QObject):
-    finished = pyqtSignal(int)
+    finished = pyqtSignal(int)  # When the Thread is done
 
     informAboutNextPointToMove = pyqtSignal(QPoint)
     informToClearQueueMovement = pyqtSignal()
@@ -19,7 +19,7 @@ class Brain(QRunnable):
 
     def __init__(self, n, arena, difficulty="Medium"):
         QRunnable.__init__(self)
-        self.n = n
+        self.n = n  # index of AI / Thread
 
         self.signals = Signals()
 
@@ -46,6 +46,7 @@ class Brain(QRunnable):
             self.sleepTime = 7
 
     def inform_brain(self, human_player, robo_player):
+        # Get infos about the current game-state
         self.informedEnaugh = True
         self.human_player = human_player
         self.robo_player = robo_player
@@ -63,6 +64,7 @@ class Brain(QRunnable):
                 if tileIndexInGraph in self.unreachableTiles:
                     continue
 
+                # iterating over every Neighbour of the current Tile
                 added_ngbr_offsets = []
                 direct_ngbr_offsets = [(0, 1), (1, 0), (0, -1), (-1, 0)]
                 diagonal_ngbr_offsets = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
@@ -138,6 +140,8 @@ class Brain(QRunnable):
                (0 <= y < self.arena.tile_count_y)
 
     def diagonalNgbrCanBeAdded(self, offset, added_offsets):
+        # This makes sure there is no diagonal line over water etc
+
         upper_right_ok = (1, 0) in added_offsets and (0, -1) in added_offsets
         upper_left_ok = (-1, 0) in added_offsets and (0, -1) in added_offsets
         lower_right_ok = (1, 0) in added_offsets and (0, 1) in added_offsets
@@ -165,9 +169,11 @@ class Brain(QRunnable):
              edge_color=['red'])
 
     def getTileIndexInGraph(self, x, y):
+        # igraph specific index in List of vertex
         return int(y) * self.arena.tile_count_x + int(x)
 
     def getTilePositionInArena(self, index):
+        # tile-coords in Arena
         x = index % self.arena.tile_count_x * self.arena.tile_width \
             + int(0.5 * self.arena.tile_height)  # center
         y = floor(index / self.arena.tile_count_x) * self.arena.tile_width \
@@ -189,6 +195,7 @@ class Brain(QRunnable):
             # self.plotGraph()
 
         if self.informedEnaugh:
+            # Position of robot in Graph
             FROMIndexInGraph = self.getTileIndexInGraph(
                                     floor(
                                         (self.robo_player.x +
@@ -199,6 +206,7 @@ class Brain(QRunnable):
                                             0.5 * self.robo_player.r) /
                                         self.arena.tile_width))
 
+            # Position of Human in Graph
             TOIndexInGraph = self.getTileIndexInGraph(
                                     floor(
                                         (self.human_player.x +
@@ -209,6 +217,9 @@ class Brain(QRunnable):
                                             0.5 * self.human_player.r) /
                                         self.arena.tile_height))
 
+            # If the humanplayer / roboplayer is in some area the robot
+            # can not reach (see unreachable Tiles) the ngbr Tiles
+            # are looked at as targets
             if TOIndexInGraph in self.unreachableTiles:
                 reachableTileFound = False
                 for offset_x in range(-1, 0, 1):
@@ -235,6 +246,7 @@ class Brain(QRunnable):
                     if reachableTileFound:
                         break
 
+            # This works. Trust me I'm an Engineer
             try:
                 path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
                                                            TOIndexInGraph,
@@ -261,6 +273,7 @@ class Brain(QRunnable):
             self.calculatePath()
             self.calculateShooting()
 
+            # This slows the robot down in how smart he is
             time.sleep(self.sleepTime)
 
             if not self.stop:

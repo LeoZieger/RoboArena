@@ -45,6 +45,8 @@ class AIControlledRobot(BaseRobot):
             self.MIN_SPEED = 1
 
     def connectBainToSlots(self):
+        # This is the base of communication between the Thread and the AI
+
         self.brain.signals.finished.connect(self.setThreadToFinished)
 
         self.brain.signals.informAboutNextPointToMove.connect(
@@ -67,6 +69,8 @@ class AIControlledRobot(BaseRobot):
         self.shoot_queue.append(new_point)
 
     def followPoints(self):
+        # Follow the Points given by the Brain
+
         if len(self.point_queue) > 0:
             self.speed = self.MIN_SPEED
 
@@ -79,6 +83,8 @@ class AIControlledRobot(BaseRobot):
             self.speed = 0
 
     def shootAtPoints(self):
+        # Shooting at Points given by the Brain
+
         if len(self.shoot_queue) > 0:
             if time.time() - self.canShootAgainAt > 0:
                 self.shooting = True
@@ -114,7 +120,11 @@ class AIControlledRobot(BaseRobot):
         v = self.getVector()
         self.alpha = old_apha
 
+        # How much the bullet travels.
+        # This can be chosen higher to improve performance
         step_size = 1
+
+        # Error on when the bullet reached its targets point
         offset = 40
 
         x, y = self.calculateBulletStartPos()
@@ -129,6 +139,7 @@ class AIControlledRobot(BaseRobot):
 
         dist = np.sqrt(np.power(d_x, 2) + np.power(d_y, 2))
 
+        # As long as the dummy bullet didnt reach the point its moved forward
         while(dist > offset):
             x += v[0] * step_size
             y += v[1] * step_size
@@ -168,6 +179,8 @@ class AIControlledRobot(BaseRobot):
         self.shoot_queue.clear()
 
     def calculateAlphaToReachPoint(self, point):
+        # Calculates the direction of view by the robot to look at point
+
         centered_x = (self.x + (0.5 * self.r))
         centered_y = (self.y + (0.5 * self.r))
 
@@ -198,6 +211,7 @@ class AIControlledRobot(BaseRobot):
                                         self.x + (self.getVector()[0] * self.speed),
                                         self.y + (self.getVector()[1] * self.speed))
 
+            # We move forward in minimal steps to make sure to detect Collision early
             for i in range(int((self.getVector()[0] * self.speed) / v_unit[0])):
                 collision = False
 
@@ -243,5 +257,6 @@ class AIControlledRobot(BaseRobot):
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
                                     int(self.y + (self.getVector()[1] * 40))))
 
+            # Path of calculated path
             for p in self.point_queue:
                 painter.drawPoint(p)
