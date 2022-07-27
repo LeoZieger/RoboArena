@@ -10,13 +10,15 @@ ROTATION_SPEED = 3
 
 class HumanControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, collectedSpeedPowerup):
-        BaseRobot.__init__(self, x, y, r, alpha, speed)
+    def __init__(self, x, y, r, alpha, speed, texture, collectedSpeedPowerup):
+        BaseRobot.__init__(self, x, y, r, alpha, speed, texture)
 
         self.moveForward = False
         self.moveBackward = False
 
         self.collectedSpeedPowerup = collectedSpeedPowerup
+
+        self.texture = texture
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:

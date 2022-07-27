@@ -1,20 +1,21 @@
 import numpy as np
-from PathUtil import getPath
-from Tile import Tile
-from BaseRobot import BaseRobot, MIN_SPEED
+from BaseRobot import BaseRobot
 import Brain
-from PyQt5.QtGui import QImage, QPen
+from PyQt5.QtGui import QPen
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
 from Bullet import Bullet
 from SpeedPowerup import SpeedPowerup
 import time
 
+from Tile import Tile
+
 
 class AIControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, arena, pool, n=0, difficulty="Normal"):
-        BaseRobot.__init__(self, x, y, r, alpha, speed)
+    def __init__(self, x, y, r, alpha, speed, texture,
+                 arena, pool, n=0, difficulty="Normal"):
+        BaseRobot.__init__(self, x, y, r, alpha, speed, texture)
         self.n = n
 
         self.brain = Brain.Brain(self.n, arena, difficulty=difficulty)
@@ -26,7 +27,9 @@ class AIControlledRobot(BaseRobot):
         self.brain.setAutoDelete(False)
         self.threadpool.start(self.brain)
 
-        self.texture = QImage(getPath("res", "red_tank.png"))
+        self.texture = texture
+
+        self.diff_speed = 1
 
         self.point_queue = []
         self.shoot_queue = []
@@ -34,13 +37,13 @@ class AIControlledRobot(BaseRobot):
     def handleDifficulty(self, difficulty):
         if difficulty == "Hard":
             self.cooldown = 2
-            self.MIN_SPEED = 3
+            self.diff_speed = 3
         elif difficulty == "Normal":
             self.cooldown = 4
-            self.MIN_SPEED = 2
+            self.diff_speed = 2
         elif difficulty == "Easy":
             self.cooldown = 6
-            self.MIN_SPEED = 1
+            self.diff_speed = 1
 
     def connectBainToSlots(self):
         self.brain.signals.finished.connect(self.setThreadToFinished)
@@ -66,7 +69,7 @@ class AIControlledRobot(BaseRobot):
 
     def followPoints(self):
         if len(self.point_queue) > 0:
-            self.speed = MIN_SPEED
+            self.speed = self.diff_speed
 
             if self.hasReachedPoint(self.point_queue[0]):
                 self.point_queue.pop(0)

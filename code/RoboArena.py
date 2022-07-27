@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import Qt, QTimer, QThreadPool, QPoint
-from PyQt5.QtGui import QPen, QFont
+from PyQt5.QtGui import QPen, QFont, QImage
 from PyQt5.QtWidgets import QGraphicsScene, QGraphicsRectItem, QDesktopWidget
 import time
 from os.path import exists
@@ -28,7 +28,7 @@ SPEED_RAPID_DURATION = 5
 
 
 class RoboArena(QtWidgets.QMainWindow):
-    def __init__(self, multiplayer, map_name, difficulty):
+    def __init__(self, multiplayer, map_name, difficulty="Normal"):
         super().__init__()
         self.multiplayer = multiplayer
 
@@ -56,7 +56,10 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
-        self.robot = HumanControlledRobot(75, 75, 50, 0, 3, False)
+        self.robot = HumanControlledRobot(100, 50,
+                                          50, 0, 3,
+                                          QImage(getPath("res", "blue_tank.png")),
+                                          False)
 
         self.hum_robots = []
         self.AI_robots = []
@@ -64,19 +67,32 @@ class RoboArena(QtWidgets.QMainWindow):
         self.hum_robots.append(self.robot)
 
         if not self.multiplayer:
+            texture = QImage()
+            if difficulty == "Easy":
+                texture = QImage(getPath("res", "green_tank.png"))
+            elif difficulty == "Normal":
+                texture = QImage(getPath("res", "yellow_tank.png"))
+            elif difficulty == "Hard":
+                texture = QImage(getPath("res", "red_tank.png"))
 
-            self.robotAI1 = AIControlledRobot(75, 875, 50,
-                                              0, 2, copy.copy(self.arena),
+            self.robotAI1 = AIControlledRobot(500, 500, 50,
+                                              0, 2,
+                                              texture,
+                                              copy.copy(self.arena),
                                               self.threadpool,
                                               n=1,
-                                              difficulty=difficulty)
-            self.robotAI2 = AIControlledRobot(875, 875, 50,
-                                              0, 2, copy.copy(self.arena),
+                                              difficulty=difficulty,)
+            self.robotAI2 = AIControlledRobot(800, 850, 50,
+                                              0, 2,
+                                              texture,
+                                              copy.copy(self.arena),
                                               self.threadpool,
                                               n=2,
                                               difficulty=difficulty)
-            self.robotAI3 = AIControlledRobot(875, 75, 50,
-                                              0, 2, copy.copy(self.arena),
+            self.robotAI3 = AIControlledRobot(100, 850, 50,
+                                              0, 2,
+                                              texture,
+                                              copy.copy(self.arena),
                                               self.threadpool,
                                               n=3,
                                               difficulty=difficulty)
@@ -85,7 +101,10 @@ class RoboArena(QtWidgets.QMainWindow):
             self.AI_robots.append(self.robotAI2)
             self.AI_robots.append(self.robotAI3)
         else:
-            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3, False)
+            self.robot2 = HumanControlledRobot(875, 875, 50, 180, 3,
+                                               QImage(
+                                                getPath("res", "red_tank.png")),
+                                               False)
             self.hum_robots.append(self.robot2)
 
         BORDER_WIDTH = 10
