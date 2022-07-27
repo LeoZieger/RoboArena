@@ -1,8 +1,7 @@
 import numpy as np
-from PathUtil import getPath
 from BaseRobot import BaseRobot
 import Brain
-from PyQt5.QtGui import QImage, QPen
+from PyQt5.QtGui import QPen
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
 from Tile import Tile
@@ -15,8 +14,9 @@ import time
 
 class AIControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, arena, pool, n=0, difficulty="Normal"):
-        BaseRobot.__init__(self, x, y, r, alpha, speed)
+    def __init__(self, x, y, r, alpha, speed, texture,
+                 arena, pool, n=0, difficulty="Normal"):
+        BaseRobot.__init__(self, x, y, r, alpha, speed, texture)
         self.n = n
 
         self.brain = Brain.Brain(self.n, arena, difficulty=difficulty)
@@ -28,7 +28,7 @@ class AIControlledRobot(BaseRobot):
         self.brain.setAutoDelete(False)
         self.threadpool.start(self.brain)
 
-        self.texture = QImage(getPath("res", "red_tank.png"))
+        self.texture = texture
 
         self.point_queue = []
         self.shoot_queue = []

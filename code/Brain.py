@@ -27,8 +27,8 @@ class Brain(QRunnable):
         self.arena_graph = Graph()
         self.unreachableTiles = []
 
-        self.human_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0)
-        self.robo_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0)
+        self.human_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0, None)
+        self.robo_player = BaseRobot.BaseRobot(0, 0, 0, 0, 0, None)
 
         self.stop = False
         self.informedEnaugh = False
