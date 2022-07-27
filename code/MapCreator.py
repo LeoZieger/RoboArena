@@ -1,6 +1,6 @@
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTimer, Qt, QPoint
-from PyQt5.QtGui import QPen, QFontDatabase, QFont, QColor
+from PyQt5.QtGui import QPen, QFontDatabase, QFont, QColor, QIcon
 from PyQt5.QtWidgets import QDesktopWidget
 from PyQt5.QtWidgets import QApplication
 import Arena
