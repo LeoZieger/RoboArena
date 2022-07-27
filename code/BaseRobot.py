@@ -26,8 +26,8 @@ class BaseRobot(QGraphicsEllipseItem):
         self.canShootAgainAt = 0
         self.cooldown = STANDARD_COOLDOWN
 
-        self.max_HP = 3
-        self.current_HP = 3
+        self.max_HP = 5
+        self.current_HP = 5
 
         self.shooting = False
 

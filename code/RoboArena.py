@@ -264,6 +264,7 @@ class RoboArena(QtWidgets.QMainWindow):
                 SoundFX.initPwrUpSound(self)
                 self.buildScene()
 
+    # render the frames each tick
     def tick(self):
         delta_time = (time.time_ns() // 1_000_000) - self.t_last
 
@@ -272,11 +273,13 @@ class RoboArena(QtWidgets.QMainWindow):
         self.t_last += delta_time
         self.t_accumulator += delta_time
 
+        # Update the positions of the entities only if a certain time has passed
         while self.t_accumulator > UPDATE_TIME:
             self.robot.reactToUserInput(self.keys_pressed)
             if self.multiplayer:
                 self.robot2.reactToUserInput2(self.keys_pressed)
 
+            # Moving and shooting for the AI and human players
             for hum_r in self.hum_robots:
                 hum_r.move()
 
@@ -337,8 +340,7 @@ class RoboArena(QtWidgets.QMainWindow):
 
             self.update()
 
-        # Here all the objetcs in the game are drawn to the canvas ------
-
+        # Here all the objetcs in the game are drawn on the canvas
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
         self.painter.end()
@@ -362,13 +364,13 @@ class RoboArena(QtWidgets.QMainWindow):
             b.render(self.painter)
         self.painter.end()
 
-        # ---------------------------------------------------------------
-
+        # Update the fps approximately every second
         if self.clock_time > 1000:
             self.fps = int(self.clock / (self.clock_time / 1000))
             self.clock_time = 0
             self.clock = 0
 
+        # Draw the fps counter
         self.painter.begin(self.label.pixmap())
         self.painter.setPen(QPen(Qt.white, 20, Qt.SolidLine))
         self.painter.setFont(QFont(self.font))
