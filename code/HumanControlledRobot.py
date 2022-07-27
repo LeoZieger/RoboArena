@@ -18,9 +18,8 @@ class HumanControlledRobot(BaseRobot):
 
         self.moveForward = False
         self.moveBackward = False
-        self.shooting = False
-        self.collectedSpeedPowerup = collectedSpeedPowerup
 
+        self.collectedSpeedPowerup = collectedSpeedPowerup
 
     def reactToUserInput(self, keys_pressed):
         if Qt.Key_W in keys_pressed:
