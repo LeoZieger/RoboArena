@@ -8,8 +8,11 @@ import BaseRobot
 class Signals(QObject):
     finished = pyqtSignal(int)
 
-    informAboutNextPoint = pyqtSignal(QPoint)
-    informToClearQueue = pyqtSignal()
+    informAboutNextPointToMove = pyqtSignal(QPoint)
+    informToClearQueueMovement = pyqtSignal()
+
+    informAboutNextPointToShoot = pyqtSignal(QPoint)
+    informToClearQueueShooting = pyqtSignal()
 
 
 class BrainLVL1(QRunnable):
@@ -159,79 +162,91 @@ class BrainLVL1(QRunnable):
             + int(0.5 * self.arena.tile_width)  # center
         return (x, y)
 
-    def run(self):
+    def calculateShooting(self):
+        if not self.stop:
+            self.signals.informToClearQueueShooting.emit()
+
+            self.signals.informAboutNextPointToShoot.emit(
+                QPoint(int(self.human_player.rect().center().x()),
+                       int(self.human_player.rect().center().y()))
+            )
+
+    def calculatePath(self):
         if self.arena_graph.vcount() == 0:
             self.createGraph()
             # self.plotGraph()
 
+        if self.informedEnaugh:
+            FROMIndexInGraph = self.getTileIndexInGraph(
+                                    floor(
+                                        (self.robo_player.x +
+                                            0.5 * self.robo_player.r) /
+                                        self.arena.tile_width),
+                                    floor(
+                                        (self.robo_player.y +
+                                            0.5 * self.robo_player.r) /
+                                        self.arena.tile_width))
+
+            TOIndexInGraph = self.getTileIndexInGraph(
+                                    floor(
+                                        (self.human_player.x +
+                                            0.5 * self.robo_player.r) /
+                                        self.arena.tile_width),
+                                    floor(
+                                        (self.human_player.y +
+                                            0.5 * self.robo_player.r) /
+                                        self.arena.tile_height))
+
+            if TOIndexInGraph in self.unreachableTiles:
+                reachableTileFound = False
+                for offset_x in range(-1, 0, 1):
+                    for offset_y in range(-1, 0, 1):
+                        newTOIndexInGraph = TOIndexInGraph + offset_x + \
+                                            offset_y * self.arena.tile_count_x
+                        if newTOIndexInGraph not in self.unreachableTiles:
+                            TOIndexInGraph = newTOIndexInGraph
+                            reachableTileFound = True
+                            break
+                    if reachableTileFound:
+                        break
+
+            if FROMIndexInGraph in self.unreachableTiles:
+                reachableTileFound = False
+                for offset_x in range(-1, 0, 1):
+                    for offset_y in range(-1, 0, 1):
+                        newFROMIndexInGraph = FROMIndexInGraph + offset_x + \
+                                                offset_y * self.arena.tile_count_x
+                        if newFROMIndexInGraph not in self.unreachableTiles:
+                            FROMIndexInGraph = newFROMIndexInGraph
+                            reachableTileFound = True
+                            break
+                    if reachableTileFound:
+                        break
+
+            path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
+                                                       TOIndexInGraph,
+                                                       output="vpath")
+
+            # Informing AI about Point to move to
+            if len(path[0]) > 0:
+                self.signals.informToClearQueueMovement.emit()
+
+                path[0].pop(0)
+                for p in path[0]:
+                    x, y = self.getTilePositionInArena(p)
+                    if not self.stop:
+                        self.signals.informAboutNextPointToMove.emit(
+                                                                    QPoint(int(x),
+                                                                           int(y)))
+
+    def run(self):
         if self.stop:
             return
         else:
-            if self.informedEnaugh:
-                FROMIndexInGraph = self.getTileIndexInGraph(
-                                        floor(
-                                            (self.robo_player.x +
-                                             0.5 * self.robo_player.r) /
-                                            self.arena.tile_width),
-                                        floor(
-                                            (self.robo_player.y +
-                                             0.5 * self.robo_player.r) /
-                                            self.arena.tile_width))
+            self.calculatePath()
+            self.calculateShooting()
 
-                TOIndexInGraph = self.getTileIndexInGraph(
-                                        floor(
-                                            (self.human_player.x +
-                                             0.5 * self.robo_player.r) /
-                                            self.arena.tile_width),
-                                        floor(
-                                            (self.human_player.y +
-                                             0.5 * self.robo_player.r) /
-                                            self.arena.tile_height))
+            time.sleep(1)
 
-                if TOIndexInGraph in self.unreachableTiles:
-                    reachableTileFound = False
-                    for offset_x in range(-1, 0, 1):
-                        for offset_y in range(-1, 0, 1):
-                            newTOIndexInGraph = TOIndexInGraph + offset_x + \
-                                                offset_y * self.arena.tile_count_x
-                            if newTOIndexInGraph not in self.unreachableTiles:
-                                TOIndexInGraph = newTOIndexInGraph
-                                reachableTileFound = True
-                                break
-                        if reachableTileFound:
-                            break
-
-                if FROMIndexInGraph in self.unreachableTiles:
-                    reachableTileFound = False
-                    for offset_x in range(-1, 0, 1):
-                        for offset_y in range(-1, 0, 1):
-                            newFROMIndexInGraph = FROMIndexInGraph + offset_x + \
-                                                  offset_y * self.arena.tile_count_x
-                            if newFROMIndexInGraph not in self.unreachableTiles:
-                                FROMIndexInGraph = newFROMIndexInGraph
-                                reachableTileFound = True
-                                break
-                        if reachableTileFound:
-                            break
-
-                path = self.arena_graph.get_shortest_paths(FROMIndexInGraph,
-                                                           TOIndexInGraph,
-                                                           output="vpath")
-
-                if len(path[0]) > 0:
-                    self.signals.informToClearQueue.emit()
-
-                    path[0].pop(0)
-                    for p in path[0]:
-                        x, y = self.getTilePositionInArena(p)
-                        if not self.stop:
-                            self.signals.informAboutNextPoint.emit(QPoint(int(x),
-                                                                          int(y)))
-
-                    time.sleep(1)
-
-                    if not self.stop:
-                        self.signals.finished.emit(self.n)
-            else:
-                if not self.stop:
-                    self.signals.finished.emit(self.n)
+            if not self.stop:
+                self.signals.finished.emit(self.n)

@@ -7,6 +7,10 @@ from PyQt5.QtGui import QImage, QPen
 from PyQt5.QtCore import Qt, QPoint
 from PyQt5.QtWidgets import QGraphicsRectItem
 
+from Bullet import Bullet
+
+import time
+
 
 class AIControlledRobot(BaseRobot):
 
@@ -16,11 +20,9 @@ class AIControlledRobot(BaseRobot):
 
         self.brain = Brain.BrainLVL1(self.n, arena)
 
-        self.threadpool = pool
+        self.connectBainToSlots()
 
-        self.brain.signals.informAboutNextPoint.connect(self.setNewPointToMoveTo)
-        self.brain.signals.finished.connect(self.setThreadToFinished)
-        self.brain.signals.informToClearQueue.connect(self.clearFollowPointQueue)
+        self.threadpool = pool
 
         self.brain.setAutoDelete(False)
         self.threadpool.start(self.brain)
@@ -28,12 +30,29 @@ class AIControlledRobot(BaseRobot):
         self.texture = QImage(getPath("res", "red_tank.png"))
 
         self.point_queue = []
+        self.shoot_queue = []
+
+    def connectBainToSlots(self):
+        self.brain.signals.finished.connect(self.setThreadToFinished)
+
+        self.brain.signals.informAboutNextPointToMove.connect(
+                                                        self.setNewPointToMoveTo)
+        self.brain.signals.informToClearQueueMovement.connect(
+                                                        self.clearFollowPointQueue)
+
+        self.brain.signals.informAboutNextPointToShoot.connect(
+                                                        self.setNewPointToShootAt)
+        self.brain.signals.informToClearQueueShooting.connect(
+                                                        self.clearShootingQueue)
 
     def inform_brain(self, human_player, robo_player):
         self.brain.inform_brain(human_player, robo_player)
 
     def setNewPointToMoveTo(self, new_point):
         self.point_queue.append(new_point)
+
+    def setNewPointToShootAt(self, new_point):
+        self.shoot_queue.append(new_point)
 
     def followPoints(self):
         if len(self.point_queue) > 0:
@@ -47,6 +66,76 @@ class AIControlledRobot(BaseRobot):
         else:
             self.speed = 0
 
+    def shootAtPoints(self):
+        if len(self.shoot_queue) > 0:
+            if time.time() - self.canShootAgainAt > 0:
+                self.shooting = True
+                self.canShootAgainAt = time.time() + self.cooldown
+            else:
+                self.shooting = False
+        else:
+            self.shooting = False
+
+    def createBullet(self):
+        x_pos, y_pos = self.calculateBulletStartPos()
+
+        # Turning around to point where to shoot at
+        if len(self.shoot_queue) > 0:
+            point = self.shoot_queue[0]
+            new_alpha = self.calculateAlphaToReachPoint(point)
+            self.alpha = new_alpha
+            self.shoot_queue.pop(0)
+
+            if self.hasClearShot(point):
+                return Bullet(x_pos,
+                              y_pos,
+                              self.getVector(),
+                              10,
+                              15)
+
+    def hasClearShot(self, point):
+        # Simulating 'around and shooting a dummy bullet'
+        old_apha = self.alpha
+        new_alpha = self.calculateAlphaToReachPoint(point)
+        self.alpha = new_alpha
+        v = self.getVector()
+        self.alpha = old_apha
+
+        step_size = 1
+        offset = 40
+
+        x, y = self.calculateBulletStartPos()
+
+        dummy_obj = QGraphicsRectItem(x, y, 1, 1)
+        dummy_obj.setRect(x, y, 1, 1)
+
+        self.scene().addItem(dummy_obj)
+
+        d_x = point.x() - x
+        d_y = point.y() - y
+
+        dist = np.sqrt(np.power(d_x, 2) + np.power(d_y, 2))
+
+        while(dist > offset):
+            x += v[0] * step_size
+            y += v[1] * step_size
+
+            dummy_obj.setRect(x, y, 1, 1)
+
+            d_x = point.x() - x
+            d_y = point.y() - y
+
+            dist = np.sqrt(np.power(d_x, 2) + np.power(d_y, 2))
+
+            for o in self.scene().collidingItems(dummy_obj):
+                if isinstance(o, Tile) and not o.flyThrough:
+                    self.scene().removeItem(dummy_obj)
+                    return False
+                elif isinstance(o, QGraphicsRectItem):
+                    self.scene().removeItem(dummy_obj)
+                    return False
+        return True
+
     def hasReachedPoint(self, point):
         offset = 2
         dist = np.sqrt(np.power(point.x() - (self.x + 0.5 * self.r), 2)
@@ -56,6 +145,9 @@ class AIControlledRobot(BaseRobot):
 
     def clearFollowPointQueue(self):
         self.point_queue.clear()
+
+    def clearShootingQueue(self):
+        self.shoot_queue.clear()
 
     def calculateAlphaToReachPoint(self, point):
         centered_x = (self.x + (0.5 * self.r))

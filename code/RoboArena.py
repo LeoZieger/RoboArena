@@ -228,7 +228,14 @@ class RoboArena(QtWidgets.QMainWindow):
             for ai_r in self.AI_robots:
                 ai_r.move()
                 ai_r.followPoints()
+                ai_r.shootAtPoints()
                 ai_r.inform_brain(self.robot, ai_r)
+
+                if ai_r.shooting:
+                    bullet = ai_r.createBullet()
+                    if bullet is not None:
+                        self.scene.addItem(bullet)
+                        self.bullets.append(bullet)
 
             if self.robot.collisionWithPowerup(self.scene):
                 self.timeWhenPowerupIsCollected = self.getTimeInSec()
