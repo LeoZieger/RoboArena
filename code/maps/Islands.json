@@ -204,7 +204,7 @@
 {"type":"Sand", "x":5, "y":2},
 {"type":"Grass", "x":5, "y":3},
 {"type":"Grass", "x":5, "y":4},
-{"type":"Sand", "x":5, "y":5},
+{"type":"Grass", "x":5, "y":5},
 {"type":"Grass", "x":5, "y":6},
 {"type":"Grass", "x":5, "y":7},
 {"type":"Grass", "x":5, "y":8},
