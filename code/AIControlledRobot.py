@@ -237,7 +237,7 @@ class AIControlledRobot(BaseRobot):
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
-            painter.drawRect(self.boundingRect())
+            painter.drawEllipse(self.boundingRect())
 
             painter.drawLine(QPoint(int(self.x), int(self.y)),
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
