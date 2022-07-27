@@ -32,7 +32,7 @@ class RoboArena(QtWidgets.QMainWindow):
     def __init__(self, multiplayer, map_name, difficulty="Normal"):
         super().__init__()
         # Load font
-        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        id = QFontDatabase.addApplicationFont(getPath("res", "PixeloidMono.ttf"))
         families = QFontDatabase.applicationFontFamilies(id)
         self.font = families[0]
 
@@ -65,7 +65,7 @@ class RoboArena(QtWidgets.QMainWindow):
         # ThreadPool where each AI starts their Threads in
         self.threadpool = QThreadPool.globalInstance()
 
-        self.robot = HumanControlledRobot(100, 50,
+        self.robot = HumanControlledRobot(75, 75,
                                           50, 0, 3,
                                           QImage(getPath("res", "blue_tank.png")),
                                           False)
@@ -84,21 +84,21 @@ class RoboArena(QtWidgets.QMainWindow):
             elif difficulty == "Hard":
                 texture = QImage(getPath("res", "red_tank.png"))
 
-            self.robotAI1 = AIControlledRobot(500, 500, 50,
+            self.robotAI1 = AIControlledRobot(875, 75, 50,
                                               0, 2,
                                               texture,
                                               copy.copy(self.arena),
                                               self.threadpool,
                                               n=1,
                                               difficulty=difficulty,)
-            self.robotAI2 = AIControlledRobot(800, 850, 50,
+            self.robotAI2 = AIControlledRobot(75, 875, 50,
                                               0, 2,
                                               texture,
                                               copy.copy(self.arena),
                                               self.threadpool,
                                               n=2,
                                               difficulty=difficulty)
-            self.robotAI3 = AIControlledRobot(100, 850, 50,
+            self.robotAI3 = AIControlledRobot(875, 875, 50,
                                               0, 2,
                                               texture,
                                               copy.copy(self.arena),
@@ -214,6 +214,9 @@ class RoboArena(QtWidgets.QMainWindow):
     def keyReleaseEvent(self, event):
         self.keys_pressed.remove(event.key())
 
+    # Creates 1 of:
+    # - speedpowerup/health/rapidfire
+    # returns the powauP
     def generateRandomPowerup(self):
         self.randomTile = self.listOfNotCollidableTiles[
             random.randint(0, len(self.listOfNotCollidableTiles))
@@ -244,13 +247,13 @@ class RoboArena(QtWidgets.QMainWindow):
                                                     False)
             return self.newPowerup
 
+    # Appends a rnmd powerup into a list and adds a hitbox
     def spawnNewPowerup(self):
         temp = self.generateRandomPowerup()
         self.powerupList.append(temp)
         self.scene.addItem(temp)
 
-        # Takes 2 numbers, spawns all powerups after a
-        # random time between these 2 numbers
+    # Spawns the powerups and despawns them if collected
     def renderRandomTimePowerup(self):
         for powerUpIndex in self.powerupList:
             powerUpIndex.render(self.painter)
@@ -296,15 +299,13 @@ class RoboArena(QtWidgets.QMainWindow):
                         self.bullets.append(bullet)
                     self.buildScene()
 
-            if self.robot.collisionWithPowerup(self.scene):
-                self.timeWhenPowerupIsCollected = self.getTimeInSec()
-                self.collectedPowerup = True
-
             if not self.multiplayer:
-
+                # Saves the time when a powerups is collected for duration
+                # purpose
                 if self.robot.collisionWithPowerup(self.scene):
                     self.timeWhenPowerupIsCollected = self.getTimeInSec()
                     self.collectedPowerup = True
+                # if collected, resets effect after duration
                 if self.collectedPowerup:
                     if self.timeWhenPowerupIsCollected + \
                             SPEED_RAPID_DURATION < self.getTimeInSec():
@@ -313,6 +314,7 @@ class RoboArena(QtWidgets.QMainWindow):
                         self.collectedPowerup = False
 
             else:
+                # this is the same for 2 players
                 for robos in self.hum_robots:
                     if robos.collisionWithPowerup(self.scene):
                         self.timeWhenPowerupIsCollected = self.getTimeInSec()

@@ -2,7 +2,11 @@ from PyQt5 import QtCore, QtMultimedia
 from PathUtil import getPath
 
 
+# This is our class, where we define our SoundFX.
+# These will later be used in other classes, mainly
+# Robo Arena.
 class SoundFX:
+    # Sound when u get a powerup
     def initPwrUpSound(self):
         powerupsound = getPath("res", "PowerUpZap.wav")
         self.powerupsound = QtMultimedia.QSoundEffect()
@@ -10,6 +14,7 @@ class SoundFX:
         self.powerupsound.setVolume(0.3)  # Choose a value between 0 and 1
         self.powerupsound.play()
 
+    # Ingame Soundtrack
     def initSoundrack(self, bool):
         # This is the part where we can setup the soundtrack
         if bool:
@@ -22,6 +27,7 @@ class SoundFX:
         else:
             self.soundtrack.stop()
 
+    # Menu Soundtrack
     def initMenuSoundtrack(self, bool):
         if bool:
             menutrack = getPath("res", "RoboArena_Menu_Soundtrack.wav")
@@ -34,6 +40,7 @@ class SoundFX:
         else:
             self.menutrack.stop()
 
+    # This is a small transition-sound after the game is over
     def transitionSound(self):
         transitionSFX = getPath("res", "transitionSound.wav")
         self.transitionSFX = QtMultimedia.QSoundEffect()
@@ -41,6 +48,7 @@ class SoundFX:
         self.transitionSFX.setVolume(0.1)  # Choose a value between 0 and 1
         self.transitionSFX.play()
 
+    # NOT USED YET
     def initWinningScreen(self):
         winningScreenSFX = getPath("res", "RoboArena_WinningScreen.wav")
         self.winningScreenSFX = QtMultimedia.QSoundEffect()
@@ -49,6 +57,7 @@ class SoundFX:
         self.winningScreenSFX.setVolume(0.1)  # Choose a value between 0 and 1
         self.winningScreenSFX.play()
 
+    # Shooting Sound for enemy&player
     def shootingEnemySound(self):
         QtMultimedia.QSound.play(enemyShootingFX)
 
@@ -56,5 +65,7 @@ class SoundFX:
         QtMultimedia.QSound.play(shootingFX)
 
 
+# Implemented the shooting-sound, otherwise the latency would
+# be to big
 shootingFX = getPath("res", "shooting.wav")
 enemyShootingFX = getPath("res", "shootingEnemy.wav")
