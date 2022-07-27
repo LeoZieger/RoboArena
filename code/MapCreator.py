@@ -16,10 +16,11 @@ class MapCreator(QtWidgets.QMainWindow):
         super().__init__()
         self.selected_map = selected_map
 
-        # Arena and all robots that are kept track
+        # Set the arena to all grass if there is no map selected
         if self.selected_map == "New Map":
             self.arena = Arena.Arena()
             self.arena.init_matrix_with_texture("Grass")
+        # Loading the selected map
         else:
             self.arena = Arena.Arena()
             self.arena.loadMap(selected_map)
@@ -60,7 +61,7 @@ class MapCreator(QtWidgets.QMainWindow):
 
     def tick(self):
         # Load font
-        id = QFontDatabase.addApplicationFont("res/PixeloidMono.ttf")
+        id = QFontDatabase.addApplicationFont(getPath("res", "PixeloidMono.ttf"))
         families = QFontDatabase.applicationFontFamilies(id)
         self.font = families[0]
 
@@ -70,6 +71,7 @@ class MapCreator(QtWidgets.QMainWindow):
         self.painter.begin(self.label.pixmap())
         self.arena.render(self.painter)
 
+        # Create side-menu showing all the keyboard inputs
         if self.sidebar:
             self.painter.setBrush(QColor(77, 77, 77, 200))
             self.painter.drawRect(20, 25, 350, 440)
@@ -111,6 +113,7 @@ class MapCreator(QtWidgets.QMainWindow):
         if self.left_mouseButton_pressed:
             self.draw_current_tile()
 
+    # Selecting the tile you want to draw with and setting the draw size
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_1:
             self.current_draw_tile = "Dirt"

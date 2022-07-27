@@ -14,9 +14,8 @@ class BaseRobot(QGraphicsEllipseItem):
     debug = False
 
     # Basic-Robot constructor
-
     def __init__(self, x, y, r, alpha, speed, texture):
-        QGraphicsObject.__init__(self)
+        QGraphicsEllipseItem.__init__(self)
 
         self.x = x                          # x-position
         self.y = y                          # y-position
@@ -32,11 +31,14 @@ class BaseRobot(QGraphicsEllipseItem):
 
         self.shooting = False
 
+        # Initialising the bounding box for the circular hitbox (EllipseItem)
         self.setRect(self.boundingRect())
 
+    # Get the current direction vector of a robot
     def getVector(self):
         return [np.cos(np.deg2rad(self.alpha)), -1 * np.sin(np.deg2rad(self.alpha))]
 
+    # Get the current direction of a robot in degrees
     def getAlpha(self, v2):
         v1 = [1, 0]
         l1 = np.sqrt(np.power(v1[0], 2) + np.power(v1[1], 2))
@@ -47,6 +49,7 @@ class BaseRobot(QGraphicsEllipseItem):
                                         (l1 * l2)))
         return 0
 
+    # Get the normalised vector from one point to another
     def getUnitVector(self, old_x, old_y, new_x, new_y):
         dist = np.sqrt(np.power(new_x - old_x, 2) + np.power(new_y - old_y, 2))
         if dist != 0:
@@ -56,14 +59,7 @@ class BaseRobot(QGraphicsEllipseItem):
         else:
             return [0, 0]
 
-    # Small function that shows all robot-info.
-    def info(self):
-        print(self.x)
-        print(self.y)
-        print(self.r)
-        print(self.alpha)
-        print(self.speed)
-
+    # render the robot using QPainter
     def render(self, painter):
         offset = self.r / 2
 
@@ -79,6 +75,7 @@ class BaseRobot(QGraphicsEllipseItem):
 
         self.renderHealthBar(painter)
 
+        # Optional debug-mode to show the direction and hitbox of a robot
         if self.debug:
             painter.setPen(QPen(Qt.red, 5, Qt.SolidLine))
 
@@ -88,6 +85,7 @@ class BaseRobot(QGraphicsEllipseItem):
                              QPoint(int(self.x + (self.getVector()[0] * 40)),
                                     int(self.y + (self.getVector()[1] * 40))))
 
+    # Create the health-bar of the robot with QPainter
     def renderHealthBar(self, painter):
         painter.setPen(QPen(Qt.black, 5, Qt.SolidLine))
         # outer rect
@@ -114,6 +112,7 @@ class BaseRobot(QGraphicsEllipseItem):
     def isDestroyed(self):
         return self.current_HP == 0
 
+    # Bounding rectangle of the circular hitbox
     def boundingRect(self):
         return QRectF(int(self.x), int(self.y), self.r, self.r)
 
