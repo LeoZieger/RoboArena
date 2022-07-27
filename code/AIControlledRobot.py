@@ -15,11 +15,11 @@ import time
 
 class AIControlledRobot(BaseRobot):
 
-    def __init__(self, x, y, r, alpha, speed, arena, pool, n=0):
+    def __init__(self, x, y, r, alpha, speed, arena, pool, n=0, difficulty="Normal"):
         BaseRobot.__init__(self, x, y, r, alpha, speed)
         self.n = n
 
-        self.brain = Brain.BrainLVL1(self.n, arena)
+        self.brain = Brain.Brain(self.n, arena, difficulty=difficulty)
 
         self.connectBainToSlots()
 
@@ -32,6 +32,17 @@ class AIControlledRobot(BaseRobot):
 
         self.point_queue = []
         self.shoot_queue = []
+
+    def handleDifficulty(self, difficulty):
+        if difficulty == "Hard":
+            self.cooldown = 2
+            self.MIN_SPEED = 3
+        elif difficulty == "Normal":
+            self.cooldown = 4
+            self.MIN_SPEED = 2
+        elif difficulty == "Easy":
+            self.cooldown = 6
+            self.MIN_SPEED = 1
 
     def connectBainToSlots(self):
         self.brain.signals.finished.connect(self.setThreadToFinished)

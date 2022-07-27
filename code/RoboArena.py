@@ -65,15 +65,19 @@ class RoboArena(QtWidgets.QMainWindow):
             self.robotAI1 = AIControlledRobot(500, 500, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=1)
+                                              n=1,
+                                              difficulty="Easy")
             self.robotAI2 = AIControlledRobot(800, 850, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=2)
+                                              n=2,
+                                              difficulty="Normal")
             self.robotAI3 = AIControlledRobot(100, 850, 50,
                                               0, 2, copy.copy(self.arena),
                                               self.threadpool,
-                                              n=3)
+                                              n=3,
+                                              difficulty="Hard"
+                                              )
 
             self.AI_robots.append(self.robotAI1)
             self.AI_robots.append(self.robotAI2)

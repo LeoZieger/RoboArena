@@ -15,9 +15,9 @@ class Signals(QObject):
     informToClearQueueShooting = pyqtSignal()
 
 
-class BrainLVL1(QRunnable):
+class Brain(QRunnable):
 
-    def __init__(self, n, arena):
+    def __init__(self, n, arena, difficulty="Medium"):
         QRunnable.__init__(self)
         self.n = n
 
@@ -32,6 +32,18 @@ class BrainLVL1(QRunnable):
 
         self.stop = False
         self.informedEnaugh = False
+
+        self.sleepTime = 1
+
+        self.handleDifficulty(difficulty)
+
+    def handleDifficulty(self, difficulty):
+        if difficulty == "Hard":
+            self.sleepTime = 1
+        elif difficulty == "Normal":
+            self.sleepTime = 5
+        elif difficulty == "Easy":
+            self.sleepTime = 7
 
     def inform_brain(self, human_player, robo_player):
         self.informedEnaugh = True
@@ -246,7 +258,7 @@ class BrainLVL1(QRunnable):
             self.calculatePath()
             self.calculateShooting()
 
-            time.sleep(1)
+            time.sleep(self.sleepTime)
 
             if not self.stop:
                 self.signals.finished.emit(self.n)
