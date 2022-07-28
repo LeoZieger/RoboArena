@@ -59,9 +59,15 @@ Added a FPS-Counter:
 
 Final polishing: 
 - We reworked the Map-Editor and added a small GUI which can be deactivated by pressing Spacebar. Also, there a new Tiles available. 
+![Screenshot 2022-07-28 125538](https://user-images.githubusercontent.com/70483582/181489187-44fc7d18-90f9-4fc6-ab04-8118c9ae38c4.png)
 - We added more Sounds using AbletonLive, e.g. explosion-sound, shooting-sound, ...
+- We added a few new Powerups (heal, red), (rapidFire, green), (speed, yelllow): 
+
+![healPowerup](https://user-images.githubusercontent.com/70483582/181506656-7fea4964-897e-48ac-8a46-74160ee829a2.png)
+![rapidPowerup](https://user-images.githubusercontent.com/70483582/181506672-bf4c9347-5d8c-4bc1-9ae3-9759c2c82e8f.png)
+![speedPowerup](https://user-images.githubusercontent.com/70483582/181506638-e0ce2b2d-ed04-4868-a1cc-d4a07183eb62.png)
 - We added a new Pixel-Style font which suits the general aesthetic of our game better.
 - We created a small gif for the MainMenu with AdobePremiere.
-![Screenshot 2022-07-28 125538](https://user-images.githubusercontent.com/70483582/181489187-44fc7d18-90f9-4fc6-ab04-8118c9ae38c4.png)
 ![ezgif com-gif-maker (10) (1) (1)](https://user-images.githubusercontent.com/70483582/181491411-40e81001-836f-4955-9291-6225603456f3.gif)
+
 
