@@ -81,7 +81,7 @@ Added a FPS-Counter:
 
 **UML Sequence Diagram:**
 
-![Roboarena_Sequence_final](https://user-images.githubusercontent.com/70217976/181514354-214a8fbf-c04a-43c1-bdda-92f6f4d0ca00.jpg)
+![Roboarena_Sequence_final](https://user-images.githubusercontent.com/70217976/181519519-54ecdcd0-7c68-46db-b0c5-ea48730c917f.jpg)
 
 **General difficulties:**
 - PyQT 
