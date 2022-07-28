@@ -33,7 +33,9 @@ We also thought about a generel way of structuring our project. We used a Scrum-
 To create maps efficiently, we implemented a map-editor, which writes down the maps as .JSON -files. This is a short exmaple of a .JSON-File and our first 2 maps that we created. Another big change was the implementation of a basic-Movement function, which allowed us to move across the map.
 
 ![171642081-3715ea69-aa58-4b82-a11b-bb214627906c](https://user-images.githubusercontent.com/70483582/181487539-e7d6a611-e801-4a2e-8461-9ee53598c06e.png)
+
 ![171627386-373bccd1-26c9-4f97-a0e6-97b5cec75098](https://user-images.githubusercontent.com/70483582/181487565-332681ee-62dc-4e02-80ea-1b1615b518cb.png)
+
 ![171643269-1b180567-3a04-4dda-850f-a341294e2f45](https://user-images.githubusercontent.com/70483582/181487572-4e7dcfae-0b0d-448d-94da-0af0c98c9ff1.gif)
 
 After this, we designed a our Main-Menu. At this step, you could ony use "Start Game" and "Map Editor", but it felt way better having a decent Menu-Screen than just starting the game directly.
