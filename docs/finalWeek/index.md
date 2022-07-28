@@ -54,6 +54,7 @@ For this purpose, we used iGraph to create a Graph of the map, which then can be
 ![178822579-9c9e48ef-3835-4a7d-8d85-82f624686958](https://user-images.githubusercontent.com/70483582/181488008-12259948-d097-4108-a46b-07663627437f.png)
 
 Added a FPS-Counter:
+
 ![178991653-e35ac8c8-59a7-4237-b4e6-b8cc41ef8deb](https://user-images.githubusercontent.com/70483582/181488021-5fea3ee8-5ce2-449f-aee5-c807c7720661.gif)
 
 Final polishing: 
