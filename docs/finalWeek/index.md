@@ -62,7 +62,7 @@ Added a FPS-Counter:
 
 ![178991653-e35ac8c8-59a7-4237-b4e6-b8cc41ef8deb](https://user-images.githubusercontent.com/70483582/181488021-5fea3ee8-5ce2-449f-aee5-c807c7720661.gif)
 
-**Final polishing: **
+**Final polishing:**
 - We reworked the Map-Editor and added a small GUI which can be deactivated by pressing Spacebar. Also, there a new Tiles available. 
 ![Screenshot 2022-07-28 125538](https://user-images.githubusercontent.com/70483582/181489187-44fc7d18-90f9-4fc6-ab04-8118c9ae38c4.png)
 - We added more Sounds using AbletonLive, e.g. explosion-sound, shooting-sound, ...
@@ -76,7 +76,7 @@ Added a FPS-Counter:
 ![ezgif com-gif-maker (10) (1) (1)](https://user-images.githubusercontent.com/70483582/181491411-40e81001-836f-4955-9291-6225603456f3.gif)
 
 
-**General difficulties: **
+**General difficulties:**
 - PyQT 
 - github
 - python
