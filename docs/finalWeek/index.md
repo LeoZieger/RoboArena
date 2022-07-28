@@ -8,23 +8,26 @@
 | Lasse Niederkrome |
 | Leonard Zieger    |
 
-How it began:
+**How it began:**
   - We startet planning how we want our game too look and feel
   - We thought about how we can manage our workflow and work efficiently
   - We also needed to start with a solid base for everything we want to code:
   
-  These are our first sketches for the Menu and a level of the game:
+  *These are our first sketches for the Menu and a level of the game:*
   ![image](https://user-images.githubusercontent.com/72664329/181482252-07d7fcf4-9f6c-44cc-a0e5-12ec4e9c491f.png)
   
   ![image](https://user-images.githubusercontent.com/70483582/168475373-8e8e9804-520c-4c74-84a8-61d34c1bd05b.png)
   
   
   
-  After that, we focused on our first experience drawing and moving a circle with PyQT:
+  *After that, we focused on our first experience drawing and moving a circle with PyQT:*
   ![1](https://user-images.githubusercontent.com/72664329/181482500-387cd313-58d2-48cb-85be-eeaaa1528ddf.gif)
 
 
-Workflow: We also thought about a generel way of structuring our project. We used a Scrum-like-System, where we met once a week and discussed our project. We shared our custom-progress with each other and also distributed our tasks for the next meeting. For that, we used gitHub-"Project". 
+
+**Workflow:**
+
+We also thought about a generel way of structuring our project. We used a Scrum-like-System, where we met once a week and discussed our project. We shared our custom-progress with each other and also distributed our tasks for the next meeting. For that, we used gitHub-"Project". 
 ![171641815-9ae9b427-112c-4adf-864a-72e2b1653eb2](https://user-images.githubusercontent.com/70483582/181487545-c49738f1-2224-4787-a8af-f70505ea54f8.png)
 
 To create maps efficiently, we implemented a map-editor, which writes down the maps as .JSON -files. This is a short exmaple of a .JSON-File and our first 2 maps that we created. Another big change was the implementation of a basic-Movement function, which allowed us to move across the map.
@@ -57,7 +60,7 @@ Added a FPS-Counter:
 
 ![178991653-e35ac8c8-59a7-4237-b4e6-b8cc41ef8deb](https://user-images.githubusercontent.com/70483582/181488021-5fea3ee8-5ce2-449f-aee5-c807c7720661.gif)
 
-Final polishing: 
+**Final polishing: **
 - We reworked the Map-Editor and added a small GUI which can be deactivated by pressing Spacebar. Also, there a new Tiles available. 
 ![Screenshot 2022-07-28 125538](https://user-images.githubusercontent.com/70483582/181489187-44fc7d18-90f9-4fc6-ab04-8118c9ae38c4.png)
 - We added more Sounds using AbletonLive, e.g. explosion-sound, shooting-sound, ...
@@ -70,4 +73,21 @@ Final polishing:
 - We created a small gif for the MainMenu with AdobePremiere.
 ![ezgif com-gif-maker (10) (1) (1)](https://user-images.githubusercontent.com/70483582/181491411-40e81001-836f-4955-9291-6225603456f3.gif)
 
+
+**General difficulties: **
+- PyQT 
+- github
+- python
+- Collision + Hitbox
+- Thread-Implementation
+
+
+
+**Conclusion:**
+Overall, we all agree that this was a really fun and challenging Project.
+We learned a lot about:
+-  programming in general
+-  gitHub and Git
+-  structuring a project and working as a team 
+-  time-management 
 
