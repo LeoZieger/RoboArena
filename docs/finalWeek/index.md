@@ -11,17 +11,20 @@
 How it began:
   - We startet planning how we want our game too look and feel
   - We thought about how we can manage our workflow and work efficiently
-  - We also needed to start with a solid base for everything we want to code: The arena
+  - We also needed to start with a solid base for everything we want to code:
+  
+  These are our first sketches for the Menu and a level of the game:
   ![image](https://user-images.githubusercontent.com/72664329/181482252-07d7fcf4-9f6c-44cc-a0e5-12ec4e9c491f.png)
   
   ![image](https://user-images.githubusercontent.com/70483582/168475373-8e8e9804-520c-4c74-84a8-61d34c1bd05b.png)
   
   
   
-  This is our first experience drawing and moving a circle with PyQT:
+  After that, we focused on our first experience drawing and moving a circle with PyQT:
   ![1](https://user-images.githubusercontent.com/72664329/181482500-387cd313-58d2-48cb-85be-eeaaa1528ddf.gif)
 
 
+To create maps efficiently, we implemented a map-editor, which writes down the maps as .JSON -files. This is a short exmaple: 
 ![171642081-3715ea69-aa58-4b82-a11b-bb214627906c](https://user-images.githubusercontent.com/70483582/181487539-e7d6a611-e801-4a2e-8461-9ee53598c06e.png)
 ![171641815-9ae9b427-112c-4adf-864a-72e2b1653eb2](https://user-images.githubusercontent.com/70483582/181487545-c49738f1-2224-4787-a8af-f70505ea54f8.png)
 ![171627386-373bccd1-26c9-4f97-a0e6-97b5cec75098](https://user-images.githubusercontent.com/70483582/181487565-332681ee-62dc-4e02-80ea-1b1615b518cb.png)
