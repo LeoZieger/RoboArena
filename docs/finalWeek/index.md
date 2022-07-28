@@ -86,6 +86,7 @@ Added a FPS-Counter:
 
 
 **Conclusion:**
+
 Overall, we all agree that this was a really fun and challenging Project.
 We learned a lot about:
 -  programming in general
