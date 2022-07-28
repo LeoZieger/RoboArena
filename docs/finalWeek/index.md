@@ -59,7 +59,7 @@ Added a FPS-Counter:
 
 Final polishing: 
 - We reworked the Map-Editor and added a small GUI which can be deactivated by pressing Spacebar. Also, there a new Tiles available. 
-- We added more Sounds, e.g. explosion-sound, shooting-sound, ...
+- We added more Sounds using AbletonLive, e.g. explosion-sound, shooting-sound, ...
 - We added a new Pixel-Style font which suits the general aesthetic of our game better.
 - We created a small gif for the MainMenu with AdobePremiere.
 ![Screenshot 2022-07-28 125538](https://user-images.githubusercontent.com/70483582/181489187-44fc7d18-90f9-4fc6-ab04-8118c9ae38c4.png)
