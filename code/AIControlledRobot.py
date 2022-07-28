@@ -21,7 +21,7 @@ class AIControlledRobot(BaseRobot):
 
         self.brain = Brain.Brain(self.n, arena, difficulty=difficulty)
 
-        self.connectBainToSlots()
+        self.connectBrainToSlots()
 
         self.threadpool = pool
 
@@ -48,7 +48,7 @@ class AIControlledRobot(BaseRobot):
             self.cooldown = 4
             self.diff_speed = 2
 
-    def connectBainToSlots(self):
+    def connectBrainToSlots(self):
         self.brain.signals.finished.connect(self.setThreadToFinished)
 
         self.brain.signals.informAboutNextPointToMove.connect(
