@@ -45,11 +45,22 @@ Adding Textures was also a big step, because it changed the whole feel of the ga
 ![176689807-38c6d65a-e6bc-4173-95c7-010aa0bec3b1](https://user-images.githubusercontent.com/70483582/181487945-591474cf-cf8b-4304-9c7b-6d8196d124eb.gif)
 
 
+We decided to change our Tile-Size from 10x10 to 25x25 pixels.
 ![178989409-e085ecc1-bdc8-4649-8e80-e1fdda294d34](https://user-images.githubusercontent.com/70483582/181487983-0a3018cc-8ca2-409b-b756-327af9fd049b.png)
+
+At this stage, we needed to make the AI stronger, so we decided to implement a pathfinding-algorithm to drive to the current player-location.
+For this purpose, we used iGraph to create a Graph of the map, which then can be used by the AI-Robots to know where they can drive.
 ![178823922-b1893f55-a244-45b9-828a-575a6b1f659b](https://user-images.githubusercontent.com/70483582/181488003-94162d34-4267-40a1-beb2-59355070656b.png)
 ![178822579-9c9e48ef-3835-4a7d-8d85-82f624686958](https://user-images.githubusercontent.com/70483582/181488008-12259948-d097-4108-a46b-07663627437f.png)
+
+Added a FPS-Counter:
 ![178991653-e35ac8c8-59a7-4237-b4e6-b8cc41ef8deb](https://user-images.githubusercontent.com/70483582/181488021-5fea3ee8-5ce2-449f-aee5-c807c7720661.gif)
 
+Final polishing: 
+- We reworked the Map-Editor and added a small GUI which can be deactivated by pressing Spacebar. Also, there a new Tiles available. 
+- We added more Sounds, e.g. explosion-sound, shooting-sound, ...
+- We added a new Pixel-Style font which suits the general aesthetic of our game better.
+- We created a small gif for the MainMenu with AdobePremiere.
 ![Screenshot 2022-07-28 125538](https://user-images.githubusercontent.com/70483582/181489187-44fc7d18-90f9-4fc6-ab04-8118c9ae38c4.png)
 ![ezgif com-gif-maker (10) (1) (1)](https://user-images.githubusercontent.com/70483582/181491411-40e81001-836f-4955-9291-6225603456f3.gif)
 
