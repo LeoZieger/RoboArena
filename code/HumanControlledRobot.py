@@ -166,5 +166,5 @@ class HumanControlledRobot(BaseRobot):
         self.cooldown = STANDARD_COOLDOWN
 
     def healPlayer(self):
-        if self.current_HP < 3:
+        if self.current_HP < self.max_HP:
             self.current_HP += 1
