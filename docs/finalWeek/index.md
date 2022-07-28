@@ -91,7 +91,6 @@ Added a FPS-Counter:
 - Thread-Implementation
 
 
-
 **Conclusion:**
 
 Overall, we all agree that this was a really fun and challenging Project.
