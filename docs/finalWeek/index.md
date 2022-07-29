@@ -77,7 +77,7 @@ Added a FPS-Counter:
 
 **UML Class Diagram:**
 
-[Roboarena_final](https://user-images.githubusercontent.com/70217976/181514217-b1f62328-ccf8-41ec-b3e5-aa0e4cec3135.jpg)
+![Roboarena](https://user-images.githubusercontent.com/72664329/181833610-9d7cfb05-6f19-482c-b7ac-2cf542c57dcb.svg)
 
 **UML Sequence Diagram:**
 
