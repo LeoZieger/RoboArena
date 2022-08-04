@@ -109,11 +109,7 @@ We learned a lot about:
 Here are 2 impressiones of the finished game: 
 
 - This is the normal game-loop. You can start a game with different settings and maps.
-https://user-images.githubusercontent.com/70483582/182848471-44759665-44d1-4da9-bc67-da58b318579a.mp4
-
-
-
+<video src="https://user-images.githubusercontent.com/70483582/182848471-44759665-44d1-4da9-bc67-da58b318579a.mp4" controls="controls" style="max-width: 500px;"> </video>
 
 - This is our map creator. As you can see, you can create maps easily, which than can be imported to the game.
-https://user-images.githubusercontent.com/70483582/182848746-64be77af-ffbd-4d63-86f5-2fe38f3778ca.mp4
-
+<video src="https://user-images.githubusercontent.com/70483582/182848746-64be77af-ffbd-4d63-86f5-2fe38f3778ca.mp4" controls="controls" style="max-width: 500px;"> </video>
